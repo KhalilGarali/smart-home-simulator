@@ -4,9 +4,10 @@ import commands.close.CloseADoor;
 import commands.close.CloseAWindow;
 import commands.open.OpenADoor;
 import commands.open.OpenAWindow;
+import observerPattern.Observable;
 import rooms.*;
 
-public class SHC {
+public class SHC extends Module{
     //this potentially has to be a list
     private Command aCommand;
 
@@ -21,5 +22,10 @@ public class SHC {
 
     public void executeCommand(){
         aCommand.execute();
+    }
+
+    @Override
+    public void update(Observable o){
+
     }
 }

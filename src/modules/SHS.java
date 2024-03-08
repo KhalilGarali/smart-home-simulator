@@ -31,6 +31,8 @@ public class SHS {
 
         // instaniate an SHC with it's default commands 
         SHC anSHC = new SHC();
+        SHH anSHH = new SHH();
+        kitchen.addObserver(anSHH);
         
         //those two commands should somehow be linked to the GUI button trigger
         anSHC.addCommand(openWindow1);

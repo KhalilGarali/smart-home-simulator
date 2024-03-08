@@ -3,10 +3,29 @@ package rooms;
 import java.util.ArrayList;
 import java.util.List;
 
+import observerPattern.Observable;
+import observerPattern.Observer;
 import openings.*;
 
 
-public abstract class Room {
+public abstract class Room implements Observable{
+
+    public List<Observer> listeningModules = new ArrayList<>();
+
+    @Override
+    public void addObserver(Observer m){
+        listeningModules.add(m);
+    }
+    @Override
+    public void removeObserver(Observer m){
+        listeningModules.remove(m);
+    }
+    @Override
+    public void notifyObserver(){
+        for (Observer module: listeningModules){
+            module.update(this);
+        }
+    }
 
     // we can use it if we decide to have more openings in a room
     // private List<Opening> openings = new ArrayList<>();
@@ -40,7 +59,9 @@ public abstract class Room {
             System.out.println("can't add more than 2 windows to a room!");
         }    
     }
-
+    public Window getWindow1(){
+        return this.window1;
+    }
 
     //All openers and closers - will be useful with SHH and SHP
     public void openAllOpenings() {
@@ -83,6 +104,7 @@ public abstract class Room {
         if (num==1){
             System.out.println("Open window1");
             window1.open();
+            notifyObserver();
         }
         if (num==2){
             System.out.println("Open window2");

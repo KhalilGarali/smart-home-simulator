@@ -1,5 +1,10 @@
 package modules;
 
-public class SHP {
-    
+import observerPattern.Observable;
+
+public class SHP extends Module{
+    @Override
+    public void update(Observable o){
+
+    }
 }

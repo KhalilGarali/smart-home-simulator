@@ -10,5 +10,4 @@ public class Kitchen extends Room{
     public String toString() {
         return "Kitchen" + super.toString();
     }
-    
 }

@@ -1,32 +1,25 @@
 package modules;
 import commands.*;
-import commands.close.CloseDoor;
-import commands.close.CloseWindow;
-import commands.open.OpenDoor;
-import commands.open.OpenWindow;
+import commands.close.CloseADoor;
+import commands.close.CloseAWindow;
+import commands.open.OpenADoor;
+import commands.open.OpenAWindow;
 import rooms.*;
 
 public class SHC {
     //this potentially has to be a list
-    Room kitchen = new Kitchen();
+    private Command aCommand;
 
-    private Command openWindow;
-    private Command closeWindow;
-    private Command openDoor;
-    private Command closeDoor;
-
-    
-    public SHC (Command openWindow, Command closeWindow, Command openDoor, Command closeDoor){
-        this.openWindow = openWindow;
-        this.closeWindow = closeWindow;
-        this.openDoor = openDoor;
-        this.closeDoor = closeDoor;
+    //default constructor
+    public SHC (){
+        
     }
 
-    public void addCommand(){
-
+    public void addCommand(Command c){
+        aCommand = c;
     }
-    public void OpenWindowTest(){
-        openWindow.execute();
+
+    public void executeCommand(){
+        aCommand.execute();
     }
 }

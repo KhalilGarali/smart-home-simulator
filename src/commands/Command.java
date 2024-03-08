@@ -2,5 +2,5 @@ package commands;
 
 public interface Command {
 
-    public void execute();
+    public Boolean execute();
 }

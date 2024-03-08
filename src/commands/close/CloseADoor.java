@@ -1,22 +1,23 @@
-package commands.open;
+package commands.close;
 
 import commands.Command;
 import rooms.Room;
 
-public class OpenDoor implements Command{
+public class CloseADoor implements Command{
     protected Room room;
 
-    public OpenDoor(Room room){
+    public CloseADoor(Room room){
         this.room = room;
     }
 
     @Override
-    public void execute(){
+    public Boolean execute(){
         // if(room.getHasDoors()){
-            // room.setDoorOpen(true);
+            // room.setDoorOpen(false);
         // } else {
             // potentially send a GUI error
             // System.out.println("No doors to open in " + room);
         // }
+        return true;
     }
 }

@@ -17,4 +17,9 @@ public class Window implements Opening {
     public boolean isOpen() {
         return open;
     }
+
+    @Override
+    public String toString() {
+        return "Window [open=" + open + "]";
+    }
 }

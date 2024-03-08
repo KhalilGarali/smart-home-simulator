@@ -1,9 +1,3 @@
-/* 
- * command pattern notes: 
- * 
- * 
- */
-
 package rooms;
 
 import java.util.ArrayList;
@@ -19,7 +13,7 @@ public abstract class Room {
 
     //making the assumption that the room can have max 2 openings of the same kind
     public Window window1;
-    private Window window2;
+    public Window window2;
     private Door door1;
     private Door door2;
 
@@ -27,8 +21,8 @@ public abstract class Room {
     public Room(){
     } 
 
-    // single opening setters
-    public void setWindows(Window window) {
+    // opening setters
+    public void setWindow(Window window) {
         if(window1 == null){
             this.window1 = window;   
         } else if(window1 != null && window2 == null){
@@ -37,24 +31,16 @@ public abstract class Room {
             System.out.println("can't add more than 2 windows to a room!");
         }
     }
-    public void setWindow1(Window window) {
-        if(window1 == null){
-            this.window1 = window;   
-        } else if(window1 != null && window2 == null){
-            this.window2 = window;
+    public void setDoor(Door door) {
+        if(door1 == null){
+            this.door1 = door;   
+        } else if(door1 != null && door2 == null){
+            this.door2 = door;
         } else {
             System.out.println("can't add more than 2 windows to a room!");
-        }
+        }    
     }
-    public void setWindow2(Window window) {
-        this.window2 = window;
-    }
-    public void setDoor1(Door door) {
-        this.door1 = door;
-    }
-    public void setDoor2(Door door) {
-        this.door2 = door;
-    }
+
 
     //All openers and closers - will be useful with SHH and SHP
     public void openAllOpenings() {
@@ -93,6 +79,24 @@ public abstract class Room {
     }
     
     // single opening closers and openers
+    public void openWindow(int num){
+        if (num==1){
+            System.out.println("Open window1");
+            window1.open();
+        }
+        if (num==2){
+            System.out.println("Open window2");
+            window2.open();
+        } 
+    }
+    public void openDoor1(){
+        System.out.println("Open door1");
+        door1.open();
+    }
+    public void openDoor2(){
+        System.out.println("Open door2");
+        door2.open();
+    }
     public void closeWindow1(){
         System.out.println("Close window1");
         window1.close();
@@ -109,20 +113,10 @@ public abstract class Room {
         System.out.println("Close door2");
         door2.close();
     }
-    public void openWindow1(){
-        System.out.println("Open window1");
-        window1.open();
-    }
-    public void openWindow2(){
-        System.out.println("Open window2");
-        window2.open();
-    }
-    public void openDoor1(){
-        System.out.println("Open door1");
-        door1.open();
-    }
-    public void openDoor2(){
-        System.out.println("Open door2");
-        door2.open();
+    
+    @Override
+    public String toString() {
+        return " [window1=" + window1 + ", window2=" + window2 + ", door1=" + door1 + ", door2=" + door2 + "]";
     }   
+    
 }

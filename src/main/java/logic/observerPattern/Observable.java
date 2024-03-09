@@ -1,4 +1,4 @@
-package observerPattern;
+package main.java.logic.observerPattern;
 
 public interface Observable {
     void notifyObserver();

@@ -1,11 +1,11 @@
-package rooms;
+package main.java.model.rooms;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import observerPattern.Observable;
-import observerPattern.Observer;
-import openings.*;
+import main.java.logic.observerPattern.Observable;
+import main.java.logic.observerPattern.Observer;
+import main.java.model.openings.*;
 
 
 public abstract class Room implements Observable{

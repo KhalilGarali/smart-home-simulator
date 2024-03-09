@@ -1,4 +1,4 @@
-package openings;
+package main.java.model.openings;
 
 public interface Opening {
     void open();

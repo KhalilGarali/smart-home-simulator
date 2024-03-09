@@ -1,7 +1,7 @@
-package commands.open;
+package main.java.logic.commands.open;
 
-import commands.Command;
-import rooms.Room;
+import main.java.logic.commands.Command;
+import main.java.model.rooms.Room;
 
 public class OpenAWindow implements Command{
     protected Room room;

@@ -1,4 +1,4 @@
-package commands;
+package main.java.logic.commands;
 
 public interface Command {
 

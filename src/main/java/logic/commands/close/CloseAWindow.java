@@ -1,7 +1,7 @@
-package commands.close;
+package main.java.logic.commands.close;
 
-import commands.Command;
-import rooms.Room;
+import main.java.logic.commands.Command;
+import main.java.model.rooms.Room;
 
 public class CloseAWindow implements Command{
     protected Room room;

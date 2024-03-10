@@ -1,6 +1,7 @@
 package main.java.logic.modules;
-import main.java.logic.commands.close.*;
+
 import main.java.logic.commands.open.*;
+import main.java.logic.users.*;
 import main.java.model.openings.*;
 import main.java.model.rooms.*;
 
@@ -32,13 +33,22 @@ public class SHS {
         SHC anSHC = new SHC();
         SHH anSHH = new SHH();
         kitchen.addObserver(anSHH);
+
+        User stranger = new Stranger("IT");
+        User father = new Parent("Jordan");
+        User child = new Child("Joseph");
+        User guest = new Guest("Margery");
+
         
         //those two commands should somehow be linked to the GUI button trigger
-        anSHC.addCommand(openWindow1);
-        anSHC.executeCommand();
+        anSHC.userAction(stranger, openWindow1);
+        anSHC.userAction(father, openWindow1);
+        anSHC.userAction(child, openWindow1);
+        anSHC.userAction(guest, openWindow1);
 
-        anSHC.addCommand(openWindow2);
-        anSHC.executeCommand();
+
+        // anSHC.addCommand(openWindow2);
+        // anSHC.executeCommand();
 
     }
     

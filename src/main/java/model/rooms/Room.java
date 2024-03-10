@@ -6,6 +6,8 @@ import java.util.List;
 
 import main.java.logic.observerPattern.Observable;
 import main.java.logic.observerPattern.Observer;
+import main.java.logic.users.User;
+import main.java.model.fixtures.Light;
 import main.java.model.openings.*;
 
 /**
@@ -21,8 +23,13 @@ public abstract class Room implements Observable{
     private Door door1;
     private Door door2;
 
+    private Light light;
+    protected List<User> usersInThisRoomList = new ArrayList<>();
+
+    protected String name;
     //default constructor
-    public Room(){
+    public Room(String name){
+        this.name = name;
     } 
 
     // START OF THE OBSERVER PATTERN IMPLEMENTATION
@@ -163,6 +170,12 @@ public abstract class Room implements Observable{
             door2.close();
             notifyObserver();
         } 
+    }
+    public void addUserToRoom(User user){
+        usersInThisRoomList.add(user);
+    }
+    public void removeUserFromRoom(User user){
+        usersInThisRoomList.remove(user);
     }
     
     @Override

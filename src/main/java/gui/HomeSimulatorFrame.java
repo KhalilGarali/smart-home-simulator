@@ -3,7 +3,11 @@ package main.java.gui;
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalToggleButtonUI;
 
+import main.java.model.rooms.Kitchen;
+import main.java.model.rooms.Room;
+
 import java.awt.*;
+import java.util.ArrayList;
 
 public class HomeSimulatorFrame extends JFrame {
 
@@ -16,7 +20,7 @@ public class HomeSimulatorFrame extends JFrame {
 
     public HomeSimulatorFrame() {
         setTitle("Smart Home Simulator");
-        setSize(1600, 800);
+        setSize(1400, 800);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
@@ -193,17 +197,8 @@ public class HomeSimulatorFrame extends JFrame {
         housePanel.setBorder(BorderFactory.createTitledBorder("House Layout"));
     
         // House View Panel with an image
-        houseViewPanel = new JPanel() {
-        private Image houseImage = new ImageIcon("src\\main\\resources\\pdp.jpg").getImage();
-
-        @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            // Draw the image on the panel
-            g.drawImage(houseImage, 0, 0, this.getWidth(), this.getHeight(), this); // Scales image to panel size
-        }
-        };
-        houseViewPanel.setPreferredSize(new Dimension(600, houseViewPanel.getPreferredSize().height));
+        houseViewPanel = createHouseLayoutPanel();
+        houseViewPanel.setPreferredSize(new Dimension(670, houseViewPanel.getPreferredSize().height));
         housePanel.add(houseViewPanel); 
 
         return housePanel;
@@ -223,6 +218,49 @@ public class HomeSimulatorFrame extends JFrame {
         return outputPanel;
     }
 
+    private JPanel createHouseLayoutPanel(){
+        ArrayList<Kitchen> rooms = new ArrayList<Kitchen>();
+
+        rooms.add(new Kitchen(150, 150));
+        rooms.add(new Kitchen(150, 150));
+        rooms.add(new Kitchen(150, 150));
+        rooms.add(new Kitchen(150, 150));
+        rooms.add(new Kitchen(150, 150));
+        rooms.add(new Kitchen(150, 150));
+        rooms.add(new Kitchen(150, 150));
+        rooms.add(new Kitchen(150, 150));
+        rooms.add(new Kitchen(150, 150));
+        rooms.add(new Kitchen(150, 150));
+        rooms.add(new Kitchen(150, 150));
+        rooms.add(new Kitchen(150, 150));
+
+        JPanel houseLayoutPanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                int x = 10; // Initial x position
+                int y = 10; // Initial y position
+                int maxWidth = getWidth() - 15; // Panel width minus some margin
+                for (Kitchen room : rooms) {
+                    // If the next room doesn't fit in the current row, move to the next line
+                    if (x + room.getWidth() > maxWidth) {
+                    x = 10; // Reset x position
+                    y += room.getHeight() + 10; // Move y position to the next row
+                    }
+                    // Here you can use room.type to decide on colors or other properties
+                    g.drawRect(x, y, room.getWidth(), room.getHeight()); // Draw the room
+                    // g.drawString(room.type, x + 5, y + 15); // Label the room
+                    x += room.getWidth() + 10; // Increment x position for the next room
+                }
+            }
+        };
+         // Set the preferred size dynamically based on the number of rooms
+        int totalHeight = (150 + 10) * ((rooms.size() / 4) + 1); // Calculate the total height needed
+        houseLayoutPanel.setPreferredSize(new Dimension(600, totalHeight));
+
+        return houseLayoutPanel;
+
+    }
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             HomeSimulatorFrame frame = new HomeSimulatorFrame();

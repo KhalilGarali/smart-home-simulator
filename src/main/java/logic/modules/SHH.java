@@ -4,6 +4,9 @@ import main.java.logic.observerPattern.Observable;
 import main.java.model.rooms.Room;
 
 public class SHH extends Module {
+
+    // temporary implementation, very minial just to show update received automatically
+    // upon notification from the room
     @Override
     public void update(Observable o){
         if (o instanceof Room) {

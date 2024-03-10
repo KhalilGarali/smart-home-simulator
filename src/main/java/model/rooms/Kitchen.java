@@ -1,4 +1,4 @@
-package rooms;
+package main.java.model.rooms;
 
 public class Kitchen extends Room{
 

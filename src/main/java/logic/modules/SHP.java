@@ -1,6 +1,6 @@
-package modules;
+package main.java.logic.modules;
 
-import observerPattern.Observable;
+import main.java.logic.observerPattern.Observable;
 
 public class SHP extends Module{
     @Override

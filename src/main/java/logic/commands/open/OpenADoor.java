@@ -1,19 +1,19 @@
-package commands.close;
+package main.java.logic.commands.open;
 
-import commands.Command;
-import rooms.Room;
+import main.java.logic.commands.Command;
+import main.java.model.rooms.Room;
 
-public class CloseADoor implements Command{
+public class OpenADoor implements Command{
     protected Room room;
 
-    public CloseADoor(Room room){
+    public OpenADoor(Room room){
         this.room = room;
     }
 
     @Override
     public Boolean execute(){
         // if(room.getHasDoors()){
-            // room.setDoorOpen(false);
+            // room.setDoorOpen(true);
         // } else {
             // potentially send a GUI error
             // System.out.println("No doors to open in " + room);

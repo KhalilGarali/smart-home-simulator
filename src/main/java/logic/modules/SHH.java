@@ -1,7 +1,7 @@
-package modules;
+package main.java.logic.modules;
 
-import observerPattern.Observable;
-import rooms.Room;
+import main.java.logic.observerPattern.Observable;
+import main.java.model.rooms.Room;
 
 public class SHH extends Module {
     @Override

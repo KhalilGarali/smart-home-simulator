@@ -1,4 +1,4 @@
-package openings;
+package main.java.model.openings;
 
 public class Window implements Opening {
     private boolean open = false;

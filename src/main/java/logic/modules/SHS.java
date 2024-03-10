@@ -1,11 +1,10 @@
-package modules;
-import openings.*;
-import commands.close.*;
-import commands.open.*;
-
+package main.java.logic.modules;
+import main.java.logic.commands.close.*;
+import main.java.logic.commands.open.*;
+import main.java.model.openings.*;
+import main.java.model.rooms.*;
 
 import java.util.*;
-import rooms.*;
 
 public class SHS {
 

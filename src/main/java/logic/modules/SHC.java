@@ -1,11 +1,11 @@
-package modules;
-import commands.*;
-import commands.close.CloseADoor;
-import commands.close.CloseAWindow;
-import commands.open.OpenADoor;
-import commands.open.OpenAWindow;
-import observerPattern.Observable;
-import rooms.*;
+package main.java.logic.modules;
+import main.java.logic.commands.*;
+import main.java.logic.commands.close.CloseADoor;
+import main.java.logic.commands.close.CloseAWindow;
+import main.java.logic.commands.open.OpenADoor;
+import main.java.logic.commands.open.OpenAWindow;
+import main.java.logic.observerPattern.Observable;
+import main.java.model.rooms.*;
 
 public class SHC extends Module{
     //this potentially has to be a list

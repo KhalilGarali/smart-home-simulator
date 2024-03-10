@@ -1,3 +1,4 @@
+
 package main.java.model.rooms;
 
 import java.util.ArrayList;
@@ -7,29 +8,13 @@ import main.java.logic.observerPattern.Observable;
 import main.java.logic.observerPattern.Observer;
 import main.java.model.openings.*;
 
+/**
+ * Abstract class representing a Room that can observe and be observed,
+ * following the Observer pattern. It allows for the manipulation of room openings
+ * such as windows and doors.
+ */
 
 public abstract class Room implements Observable{
-
-    public List<Observer> listeningModules = new ArrayList<>();
-
-    @Override
-    public void addObserver(Observer m){
-        listeningModules.add(m);
-    }
-    @Override
-    public void removeObserver(Observer m){
-        listeningModules.remove(m);
-    }
-    @Override
-    public void notifyObserver(){
-        for (Observer module: listeningModules){
-            module.update(this);
-        }
-    }
-
-    // we can use it if we decide to have more openings in a room
-    // private List<Opening> openings = new ArrayList<>();
-
     //making the assumption that the room can have max 2 openings of the same kind
     public Window window1;
     public Window window2;
@@ -40,7 +25,38 @@ public abstract class Room implements Observable{
     public Room(){
     } 
 
-    // opening setters
+    // START OF THE OBSERVER PATTERN IMPLEMENTATION
+    // List of Observer objects that are monitoring changes in this Room
+    public List<Observer> listeningModules = new ArrayList<>();
+
+    /**
+     * Adds an observer to the list of observers listening for changes to the room.
+     * @param m The observer to add.
+     */
+    @Override
+    public void addObserver(Observer m){
+        listeningModules.add(m);
+    }
+    /**
+     * Removes an observer from the list of observers.
+     * @param m The observer to remove.
+     */
+    @Override
+    public void removeObserver(Observer m){
+        listeningModules.remove(m);
+    }
+    /**
+     * Notifies all observers about a change in the room's state.
+     */
+    @Override
+    public void notifyObserver(){
+        for (Observer module: listeningModules){
+            module.update(this);
+        }
+    }
+    // END OF THE OBSERVER PATTERN IMPLEMENTATION
+
+    // Setters for the Openings in the Room
     public void setWindow(Window window) {
         if(window1 == null){
             this.window1 = window;   
@@ -56,14 +72,14 @@ public abstract class Room implements Observable{
         } else if(door1 != null && door2 == null){
             this.door2 = door;
         } else {
-            System.out.println("can't add more than 2 windows to a room!");
+            System.out.println("can't add more than 2 doors to a room!");
         }    
     }
     public Window getWindow1(){
         return this.window1;
     }
 
-    //All openers and closers - will be useful with SHH and SHP
+    // open and close for All's - will be useful with SHH and SHP
     public void openAllOpenings() {
         System.out.println("Open everything");
         window1.open();
@@ -99,7 +115,7 @@ public abstract class Room implements Observable{
         door2.close();
     }
     
-    // single opening closers and openers
+    // single Opening closers and openers
     public void openWindow(int num){
         if (num==1){
             System.out.println("Open window1");
@@ -109,36 +125,49 @@ public abstract class Room implements Observable{
         if (num==2){
             System.out.println("Open window2");
             window2.open();
+            notifyObserver();
         } 
     }
-    public void openDoor1(){
-        System.out.println("Open door1");
-        door1.open();
+    public void openDoor(int num){
+        if (num==1){
+            System.out.println("Open door1");
+            door1.open();
+            notifyObserver();
+        }
+        if (num==2){
+            System.out.println("Open door2");
+            door2.open();
+            notifyObserver();
+        } 
     }
-    public void openDoor2(){
-        System.out.println("Open door2");
-        door2.open();
+    public void closeWindow(int num){
+        if (num==1){
+            System.out.println("Close window1");
+            window1.close();
+            notifyObserver();
+        }
+        if (num==2){
+            System.out.println("Close window2");
+            window2.close();
+            notifyObserver();
+        } 
     }
-    public void closeWindow1(){
-        System.out.println("Close window1");
-        window1.close();
-    }
-    public void closeWindow2(){
-        System.out.println("Close window2");
-        window2.close();
-    }
-    public void closeDoor1(){
-        System.out.println("Close door1");
-        door1.close();
-    }
-    public void closeDoor2(){
-        System.out.println("Close door2");
-        door2.close();
+    public void closeDoor(int num){
+        if (num==1){
+            System.out.println("Close door1");
+            door1.close();
+            notifyObserver();
+        }
+        if (num==2){
+            System.out.println("Close door2");
+            door2.close();
+            notifyObserver();
+        } 
     }
     
     @Override
     public String toString() {
-        return " [window1=" + window1 + ", window2=" + window2 + ", door1=" + door1 + ", door2=" + door2 + "]";
+        return " has window1=" + window1 + ", window2=" + window2 + ", door1=" + door1 + ", door2=" + door2 + "";
     }   
     
 }

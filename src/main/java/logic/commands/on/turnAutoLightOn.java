@@ -4,10 +4,10 @@ import main.java.logic.commands.Command;
 import main.java.logic.users.Permissions;
 import main.java.model.rooms.Room;
 
-public class turnAnAutoLightOn implements Command {
+public class turnAutoLightOn implements Command {
     protected Room room;
 
-    public turnAnAutoLightOn(Room room){
+    public turnAutoLightOn(Room room){
         this.room = room;
     }
 
@@ -24,12 +24,18 @@ public class turnAnAutoLightOn implements Command {
         // potentially send a GUI error
         // System.out.println("No doors to open in " + room);
         // }
+        System.out.println("\n--------------------------------------------------------------------");
+        System.out.println(room);
+        System.out.print("command done: ");
+        room.turnAutoLightOn();
+        System.out.println(room);
+        System.out.println("----------------------------------------------------------------------");
         return true;
     }
 
     @Override
     public String toString(){
-        return "turn a light on";
+        return "turn auto-light on";
     }
 
 }

@@ -1,16 +1,14 @@
-package main.java.logic.commands.close;
+package main.java.logic.commands.on;
 
 import main.java.logic.commands.Command;
 import main.java.logic.users.Permissions;
 import main.java.model.rooms.Room;
 
-public class CloseADoor implements Command{
+public class TurnLightOn implements Command {
     protected Room room;
-    protected int doorNumber;
 
-    public CloseADoor(Room room, int doorNumber){
+    public TurnLightOn(Room room){
         this.room = room;
-        this.doorNumber = doorNumber;
     }
 
     @Override
@@ -21,15 +19,15 @@ public class CloseADoor implements Command{
     @Override
     public Boolean execute(){
         // if(room.getHasDoors()){
-            // room.setDoorOpen(false);
+        // room.setDoorOpen(false);
         // } else {
-            // potentially send a GUI error
-            // System.out.println("No doors to open in " + room);
+        // potentially send a GUI error
+        // System.out.println("No doors to open in " + room);
         // }
         System.out.println("\n--------------------------------------------------------------------");
         System.out.println(room);
         System.out.print("command done: ");
-        room.closeDoor(1);
+        room.turnLightOn();
         System.out.println(room);
         System.out.println("----------------------------------------------------------------------");
         return true;
@@ -37,6 +35,7 @@ public class CloseADoor implements Command{
 
     @Override
     public String toString(){
-        return "close a door";
+        return "turn a light on";
     }
+
 }

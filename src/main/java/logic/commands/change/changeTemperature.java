@@ -12,18 +12,28 @@ public class changeTemperature implements Command {
     }
 
     @Override
+    public Boolean execute() {
+        return null;
+    }
+
+    @Override
     public Permissions requirePermissions(){
         return REQUIRED_PERMISSIONS;
     }
 
-    @Override
-    public Boolean execute(){
+    public Boolean execute(int temperature){
         // if(room.getHasDoors()){
         // room.setDoorOpen(false);
         // } else {
         // potentially send a GUI error
         // System.out.println("No doors to open in " + room);
         // }
+        System.out.println("\n--------------------------------------------------------------------");
+        System.out.println(room);
+        System.out.print("command done: ");
+        room.setTemperature(temperature);
+        System.out.println(room);
+        System.out.println("----------------------------------------------------------------------");
         return true;
     }
 

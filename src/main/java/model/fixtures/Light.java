@@ -1,23 +1,27 @@
 package main.java.model.fixtures;
 
 public class Light {
-    private LightState light = LightState.OFF;
-    private LightState Autolight = LightState.OFF;
+    private  boolean lightON = true ;
+    private boolean AutoLightON = true;
 
-    public LightState getAutolight() {
-        return Autolight;
+    public boolean getAutolight() {
+        return AutoLightON;
     }
 
-    public void setAutolight(LightState autolight) {
-        Autolight = autolight;
+    public void setAutolightOff() {
+        this.AutoLightON = false;
     }
-
-    public LightState getLight() {
-        return light;
+    public void setAutolightOn() {
+        this.AutoLightON = true;
     }
-
-    public void setLight(LightState light) {
-        this.light = light;
+    public boolean getLight() {
+        return lightON;
+    }
+    public void setLightOff() {
+        this.lightON = false;
+    }
+    public void setLightOn() {
+        this.lightON = true;
     }
 
 }

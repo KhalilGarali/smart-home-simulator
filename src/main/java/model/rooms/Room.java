@@ -8,6 +8,7 @@ import main.java.logic.observerPattern.Observable;
 import main.java.logic.observerPattern.Observer;
 import main.java.logic.users.User;
 import main.java.model.fixtures.Light;
+import main.java.model.fixtures.Temperature;
 import main.java.model.openings.*;
 
 /**
@@ -22,8 +23,8 @@ public abstract class Room implements Observable{
     public Window window2;
     private Door door1;
     private Door door2;
-
     private Light light;
+    private Temperature temp;
     protected List<User> usersInThisRoomList = new ArrayList<>();
 
     protected String name;
@@ -170,6 +171,31 @@ public abstract class Room implements Observable{
             door2.close();
             notifyObserver();
         } 
+    }
+    public void turnLightOn(){
+        System.out.println("turning light on");
+        light.setLightOn();
+        notifyObserver();
+    }
+    public void turnLightOff(){
+        System.out.println("turning light on");
+        light.setLightOff();
+        notifyObserver();
+    }
+    public void turnAutoLightOn(){
+        System.out.println("turning light on");
+        light.setAutolightOn();
+        notifyObserver();
+    }
+    public void turnAutoLightOff(){
+        System.out.println("turning light on");
+        light.setAutolightOff();
+        notifyObserver();
+    }
+    public void setTemperature(int temperature){
+        System.out.println("setting temperature to: "+temperature);
+        temp.setTemperature(temperature);
+        notifyObserver();
     }
     public void addUserToRoom(User user){
         usersInThisRoomList.add(user);

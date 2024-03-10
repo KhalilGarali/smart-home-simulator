@@ -6,9 +6,11 @@ import main.java.model.rooms.Room;
 
 public class OpenADoor implements Command{
     protected Room room;
+    protected int doorNumber;
 
-    public OpenADoor(Room room){
+    public OpenADoor(Room room, int doorNumber){
         this.room = room;
+        this.doorNumber = doorNumber;
     }
 
     @Override
@@ -24,6 +26,12 @@ public class OpenADoor implements Command{
             // potentially send a GUI error
             // System.out.println("No doors to open in " + room);
         // }
+        System.out.println("\n--------------------------------------------------------------------");
+        System.out.println(room);
+        System.out.print("command done: ");
+        room.openDoor(doorNumber);
+        System.out.println(room);
+        System.out.println("----------------------------------------------------------------------");
         return true;
     }
 

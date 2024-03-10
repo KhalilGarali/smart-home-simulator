@@ -29,10 +29,11 @@ public class main {
         User guest = shs.makeGuest("Julie");
 
         shs.enterRoom(father, bedroom);
+        shs.enterRoom(child, bedroom);
 
         OpenAWindow openAWindow1 = shs.makeOpenAWindow(kitchen, 1);
         shs.doAction(father,openAWindow1, kitchen);
-//        shs.doAction(child,openAWindow1, kitchen);
+        shs.doAction(child,openAWindow1, kitchen);
 //        Room kitchen = new Kitchen();
 //        Window window1 = new Window();
 //        Window window2 = new Window();

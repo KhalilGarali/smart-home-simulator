@@ -1,6 +1,6 @@
 package main.java.model.fixtures;
 
-public class Temp {
+public class Temperature {
 
     private int temperature = 25;
 

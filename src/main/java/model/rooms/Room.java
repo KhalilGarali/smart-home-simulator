@@ -6,6 +6,7 @@ import java.util.List;
 
 import main.java.logic.observerPattern.Observable;
 import main.java.logic.observerPattern.Observer;
+import main.java.model.lighting.Light;
 import main.java.model.openings.*;
 
 /**
@@ -15,14 +16,17 @@ import main.java.model.openings.*;
  */
 
 public abstract class Room implements Observable{
+    String name;
     //making the assumption that the room can have max 2 openings of the same kind
     public Window window1;
     public Window window2;
     private Door door1;
     private Door door2;
+    private Light light1;
 
     //default constructor
-    public Room(){
+    public Room(String name){
+        this.name = name;
     } 
 
     // START OF THE OBSERVER PATTERN IMPLEMENTATION
@@ -75,8 +79,17 @@ public abstract class Room implements Observable{
             System.out.println("can't add more than 2 doors to a room!");
         }    
     }
-    public Window getWindow1(){
-        return this.window1;
+
+
+    public Window getWindow(int windowNumber){
+        if (windowNumber==1){
+            return window1;
+        }
+        return window2;
+    }
+
+    public void setLight(Light l){
+        this.light1 = l;
     }
 
     // open and close for All's - will be useful with SHH and SHP
@@ -165,9 +178,10 @@ public abstract class Room implements Observable{
         } 
     }
     
+    //not showing window2 and door2 for now!
     @Override
     public String toString() {
-        return " has window1=" + window1 + ", window2=" + window2 + ", door1=" + door1 + ", door2=" + door2 + "";
+        return " has window1=" + window1 + ", door1=" + door1 + ", light=" + light1;
     }   
     
 }

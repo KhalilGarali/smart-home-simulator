@@ -17,4 +17,10 @@ public class Door implements Opening {
     public boolean isOpen() {
         return open;
     }
+
+    @Override
+    public String toString() {
+        return "Door [open=" + open + "]";
+    }
+    
 }

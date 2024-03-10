@@ -1,8 +1,7 @@
 package main.java.model.rooms;
 
-public class Kitchen extends Room{
-
-    public Kitchen(String name){
+public class Garage extends Room{
+    public Garage(String name){
         super(name);
     }
 

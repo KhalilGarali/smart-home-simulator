@@ -1,6 +1,7 @@
 package main.java.logic.commands.open;
 
 import main.java.logic.commands.Command;
+import main.java.logic.users.Permissions;
 import main.java.model.rooms.Room;
 
 public class OpenADoor implements Command{
@@ -8,6 +9,11 @@ public class OpenADoor implements Command{
 
     public OpenADoor(Room room){
         this.room = room;
+    }
+
+    @Override
+    public Permissions requirePermissions(){
+        return REQUIRED_PERMISSIONS;
     }
 
     @Override
@@ -19,5 +25,10 @@ public class OpenADoor implements Command{
             // System.out.println("No doors to open in " + room);
         // }
         return true;
+    }
+
+    @Override
+    public String toString(){
+        return "close a window";
     }
 }

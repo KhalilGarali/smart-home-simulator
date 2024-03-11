@@ -1,3 +1,4 @@
+
 package main.java.model.rooms;
 
 import java.util.ArrayList;
@@ -5,42 +6,74 @@ import java.util.List;
 
 import main.java.logic.observerPattern.Observable;
 import main.java.logic.observerPattern.Observer;
+// import main.java.model.lighting.Light;
+import main.java.logic.users.User;
+import main.java.model.fixtures.HVAC;
+import main.java.model.fixtures.Light;
+import main.java.model.fixtures.Temperature;
 import main.java.model.openings.*;
 
+/**
+ * Abstract class representing a Room that can observe and be observed,
+ * following the Observer pattern. It allows for the manipulation of room openings
+ * such as windows and doors.
+ */
 
 public abstract class Room implements Observable{
+    // String name;
+    //making the assumption that the room can have max 2 openings of the same kind
+    public Window window1;
+    public Window window2;
+    private Door door1;
+    private Door door2;
+    private Light light = new Light();
+    private Temperature temp = new Temperature();
+    private int desiredTemp;
+    private int lightSensor;
+    private HVAC hvac = new HVAC();
+    protected String name;
 
+    protected List<User> usersInThisRoomList = new ArrayList<>();
+    private Light light1;
+
+    //default constructor
+    public Room(String name){
+        this.name = name;
+        // this.name = name;
+    } 
+
+    // START OF THE OBSERVER PATTERN IMPLEMENTATION
+    // List of Observer objects that are monitoring changes in this Room
     public List<Observer> listeningModules = new ArrayList<>();
 
+    /**
+     * Adds an observer to the list of observers listening for changes to the room.
+     * @param m The observer to add.
+     */
     @Override
     public void addObserver(Observer m){
         listeningModules.add(m);
     }
+    /**
+     * Removes an observer from the list of observers.
+     * @param m The observer to remove.
+     */
     @Override
     public void removeObserver(Observer m){
         listeningModules.remove(m);
     }
+    /**
+     * Notifies all observers about a change in the room's state.
+     */
     @Override
     public void notifyObserver(){
         for (Observer module: listeningModules){
             module.update(this);
         }
     }
+    // END OF THE OBSERVER PATTERN IMPLEMENTATION
 
-    // we can use it if we decide to have more openings in a room
-    // private List<Opening> openings = new ArrayList<>();
-
-    //making the assumption that the room can have max 2 openings of the same kind
-    public Window window1;
-    public Window window2;
-    private Door door1;
-    private Door door2;
-
-    //default constructor
-    public Room(){
-    } 
-
-    // opening setters
+    // Setters for the Openings in the Room
     public void setWindow(Window window) {
         if(window1 == null){
             this.window1 = window;   
@@ -56,14 +89,44 @@ public abstract class Room implements Observable{
         } else if(door1 != null && door2 == null){
             this.door2 = door;
         } else {
-            System.out.println("can't add more than 2 windows to a room!");
+            System.out.println("can't add more than 2 doors to a room!");
         }    
     }
-    public Window getWindow1(){
-        return this.window1;
+
+
+    public Window getWindow(int windowNumber){
+        if (windowNumber==1){
+            return window1;
+        }
+        return window2;
     }
 
-    //All openers and closers - will be useful with SHH and SHP
+    public void setLight(Light l){
+        this.light1 = l;
+    }
+    public Door getDoor1() {
+        return door1;
+    }
+    public Door getDoor2() {
+        return door2;
+    }
+    public Light getLight() {
+        return light;
+    }
+    public Temperature getTemp() {
+        return temp;
+    }
+    public int getDesiredTemp() {
+        return desiredTemp;
+    }
+    public int getLightSensor() {
+        return lightSensor;
+    }
+    public String getName() {
+        return name;
+    }
+
+    // open and close for All's - will be useful with SHH and SHP
     public void openAllOpenings() {
         System.out.println("Open everything");
         window1.open();
@@ -99,7 +162,7 @@ public abstract class Room implements Observable{
         door2.close();
     }
     
-    // single opening closers and openers
+    // single Opening closers and openers
     public void openWindow(int num){
         if (num==1){
             System.out.println("Open window1");
@@ -109,36 +172,124 @@ public abstract class Room implements Observable{
         if (num==2){
             System.out.println("Open window2");
             window2.open();
+            notifyObserver();
         } 
     }
-    public void openDoor1(){
-        System.out.println("Open door1");
-        door1.open();
+    public void openDoor(int num){
+        if (num==1){
+            System.out.println("Open door1");
+            door1.open();
+            notifyObserver();
+        }
+        if (num==2){
+            System.out.println("Open door2");
+            door2.open();
+            notifyObserver();
+        } 
     }
-    public void openDoor2(){
-        System.out.println("Open door2");
-        door2.open();
+    public void closeWindow(int num){
+        if (num==1){
+            System.out.println("Close window1");
+            window1.close();
+            notifyObserver();
+        }
+        if (num==2){
+            System.out.println("Close window2");
+            window2.close();
+            notifyObserver();
+        } 
     }
-    public void closeWindow1(){
-        System.out.println("Close window1");
-        window1.close();
+    public void closeDoor(int num){
+        if (num==1){
+            System.out.println("Close door1");
+            door1.close();
+            notifyObserver();
+        }
+        if (num==2){
+            System.out.println("Close door2");
+            door2.close();
+            notifyObserver();
+        } 
     }
-    public void closeWindow2(){
-        System.out.println("Close window2");
-        window2.close();
+    public void turnLightOn(){
+        System.out.println("turning light on in : " + this.getName());
+        light.setLightOn();
+        notifyObserver();
     }
-    public void closeDoor1(){
-        System.out.println("Close door1");
-        door1.close();
+    public void turnLightOff(){
+        if(usersInThisRoomList.isEmpty()){
+            System.out.println("cannot turn light off, someone is still in: " + this.getName());
+        }
+        else{
+            System.out.println("turning light off");
+            light.setLightOff();
+            notifyObserver();
+        }
     }
-    public void closeDoor2(){
-        System.out.println("Close door2");
-        door2.close();
+    public void turnAutoLightOn(){
+        System.out.println("turning auto light on");
+        light.setAutolightOn();
+        notifyObserver();
+    }
+    public void turnAutoLightOff(){
+        System.out.println("turning light on");
+        light.setAutolightOff();
+        notifyObserver();
+    }
+    public void setTemperature(int temperature){
+        System.out.println("setting temperature to: "+temperature);
+        temp.setTemperature(temperature);
+        notifyObserver();
+    }
+    public void setDesiredTemperature(int temperature){
+        System.out.println("setting desired temperature to: " + temperature);
+        desiredTemp = temperature;
+        notifyObserver();
+    }
+    public void turnHeatingOn(){
+        turnCoolingOff();
+        System.out.println("Turning On Heating : ");
+        hvac.setHeating(true);
+        notifyObserver();
+    }
+    public void turnHeatingOff(){
+        System.out.println("Turning Off Heating : ");
+        hvac.setHeating(false);
+        notifyObserver();
+    }
+    public void turnCoolingOn(){
+        turnCoolingOff();
+        System.out.println("Turning On Cooling : ");
+        hvac.setCooling(true);
+        notifyObserver();
+    }
+    public void turnCoolingOff(){
+        System.out.println("Turning Off Cooling : ");
+        hvac.setCooling(false);
+        notifyObserver();
+    }
+
+    public void addUserToRoom(User user){
+        usersInThisRoomList.add(user);
+    }
+    public void removeUserFromRoom(User user){
+        try {
+            usersInThisRoomList.remove(user);
+        }catch(Exception ignored){
+            System.out.println("user isn't in: " + this.getName());
+        }
     }
     
+    //not showing window2 and door2 for now!
     @Override
     public String toString() {
-        return " [window1=" + window1 + ", window2=" + window2 + ", door1=" + door1 + ", door2=" + door2 + "]";
+        return " has window1= " + window1 +
+                ", window2= " + window2 +
+                ", door= " + door1 +
+                ", light= " + light.getLight() +
+                ", temperature= " + temp.getTemperature() +
+                ", autoLight= " + light.getAutolight() +
+                " ";
     }   
     
 }

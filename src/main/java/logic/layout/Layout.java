@@ -9,7 +9,7 @@ import main.java.model.fixtures.Light;
 import main.java.model.openings.Door;
 import main.java.model.openings.Window;
 import main.java.model.rooms.Bathroom;
-import main.java.model.rooms.Bedroom;
+import main.java.model.rooms.BedRoom;
 import main.java.model.rooms.Garage;
 import main.java.model.rooms.Kitchen;
 import main.java.model.rooms.Room;
@@ -41,7 +41,7 @@ public class Layout {
                     if(line.substring(6).trim().equalsIgnoreCase("kitchen")){
                         currentRoom = new Kitchen("kitchen");
                     } else if (line.substring(6).trim().equalsIgnoreCase("bedroom")){
-                        currentRoom = new Bedroom("bedroom");
+                        currentRoom = new BedRoom("bedroom");
                     } else if (line.substring(6).trim().equalsIgnoreCase("garage")){
                         currentRoom = new Garage("garage");
                     } else if (line.substring(6).trim().equalsIgnoreCase("bathroom")){

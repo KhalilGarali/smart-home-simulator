@@ -96,7 +96,7 @@ public class SHS {
         return room;
     }
     public Room makeBedRoom(String roomName){
-        Room room = new Bedroom(roomName);
+        Room room = new BedRoom(roomName);
         houseLayout.add(room);
         return room;
     }

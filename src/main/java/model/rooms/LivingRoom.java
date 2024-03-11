@@ -10,7 +10,7 @@ public class LivingRoom extends Room{
 
     @Override
     public String toString() {
-        return "Living Room" + super.toString();
+        return getName() + super.toString();
     }
 
 }

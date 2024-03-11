@@ -57,7 +57,7 @@ public class SHC extends Module{
             }
         }
 
-        System.out.println(u + " is not in "+ room );
+        System.out.println(u.getName() + " is not in "+ room.getName() );
         return false;
     }
 

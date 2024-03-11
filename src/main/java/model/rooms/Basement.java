@@ -14,7 +14,7 @@ public class Basement extends Room{
 
     @Override
     public String toString() {
-        return "Bathroom" + super.toString();
+        return getName() + super.toString();
     }
 
 }

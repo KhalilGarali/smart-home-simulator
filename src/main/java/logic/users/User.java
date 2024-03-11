@@ -32,6 +32,11 @@ public abstract class User {
     public void enterRoom(Room room){
         this.room = room;
         room.addUserToRoom(this);
+        room.turnLightOn();
+    }
+    public void exitRoom(Room room){
+        room.removeUserFromRoom(this);
+        room.turnLightOff();
     }
     public String getName() {
         return name;
@@ -43,9 +48,5 @@ public abstract class User {
 
     public Room getRoom() {
         return room;
-    }
-
-    public void setRoom(Room room) {
-        this.room = room;
     }
 }

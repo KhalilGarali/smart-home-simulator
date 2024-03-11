@@ -7,6 +7,7 @@ import java.util.List;
 import main.java.logic.observerPattern.Observable;
 import main.java.logic.observerPattern.Observer;
 import main.java.logic.users.User;
+import main.java.model.fixtures.HVAC;
 import main.java.model.fixtures.Light;
 import main.java.model.fixtures.Temperature;
 import main.java.model.openings.*;
@@ -23,11 +24,15 @@ public abstract class Room implements Observable{
     public Window window2;
     private Door door1;
     private Door door2;
-    private Light light;
-    private Temperature temp;
+    private Light light = new Light();
+    private Temperature temp = new Temperature();
+    private int desiredTemp;
+    private int lightSensor;
+    private HVAC hvac;
+    protected String name;
+
     protected List<User> usersInThisRoomList = new ArrayList<>();
 
-    protected String name;
     //default constructor
     public Room(String name){
         this.name = name;
@@ -85,6 +90,27 @@ public abstract class Room implements Observable{
     }
     public Window getWindow1(){
         return this.window1;
+    }
+    public Door getDoor1() {
+        return door1;
+    }
+    public Door getDoor2() {
+        return door2;
+    }
+    public Light getLight() {
+        return light;
+    }
+    public Temperature getTemp() {
+        return temp;
+    }
+    public int getDesiredTemp() {
+        return desiredTemp;
+    }
+    public int getLightSensor() {
+        return lightSensor;
+    }
+    public String getName() {
+        return name;
     }
 
     // open and close for All's - will be useful with SHH and SHP
@@ -173,17 +199,22 @@ public abstract class Room implements Observable{
         } 
     }
     public void turnLightOn(){
-        System.out.println("turning light on");
+        System.out.println("turning light on in : " + this.getName());
         light.setLightOn();
         notifyObserver();
     }
     public void turnLightOff(){
-        System.out.println("turning light on");
-        light.setLightOff();
-        notifyObserver();
+        if(usersInThisRoomList.isEmpty()){
+            System.out.println("cannot turn light off, someone is still in: " + this.getName());
+        }
+        else{
+            System.out.println("turning light off");
+            light.setLightOff();
+            notifyObserver();
+        }
     }
     public void turnAutoLightOn(){
-        System.out.println("turning light on");
+        System.out.println("turning auto light on");
         light.setAutolightOn();
         notifyObserver();
     }
@@ -197,16 +228,52 @@ public abstract class Room implements Observable{
         temp.setTemperature(temperature);
         notifyObserver();
     }
+    public void setDesiredTemperature(int temperature){
+        System.out.println("setting desired temperature to: " + temperature);
+        desiredTemp = temperature;
+        notifyObserver();
+    }
+    public void turnHeatingOn(){
+        System.out.println("Turning On Heating : ");
+        hvac.setHeating(true);
+        notifyObserver();
+    }
+    public void turnHeatingOff(){
+        System.out.println("Turning On Heating : ");
+        hvac.setHeating(false);
+        notifyObserver();
+    }
+    public void turnCoolingOn(){
+        System.out.println("Turning On Cooling : ");
+        hvac.setCooling(true);
+        notifyObserver();
+    }
+    public void turnCoolingOff(){
+        System.out.println("Turning On Cooling : ");
+        hvac.setCooling(false);
+        notifyObserver();
+    }
+
     public void addUserToRoom(User user){
         usersInThisRoomList.add(user);
     }
     public void removeUserFromRoom(User user){
-        usersInThisRoomList.remove(user);
+        try {
+            usersInThisRoomList.remove(user);
+        }catch(Exception ignored){
+            System.out.println("user isn't in: " + this.getName());
+        }
     }
     
     @Override
     public String toString() {
-        return " has window1=" + window1 + ", window2=" + window2 + ", door1=" + door1 + ", door2=" + door2 + "";
-    }   
+        return " has window1= " + window1 +
+                ", window2= " + window2 +
+                ", door= " + door1 +
+                ", light= " + light.getLight() +
+                ", temperature= " + temp.getTemperature() +
+                ", autoLight= " + light.getAutolight() +
+                " ";
+    }
     
 }

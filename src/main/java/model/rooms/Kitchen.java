@@ -14,11 +14,6 @@ public class Kitchen extends Room{
 
     @Override
     public String toString() {
-        return "Kitchen" + super.toString();
-    }
-
-    public void enterRoom(User user){
-        System.out.println("user" + user.toString() + "has entered" + this.name);
-        usersInThisRoomList.add(user);
+        return getName() + super.toString();
     }
 }

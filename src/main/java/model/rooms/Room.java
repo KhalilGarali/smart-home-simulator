@@ -212,12 +212,14 @@ public abstract class Room implements Observable{
         } 
     }
     public void turnLightOn(){
-        System.out.println("turning light on in : " + this.getName());
-        light.setLightOn();
-        notifyObserver();
+        if(!light.getLight()){
+            System.out.println("turning light on in : " + this.getName());
+            light.setLightOn();
+            notifyObserver();
+        }
     }
     public void turnLightOff(){
-        if(usersInThisRoomList.isEmpty()){
+        if(!usersInThisRoomList.isEmpty()){
             System.out.println("cannot turn light off, someone is still in: " + this.getName());
         }
         else{
@@ -250,6 +252,7 @@ public abstract class Room implements Observable{
         turnCoolingOff();
         System.out.println("Turning On Heating : ");
         hvac.setHeating(true);
+        //set the temp object to something higher over time
         notifyObserver();
     }
     public void turnHeatingOff(){
@@ -272,12 +275,17 @@ public abstract class Room implements Observable{
     public void addUserToRoom(User user){
         usersInThisRoomList.add(user);
     }
+
     public void removeUserFromRoom(User user){
         try {
             usersInThisRoomList.remove(user);
         }catch(Exception ignored){
             System.out.println("user isn't in: " + this.getName());
         }
+    }
+
+    public List<User> getUserFromRoom(){
+        return usersInThisRoomList;
     }
     
     //not showing window2 and door2 for now!

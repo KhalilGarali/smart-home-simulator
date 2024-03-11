@@ -3,6 +3,7 @@ package main.java;
 import javax.swing.*;
 import main.java.gui.HomeSimulatorFrame;
 import main.java.logic.commands.Command;
+import main.java.logic.commands.CommandFactory;
 import main.java.logic.commands.change.ChangeTemperature;
 import main.java.logic.commands.off.TurnCoolingOff;
 import main.java.logic.commands.off.TurnHeatingOff;
@@ -22,13 +23,14 @@ public class main {
 
     // this won't be the main function anymore, it will be the client.
     public static void main(String[] args){
-        SwingUtilities.invokeLater(() -> {
-            HomeSimulatorFrame frame = new HomeSimulatorFrame();
-            frame.setVisible(true);
-        });
+        // SwingUtilities.invokeLater(() -> {
+        //     HomeSimulatorFrame frame = new HomeSimulatorFrame();
+        //     frame.setVisible(true);
+        // });
 
         SHS shs = new SHS();
 
+        //FIXME all this work will be done by the Layout class
         Room kitchen = shs.makeKitchen("My Kitchen");
         Room masterBedroom = shs.makeBedRoom("Master bedroom");
         Room kidsBedroom = shs.makeBedRoom("kid's bedroom");
@@ -73,14 +75,19 @@ public class main {
         bathroom2.setDoor((Door) dBathroomDoor);
 
         User father = shs.makeParent("John");
+        father.moveToRoom(kitchen);
         User child = shs.makeChild("Joseph");
         User guest = shs.makeGuest("Julie");
         User cousin = shs.makeFamilyMember("Jordan");
         User stranger = shs.makeStranger("J...");
 
-        shs.enterRoom(father, masterBedroom);
-        shs.enterRoom(child, kidsBedroom);
+        //FIXME moved from shs to user class
+        // shs.enterRoom(father, masterBedroom);
+        // shs.enterRoom(child, kidsBedroom);
 
+        // examples for the command factory application
+        Command openKitchenWindow1 = shs.cf.createCommand("openawindow",kitchen, 1);
+        // **************************************
         OpenAWindow openKitchenWindow = shs.makeOpenAWindow(kitchen, 1);
         OpenAWindow openMasterWindow = shs.makeOpenAWindow(masterBedroom, 1);
         OpenAWindow openKidsWindow = shs.makeOpenAWindow(kidsBedroom, 1);
@@ -96,57 +103,26 @@ public class main {
         TurnHeatingOff turnMasterHeatingOff = shs.makeTurnHeatingOff(masterBedroom);
         ChangeTemperature changeLivingTemperature = shs.makeChangeTemperature(livingRoom, 27);
 
-        shs.enterRoom(child, kitchen);
-
-        shs.doAction(father,openDBathroomWindow, kitchen);
-        shs.doAction(child,openBasementWindow, kitchen);
-        shs.doAction(father, turnLivingLightOn, kidsBedroom);
-        shs.doAction(father, turnKitchenLightOff, kidsBedroom);
-        shs.doAction(father, turnMasterCoolingOn, kidsBedroom);
-        shs.doAction(father, turnMasterCoolingOff, kidsBedroom);
-        shs.doAction(father, turnMasterHeatingOn, kidsBedroom);
-        shs.doAction(father, turnMasterHeatingOff, kidsBedroom);
-        shs.doAction(father, changeLivingTemperature, kidsBedroom);
-        shs.doAction(father, openUBathroomWindow, kidsBedroom);
-
-//        Room kitchen = new Kitchen();
-//        Window window1 = new Window();
-//        Window window2 = new Window();
-//        kitchen.setWindow(window1);
-//        kitchen.setWindow(window2);
-//
-//        //this is optional for now, might be used later by SHP for security reasons
-//        List<Room> houseLayout = new ArrayList<>();
-//        houseLayout.add(kitchen);
-//
-//        // SHC commands to be instantiated at the start of the simulation
-//        OpenAWindow openWindow1 = new OpenAWindow(kitchen, 1);
-//        OpenAWindow openWindow2 = new OpenAWindow(kitchen, 2);
-//        // CloseWindow closeWindow = new CloseWindow(kitchen);
-//        // OpenDoor openDoor = new OpenDoor(kitchen);
-//        // CloseDoor closeDoor = new CloseDoor(kitchen);
-//
-//        // instaniate an SHC with its default commands
-//        SHC anSHC = new SHC();
-//        SHH anSHH = new SHH();
-//        kitchen.addObserver(anSHH);
-//
-//        User stranger = new Stranger("IT");
-//        User father = new Parent("Jordan");
-//        User child = new Child("Joseph");
-//        User guest = new Guest("Margery");
-//
-//
-//        //those two commands should somehow be linked to the GUI button trigger
-//        anSHC.userAction(stranger, openWindow1);
-//        anSHC.userAction(father, openWindow1);
-//        anSHC.userAction(child, openWindow1);
-//        anSHC.userAction(guest, openWindow1);
+        //tester for moving a user form room using the new command
+        System.out.println("\n----------------------------------------");
+        System.out.println("kitchen has " + kitchen.getUserFromRoom());
+        father.moveToRoom(null);
+        System.out.print("kitchen has " + kitchen.getUserFromRoom());
+        System.out.print("\n----------------------------------------");
+        // end of test
 
 
-        // anSHC.addCommand(openWindow2);
-        // anSHC.executeCommand();
-
+        //FIXME to be moved to shc and called from shs. Wade
+        // shs.doAction(father,openDBathroomWindow, kitchen);
+        // shs.doAction(child,openBasementWindow, kitchen);
+        // shs.doAction(father, turnLivingLightOn, kidsBedroom);
+        // shs.doAction(father, turnKitchenLightOff, kidsBedroom);
+        // shs.doAction(father, turnMasterCoolingOn, kidsBedroom);
+        // shs.doAction(father, turnMasterCoolingOff, kidsBedroom);
+        // shs.doAction(father, turnMasterHeatingOn, kidsBedroom);
+        // shs.doAction(father, turnMasterHeatingOff, kidsBedroom);
+        // shs.doAction(father, changeLivingTemperature, kidsBedroom);
+        // shs.doAction(father, openUBathroomWindow, kidsBedroom);
     }
     
 }

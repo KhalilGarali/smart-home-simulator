@@ -1,9 +1,24 @@
 package main.java.logic.modules;
 
+import main.java.logic.commands.Command;
 import main.java.logic.observerPattern.Observable;
+import main.java.logic.users.User;
 import main.java.model.rooms.Room;
 
 public class SHH extends Module {
+    private SHC shc; 
+
+    public SHH(SHC shc){
+        this.shc = shc;
+    }
+    
+    public void doAction(Command command, Room room){
+        shc.moduleAction(command, room);
+    }
+
+    public void increaseTemperature(int temperature){
+        //directly change temperature
+    }
 
     // temporary implementation, very minial just to show update received automatically
     // upon notification from the room

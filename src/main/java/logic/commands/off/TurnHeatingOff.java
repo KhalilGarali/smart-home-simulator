@@ -4,7 +4,7 @@ import main.java.logic.commands.Command;
 import main.java.logic.users.Permissions;
 import main.java.model.rooms.Room;
 
-public class TurnHeatingOff implements Command {
+public class TurnHeatingOff extends Command {
     protected Room room;
 
     public TurnHeatingOff(Room room){

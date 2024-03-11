@@ -111,6 +111,8 @@ public class main {
         System.out.print("\n----------------------------------------");
         // end of test
 
+        //test for open window
+        shs.doAction(father, openKitchenWindow1, kitchen);
 
         //FIXME to be moved to shc and called from shs. Wade
         // shs.doAction(father,openDBathroomWindow, kitchen);

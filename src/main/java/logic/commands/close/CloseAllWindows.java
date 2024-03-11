@@ -4,7 +4,7 @@ import main.java.logic.commands.Command;
 import main.java.logic.users.Permissions;
 import main.java.model.rooms.Room;
 
-public class CloseAllWindows implements Command {
+public class CloseAllWindows extends Command {
     protected Room room;
 
 

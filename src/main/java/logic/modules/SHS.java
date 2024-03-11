@@ -264,7 +264,9 @@ public class SHS {
         return command;
     }
 
-
+    public void doAction(User user, Command command, Room room){
+        shc.userAction(user, command, room);
+    }
     /**
      *  Make/Delete actions: ////////////////////////////////////
      */

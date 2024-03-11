@@ -4,7 +4,7 @@ import main.java.logic.commands.Command;
 import main.java.logic.users.Permissions;
 import main.java.model.rooms.Room;
 
-public class CloseAWindow implements Command{
+public class CloseAWindow extends Command{
     protected Room room;
     protected int windowNumber;
 

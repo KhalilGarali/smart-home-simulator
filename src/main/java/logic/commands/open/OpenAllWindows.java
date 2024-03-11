@@ -4,7 +4,7 @@ import main.java.logic.commands.Command;
 import main.java.logic.users.Permissions;
 import main.java.model.rooms.Room;
 
-public class OpenAllWindows implements Command {
+public class OpenAllWindows extends Command {
     protected Room room;
 
     public OpenAllWindows(Room room){

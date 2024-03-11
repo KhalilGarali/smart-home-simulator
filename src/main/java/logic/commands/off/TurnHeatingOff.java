@@ -1,13 +1,13 @@
-package main.java.logic.commands.on;
+package main.java.logic.commands.off;
 
 import main.java.logic.commands.Command;
 import main.java.logic.users.Permissions;
 import main.java.model.rooms.Room;
 
-public class turnAutoLightOn implements Command {
+public class TurnHeatingOff implements Command {
     protected Room room;
 
-    public turnAutoLightOn(Room room){
+    public TurnHeatingOff(Room room){
         this.room = room;
     }
 
@@ -27,7 +27,7 @@ public class turnAutoLightOn implements Command {
         System.out.println("\n--------------------------------------------------------------------");
         System.out.println(room);
         System.out.print("command done: ");
-        room.turnAutoLightOn();
+        room.turnHeatingOff();
         System.out.println(room);
         System.out.println("----------------------------------------------------------------------");
         return true;
@@ -35,7 +35,6 @@ public class turnAutoLightOn implements Command {
 
     @Override
     public String toString(){
-        return "turn auto-light on";
+        return "turn a heating off";
     }
-
 }

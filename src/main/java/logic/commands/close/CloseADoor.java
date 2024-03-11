@@ -29,7 +29,7 @@ public class CloseADoor implements Command{
         System.out.println("\n--------------------------------------------------------------------");
         System.out.println(room);
         System.out.print("command done: ");
-        room.closeDoor(1);
+        room.closeDoor(doorNumber);
         System.out.println(room);
         System.out.println("----------------------------------------------------------------------");
         return true;

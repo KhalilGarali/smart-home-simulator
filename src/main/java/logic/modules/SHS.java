@@ -1,7 +1,17 @@
 package main.java.logic.modules;
 
 import main.java.logic.commands.Command;
-import main.java.logic.commands.open.OpenAWindow;
+import main.java.logic.commands.change.ChangeTemperature;
+import main.java.logic.commands.close.*;
+import main.java.logic.commands.off.TurnAutoLightOff;
+import main.java.logic.commands.off.TurnCoolingOff;
+import main.java.logic.commands.off.TurnHeatingOff;
+import main.java.logic.commands.off.TurnLightOff;
+import main.java.logic.commands.on.TurnAutoLightOn;
+import main.java.logic.commands.on.TurnCoolingOn;
+import main.java.logic.commands.on.TurnHeatingOn;
+import main.java.logic.commands.on.TurnLightOn;
+import main.java.logic.commands.open.*;
 import main.java.logic.users.*;
 import main.java.model.fixtures.Light;
 import main.java.model.fixtures.Temperature;
@@ -137,11 +147,102 @@ public class SHS {
     /**
      *  Make/Delete commands: ////////////////////////////////////
      */
-    public OpenAWindow makeOpenAWindow(Room room, Integer number){
+    public OpenAWindow makeOpenAWindow(Room room, int number){
         OpenAWindow command = new OpenAWindow(room, number);
         shc.addCommand(command);
         return command;
     }
+    public OpenAllWindows makeOpenAllWindows(Room room){
+        OpenAllWindows command = new OpenAllWindows(room);
+        shc.addCommand(command);
+        return command;
+    }
+    public OpenADoor makeOpenADoor(Room room, int number){
+        OpenADoor command = new OpenADoor(room, number);
+        shc.addCommand(command);
+        return command;
+    }
+    public OpenAllDoors makeOpenAllDoors(Room room){
+        OpenAllDoors command = new OpenAllDoors(room);
+        shc.addCommand(command);
+        return command;
+    }
+    public OpenAllOpenings makeOpenAllOpenings(Room room){
+        OpenAllOpenings command = new OpenAllOpenings(room);
+        shc.addCommand(command);
+        return command;
+    }
+    public CloseAWindow makeCloseAWindow(Room room, int number){
+        CloseAWindow command = new CloseAWindow(room, number);
+        shc.addCommand(command);
+        return command;
+    }
+    public CloseAllWindows makeCloseAllWindows(Room room){
+        CloseAllWindows command = new CloseAllWindows(room);
+        shc.addCommand(command);
+        return command;
+    }
+    public CloseADoor makeCloseADoor(Room room, int number){
+        CloseADoor command = new CloseADoor(room, number);
+        shc.addCommand(command);
+        return command;
+    }
+    public CloseAllDoors makeCloseAllDoors(Room room){
+        CloseAllDoors command = new CloseAllDoors(room);
+        shc.addCommand(command);
+        return command;
+    }
+    public CloseAllOpenings makeCloseAllOpenings(Room room){
+        CloseAllOpenings command = new CloseAllOpenings(room);
+        shc.addCommand(command);
+        return command;
+    }
+    public TurnLightOn makeTurnLightOn(Room room){
+        TurnLightOn command = new TurnLightOn(room);
+        shc.addCommand(command);
+        return command;
+    }
+    public TurnLightOff makeTurnLightOff(Room room){
+        TurnLightOff command = new TurnLightOff(room);
+        shc.addCommand(command);
+        return command;
+    }
+    public TurnAutoLightOn makeTurnAutoLightOn(Room room){
+        TurnAutoLightOn command = new TurnAutoLightOn(room);
+        shc.addCommand(command);
+        return command;
+    }
+    public TurnAutoLightOff makeTurnAutoLightOff(Room room){
+        TurnAutoLightOff command = new TurnAutoLightOff(room);
+        shc.addCommand(command);
+        return command;
+    }
+    public ChangeTemperature makeChangeTemperature(Room room, int temperature){
+        ChangeTemperature command = new ChangeTemperature(room, temperature);
+        shc.addCommand(command);
+        return command;
+    }
+    public TurnCoolingOn makeTurnCoolingOn(Room room){
+        TurnCoolingOn command = new TurnCoolingOn(room);
+        shc.addCommand(command);
+        return command;
+    }
+    public TurnCoolingOff makeTurnCoolingOff(Room room){
+        TurnCoolingOff command = new TurnCoolingOff(room);
+        shc.addCommand(command);
+        return command;
+    }
+    public TurnHeatingOn makeTurnHeatingOn(Room room){
+        TurnHeatingOn command = new TurnHeatingOn(room);
+        shc.addCommand(command);
+        return command;
+    }
+    public TurnHeatingOff makeTurnHeatingOff(Room room){
+        TurnHeatingOff command = new TurnHeatingOff(room);
+        shc.addCommand(command);
+        return command;
+    }
+
 
     /**
      *  Make/Delete actions: ////////////////////////////////////

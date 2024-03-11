@@ -1,6 +1,13 @@
 package main.java.logic.modules;
 
 import main.java.logic.commands.Command;
+import main.java.logic.commands.change.ChangeTemperature;
+import main.java.logic.commands.off.TurnCoolingOff;
+import main.java.logic.commands.off.TurnHeatingOff;
+import main.java.logic.commands.off.TurnLightOff;
+import main.java.logic.commands.on.TurnCoolingOn;
+import main.java.logic.commands.on.TurnHeatingOn;
+import main.java.logic.commands.on.TurnLightOn;
 import main.java.logic.commands.open.*;
 import main.java.logic.users.*;
 import main.java.model.openings.*;
@@ -74,17 +81,26 @@ public class main {
         OpenAWindow openLivingWindow = shs.makeOpenAWindow(livingRoom, 1);
         OpenAWindow openUBathroomWindow = shs.makeOpenAWindow(bathroom1, 1);
         OpenAWindow openDBathroomWindow = shs.makeOpenAWindow(bathroom2, 1);
+        TurnLightOn turnLivingLightOn = shs.makeTurnLightOn(livingRoom);
+        TurnLightOff turnKitchenLightOff = shs.makeTurnLightOff(kitchen);
+        TurnCoolingOn turnMasterCoolingOn = shs.makeTurnCoolingOn(masterBedroom);
+        TurnCoolingOff turnMasterCoolingOff = shs.makeTurnCoolingOff(masterBedroom);
+        TurnHeatingOn turnMasterHeatingOn = shs.makeTurnHeatingOn(masterBedroom);
+        TurnHeatingOff turnMasterHeatingOff = shs.makeTurnHeatingOff(masterBedroom);
+        ChangeTemperature changeLivingTemperature = shs.makeChangeTemperature(livingRoom, 27);
 
         shs.enterRoom(child, kitchen);
 
         shs.doAction(father,openDBathroomWindow, kitchen);
         shs.doAction(child,openBasementWindow, kitchen);
-        shs.doAction(child, openKidsWindow, kidsBedroom);
-
-
-
-
-
+        shs.doAction(father, turnLivingLightOn, kidsBedroom);
+        shs.doAction(father, turnKitchenLightOff, kidsBedroom);
+        shs.doAction(father, turnMasterCoolingOn, kidsBedroom);
+        shs.doAction(father, turnMasterCoolingOff, kidsBedroom);
+        shs.doAction(father, turnMasterHeatingOn, kidsBedroom);
+        shs.doAction(father, turnMasterHeatingOff, kidsBedroom);
+        shs.doAction(father, changeLivingTemperature, kidsBedroom);
+        shs.doAction(father, openUBathroomWindow, kidsBedroom);
 
 //        Room kitchen = new Kitchen();
 //        Window window1 = new Window();

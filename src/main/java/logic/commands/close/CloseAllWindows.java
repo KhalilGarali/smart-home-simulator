@@ -7,6 +7,7 @@ import main.java.model.rooms.Room;
 public class CloseAllWindows implements Command {
     protected Room room;
 
+
     public CloseAllWindows(Room room){
         this.room = room;
     }

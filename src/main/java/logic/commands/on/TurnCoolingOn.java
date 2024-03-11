@@ -1,13 +1,13 @@
-package main.java.logic.commands.off;
+package main.java.logic.commands.on;
 
 import main.java.logic.commands.Command;
 import main.java.logic.users.Permissions;
 import main.java.model.rooms.Room;
 
-public class turnLightOff implements Command {
+public class TurnCoolingOn implements Command {
     protected Room room;
 
-    public turnLightOff(Room room){
+    public TurnCoolingOn(Room room){
         this.room = room;
     }
 
@@ -27,7 +27,8 @@ public class turnLightOff implements Command {
         System.out.println("\n--------------------------------------------------------------------");
         System.out.println(room);
         System.out.print("command done: ");
-        room.turnLightOff();
+        room.turnHeatingOff();
+        room.turnCoolingOn();
         System.out.println(room);
         System.out.println("----------------------------------------------------------------------");
         return true;
@@ -35,7 +36,7 @@ public class turnLightOff implements Command {
 
     @Override
     public String toString(){
-        return "turn light off";
+        return "turn a cooling on";
     }
 
 }

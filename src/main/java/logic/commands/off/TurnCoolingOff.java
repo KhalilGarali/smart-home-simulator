@@ -1,19 +1,14 @@
-package main.java.logic.commands.change;
+package main.java.logic.commands.off;
 
 import main.java.logic.commands.Command;
 import main.java.logic.users.Permissions;
 import main.java.model.rooms.Room;
 
-public class changeTemperature implements Command {
+public class TurnCoolingOff implements Command {
     protected Room room;
 
-    public changeTemperature(Room room){
+    public TurnCoolingOff(Room room){
         this.room = room;
-    }
-
-    @Override
-    public Boolean execute() {
-        return null;
     }
 
     @Override
@@ -21,7 +16,8 @@ public class changeTemperature implements Command {
         return REQUIRED_PERMISSIONS;
     }
 
-    public Boolean execute(int temperature){
+    @Override
+    public Boolean execute(){
         // if(room.getHasDoors()){
         // room.setDoorOpen(false);
         // } else {
@@ -31,7 +27,7 @@ public class changeTemperature implements Command {
         System.out.println("\n--------------------------------------------------------------------");
         System.out.println(room);
         System.out.print("command done: ");
-        room.setTemperature(temperature);
+        room.turnCoolingOff();
         System.out.println(room);
         System.out.println("----------------------------------------------------------------------");
         return true;
@@ -39,6 +35,6 @@ public class changeTemperature implements Command {
 
     @Override
     public String toString(){
-        return "change temperature";
+        return "turn a cooling off";
     }
 }

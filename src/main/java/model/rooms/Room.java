@@ -28,7 +28,7 @@ public abstract class Room implements Observable{
     private Temperature temp = new Temperature();
     private int desiredTemp;
     private int lightSensor;
-    private HVAC hvac;
+    private HVAC hvac = new HVAC();
     protected String name;
 
     protected List<User> usersInThisRoomList = new ArrayList<>();
@@ -234,22 +234,24 @@ public abstract class Room implements Observable{
         notifyObserver();
     }
     public void turnHeatingOn(){
+        turnCoolingOff();
         System.out.println("Turning On Heating : ");
         hvac.setHeating(true);
         notifyObserver();
     }
     public void turnHeatingOff(){
-        System.out.println("Turning On Heating : ");
+        System.out.println("Turning Off Heating : ");
         hvac.setHeating(false);
         notifyObserver();
     }
     public void turnCoolingOn(){
+        turnCoolingOff();
         System.out.println("Turning On Cooling : ");
         hvac.setCooling(true);
         notifyObserver();
     }
     public void turnCoolingOff(){
-        System.out.println("Turning On Cooling : ");
+        System.out.println("Turning Off Cooling : ");
         hvac.setCooling(false);
         notifyObserver();
     }

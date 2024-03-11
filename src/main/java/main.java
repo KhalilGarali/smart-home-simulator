@@ -28,7 +28,7 @@ public class main {
         //     frame.setVisible(true);
         // });
 
-        SHS shs = new SHS();
+        SHS shs = SHS.getInstance();
 
         //FIXME all this work will be done by the Layout class
         Room kitchen = shs.makeKitchen("My Kitchen");

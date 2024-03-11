@@ -72,8 +72,8 @@ public class SHC extends Module{
         return false;
     }
 
-    //SHS
-    //SHH.regulatetemp
+    //SHS -->
+    //SHH.regulatetemp() -->
     //regulatetemp(){
     // shc.moduleAction
     //}

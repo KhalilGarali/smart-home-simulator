@@ -35,16 +35,17 @@ public class SHS {
     SHH shh;
     SHC shc;
     SHP shp ;
+    private static SHS shs;
     public CommandFactory cf;
     private List<Room> houseLayout;
     private List<User> houseUsers;
     private List<Opening> houseOpenings;
     private List<Object> housefixtures;
-    public SHS(){
+    private SHS(){
         this.shc = SHC.getIntance();
         //FIXME temp changes that might be permanent. (added the shc as arg)
-        this.shh = new SHH(shc);
-        this.shp = new SHP(shc);
+        this.shh = SHH.getInstance(shc);
+        this.shp = SHP.getInstance(shc);
         this.cf = new CommandFactory(shc);
         this.houseLayout = new ArrayList<Room>();
         this.houseUsers = new ArrayList<User>();
@@ -52,6 +53,12 @@ public class SHS {
         this.housefixtures = new ArrayList<Object>();
     }
 
+    public static SHS getInstance(){
+        if(shs == null){
+            shs = new SHS();
+        }
+        return shs;
+    }
     public void init(){
         //GUI init
         while(true){
@@ -263,8 +270,13 @@ public class SHS {
         shc.addCommand(command);
         return command;
     }
-
-    public void doAction(User user, Command command, Room room){
+    public void shhDoAction(Command command, Room room){
+        shh.doAction(command, room);
+    }
+    public void shpDoAction(Command command, Room room){
+        shp.doAction(command, room);
+    }
+    public void shcDoAction(User user, Command command, Room room){
         shc.userAction(user, command, room);
     }
     /**

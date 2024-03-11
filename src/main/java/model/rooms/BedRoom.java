@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.LinkedTransferQueue;
 
-public class Bedroom extends Room{
+public class BedRoom extends Room{
     User user;
-    public Bedroom(String name){
+    public BedRoom(String name){
         super(name);
     }
 

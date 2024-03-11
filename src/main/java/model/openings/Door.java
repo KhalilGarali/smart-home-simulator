@@ -2,7 +2,11 @@ package main.java.model.openings;
 
 public class Door implements Opening {
     private boolean open = false;
+    private String name;
 
+    public Door(String name){
+        this.name = name;
+    }
     @Override
     public void open() {
         open = true;

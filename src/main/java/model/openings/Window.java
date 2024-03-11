@@ -3,6 +3,11 @@ package main.java.model.openings;
 public class Window implements Opening {
     private boolean open = false;
     private boolean isBlocked = false;
+    private String name;
+
+    public Window(String name){
+        this.name = name;
+    }
 
     @Override
     public void open() {

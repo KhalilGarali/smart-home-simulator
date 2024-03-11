@@ -2,13 +2,9 @@ package main.java.model.rooms;
 
 import main.java.logic.users.User;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.LinkedTransferQueue;
+public class LivingRoom extends Room{
 
-public class Bedroom extends Room{
-    User user;
-    public Bedroom(String name){
+    public LivingRoom(String name){
         super(name);
     }
 
@@ -18,7 +14,4 @@ public class Bedroom extends Room{
     }
 
 }
-
-
-
 

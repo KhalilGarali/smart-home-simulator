@@ -1,120 +1,277 @@
 package main.java.logic.modules;
 
+import main.java.logic.commands.Command;
+import main.java.logic.commands.change.ChangeTemperature;
+import main.java.logic.commands.close.*;
+import main.java.logic.commands.off.TurnAutoLightOff;
+import main.java.logic.commands.off.TurnCoolingOff;
+import main.java.logic.commands.off.TurnHeatingOff;
+import main.java.logic.commands.off.TurnLightOff;
+import main.java.logic.commands.on.TurnAutoLightOn;
+import main.java.logic.commands.on.TurnCoolingOn;
+import main.java.logic.commands.on.TurnHeatingOn;
+import main.java.logic.commands.on.TurnLightOn;
 import main.java.logic.commands.open.*;
 import main.java.logic.commands.close.*;
 import main.java.logic.layout.Layout;
 import main.java.logic.users.*;
-import main.java.model.openings.*;
+import main.java.model.fixtures.Light;
+import main.java.model.fixtures.Temperature;
+import main.java.model.openings.Door;
+import main.java.model.openings.Opening;
+import main.java.model.openings.Window;
 import main.java.model.rooms.*;
 import main.java.logic.dashboard.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 import java.util.concurrent.TimeUnit;
 
 public class SHS {
-
-    // this won't be the main function anymore, it will be the client.
-    public static void main(String[] args){
-
-        //hardcode a room array for now to test layout file
-        List<Room> houseLayout = new ArrayList<>();
-        Layout aLayout = new Layout("src/main/java/logic/modules/houseLayoutFile.txt");
-        houseLayout = aLayout.getRooms();
-        System.out.println("***** The classes obtained from the example file are: ****");
-        System.out.println("\n------------------------------------------------------------");
-        for (Room r: houseLayout){
-            System.out.println(r);
-        }
-        System.out.println("------------------------------------------------------------");
-
-
-
-        Room kitchen = new Kitchen("kitchen");
-        Window window1 = new Window();
-        Window window2 = new Window();
-        kitchen.setWindow(window1);
-        kitchen.setWindow(window2);
-
-        //this is optional for now, might be used later by SHP for security reasons
-        // List<Room> houseLayout = new ArrayList<>();
-        // houseLayout.add(kitchen);
-
-        // SHC commands to be instantiated at the start of the simulation
-        OpenAWindow openWindow1 = new OpenAWindow(kitchen, 1);
-        OpenAWindow openWindow2 = new OpenAWindow(kitchen, 2);
-        CloseAWindow closeWindow1 = new CloseAWindow(kitchen);
-        // OpenDoor openDoor = new OpenDoor(kitchen);
-        // CloseDoor closeDoor = new CloseDoor(kitchen);
-
-        // instaniate an SHC with it's default commands 
-        SHC anSHC = new SHC();
-        SHH anSHH = new SHH();
-        kitchen.addObserver(anSHH);
-
-        User stranger = new Stranger("IT");
-        User father = new Parent("Jordan");
-        User child = new Child("Joseph");
-        User guest = new Guest("Margery");
-
-        
-        //those two commands should somehow be linked to the GUI button trigger
-        System.out.println("****** Testing permissions on the OpenAWindow command: ******");
-
-        anSHC.userAction(stranger, openWindow1);
-        anSHC.userAction(father, openWindow1);
-        anSHC.userAction(child, openWindow1);
-        anSHC.userAction(guest, openWindow1);
-
-
-        // *************************************
-        System.out.println("------------------------------");
-        Dashboard dashboard = new Dashboard(father, stranger);
-
-        // Use Case: Modify the date and time
-        System.out.println("Use Case: Modify the date and time");
-        dashboard.setDateTime(2010, 6, 10, 12, 0);
-        System.out.println("------------------------------");
-
-        // Use Case: The simulated time speed can be increased or decreased
-        System.out.println("Use Case: The simulated time speed can be increased or decreased");
-        System.out.println("Current date time: " + dashboard.getDateTime());
-        dashboard.adjustTimeSpeed(0.5); // make time run faster
-
-        // try {
-        //     TimeUnit.SECONDS.sleep(60);
-        // } catch(InterruptedException e) {
-        //     System.out.println("error with time sleep");
-        // }
-        System.out.println("new date time: " + dashboard.getDateTime());
-        System.out.println("------------------------------");
-
-        // Use Case: Move the logged user to another room
-        System.out.println("Use Case: Move the logged user to another room");
-        System.out.println(dashboard.getCurrentRoomLoggedUser());
-        dashboard.moveLoggedUser(Dashboard.layout[3][2]); // moved to bedroom6
-        System.out.println(dashboard.getCurrentRoomLoggedUser());
-        System.out.println("------------------------------");
-
-        // Use Case: Place people in specific rooms, or outside the home
-        System.out.println("Use Case: Place people in specific rooms, or outside the home");
-        dashboard.getCurrentRoomNonLoggedUser();
-        dashboard.moveNonLoggedUser(Dashboard.layout[0][0]); // moved to kitchen
-        dashboard.getCurrentRoomNonLoggedUser();
-        System.out.println("------------------------------");
-
-        // Use Case: Modify the temperature outside the home
-        // System.out.println("Modify the temperature outside the home");
-        // dashboard.getExternalTemperature();
-        // System.out.println("------------------------------");
-
-        // Use Case: Block window movements by putting an arbitrary object
-        // dashboard.blockWindow(window1);
-        // anSHC.userAction(father, closeWindow1);
-        // dashboard.unblockWindow(window1);
-        // anSHC.userAction(father, closeWindow1);
+    SHH shh;
+    SHC shc;
+    SHP shp ;
+    private List<Room> houseLayout;
+    private List<User> houseUsers;
+    private List<Opening> houseOpenings;
+    private List<Object> housefixtures;
+    public SHS(){
+        this.shc = new SHC();
+        this.shh = new SHH();
+        this.shp = new SHP();
+        this.houseLayout = new ArrayList<Room>();
+        this.houseUsers = new ArrayList<User>();
+        this.houseOpenings = new ArrayList<Opening>();
+        this.housefixtures = new ArrayList<Object>();
     }
-    
+
+    /**
+     *  Make/Delete users: ////////////////////////////////////
+     */
+    public User makeParent(String name){
+        User parent = new Parent(name);
+        houseUsers.add(parent);
+        return parent;
+    }
+    public User makeFamilyMember(String name){
+        User member = new FamilyMember(name);
+        houseUsers.add(member);
+        return member;
+    }
+    public User makeChild(String name){
+        User child = new Child(name);
+        houseUsers.add(child);
+        return child;
+    }
+    public User makeStranger(String name){
+        User stranger = new Stranger(name);
+        houseUsers.add(stranger);
+        return stranger;
+    }
+    public User makeGuest(String name){
+        User guest = new Guest(name);
+        houseUsers.add(guest);
+        return guest;
+    }
+    public void removeuser(User user){
+        houseUsers.remove(user);
+    }
+
+    /**
+     *  Make/Delete rooms: ////////////////////////////////////
+     */
+    public void removeRoom(Room room){
+        houseLayout.remove(room);
+    }
+    public Room makeKitchen(String roomName){
+        Room room = new Kitchen(roomName);
+        houseLayout.add(room);
+        return room;
+    }
+    public Room makeLivingRoom(String roomName){
+        Room room = new LivingRoom(roomName);
+        houseLayout.add(room);
+        return room;
+    }
+    public Room makeBedRoom(String roomName){
+        Room room = new Bedroom(roomName);
+        houseLayout.add(room);
+        return room;
+    }
+    public Room makeBasement(String roomName){
+        Room room = new Basement(roomName);
+        houseLayout.add(room);
+        return room;
+    }
+    public Room makeGarage(String roomName){
+        Room room = new Garage(roomName);
+        houseLayout.add(room);
+        return room;
+    }
+    public Room makePorch(String roomName){
+        Room room = new Porch(roomName);
+        houseLayout.add(room);
+        return room;
+    }
+    public Room makeBathroom(String roomName){
+        Room room = new Bathroom(roomName);
+        houseLayout.add(room);
+        return room;
+    }
+
+    /**
+     *  Make/Delete openings:  ////////////////////////////////////
+     */
+    public Opening makeWindow(String openingName){
+        Opening window = new Window(openingName);
+        houseOpenings.add(window);
+        return window;
+    }
+    public Opening makeDoor(String openingName){
+        Opening door = new Door(openingName);
+        houseOpenings.add(door);
+        return door;
+    }
+
+    /**
+     *  Make/Delete fixtures:  ////////////////////////////////////
+     */
+    public Light makeLight(String openingName){
+        Light light = new Light();
+        housefixtures.add(light);
+        return light;
+    }
+    public Temperature makeTemp(String openingName){
+        Temperature temperature = new Temperature();
+        housefixtures.add(temperature);
+        return temperature;
+    }
+
+    /**
+     *  Make/Delete commands: ////////////////////////////////////
+     */
+    public OpenAWindow makeOpenAWindow(Room room, int number){
+        OpenAWindow command = new OpenAWindow(room, number);
+        shc.addCommand(command);
+        return command;
+    }
+    public OpenAllWindows makeOpenAllWindows(Room room){
+        OpenAllWindows command = new OpenAllWindows(room);
+        shc.addCommand(command);
+        return command;
+    }
+    public OpenADoor makeOpenADoor(Room room, int number){
+        OpenADoor command = new OpenADoor(room, number);
+        shc.addCommand(command);
+        return command;
+    }
+    public OpenAllDoors makeOpenAllDoors(Room room){
+        OpenAllDoors command = new OpenAllDoors(room);
+        shc.addCommand(command);
+        return command;
+    }
+    public OpenAllOpenings makeOpenAllOpenings(Room room){
+        OpenAllOpenings command = new OpenAllOpenings(room);
+        shc.addCommand(command);
+        return command;
+    }
+    public CloseAWindow makeCloseAWindow(Room room, int number){
+        CloseAWindow command = new CloseAWindow(room, number);
+        shc.addCommand(command);
+        return command;
+    }
+    public CloseAllWindows makeCloseAllWindows(Room room){
+        CloseAllWindows command = new CloseAllWindows(room);
+        shc.addCommand(command);
+        return command;
+    }
+    public CloseADoor makeCloseADoor(Room room, int number){
+        CloseADoor command = new CloseADoor(room, number);
+        shc.addCommand(command);
+        return command;
+    }
+    public CloseAllDoors makeCloseAllDoors(Room room){
+        CloseAllDoors command = new CloseAllDoors(room);
+        shc.addCommand(command);
+        return command;
+    }
+    public CloseAllOpenings makeCloseAllOpenings(Room room){
+        CloseAllOpenings command = new CloseAllOpenings(room);
+        shc.addCommand(command);
+        return command;
+    }
+    public TurnLightOn makeTurnLightOn(Room room){
+        TurnLightOn command = new TurnLightOn(room);
+        shc.addCommand(command);
+        return command;
+    }
+    public TurnLightOff makeTurnLightOff(Room room){
+        TurnLightOff command = new TurnLightOff(room);
+        shc.addCommand(command);
+        return command;
+    }
+    public TurnAutoLightOn makeTurnAutoLightOn(Room room){
+        TurnAutoLightOn command = new TurnAutoLightOn(room);
+        shc.addCommand(command);
+        return command;
+    }
+    public TurnAutoLightOff makeTurnAutoLightOff(Room room){
+        TurnAutoLightOff command = new TurnAutoLightOff(room);
+        shc.addCommand(command);
+        return command;
+    }
+    public ChangeTemperature makeChangeTemperature(Room room, int temperature){
+        ChangeTemperature command = new ChangeTemperature(room, temperature);
+        shc.addCommand(command);
+        return command;
+    }
+    public TurnCoolingOn makeTurnCoolingOn(Room room){
+        TurnCoolingOn command = new TurnCoolingOn(room);
+        shc.addCommand(command);
+        return command;
+    }
+    public TurnCoolingOff makeTurnCoolingOff(Room room){
+        TurnCoolingOff command = new TurnCoolingOff(room);
+        shc.addCommand(command);
+        return command;
+    }
+    public TurnHeatingOn makeTurnHeatingOn(Room room){
+        TurnHeatingOn command = new TurnHeatingOn(room);
+        shc.addCommand(command);
+        return command;
+    }
+    public TurnHeatingOff makeTurnHeatingOff(Room room){
+        TurnHeatingOff command = new TurnHeatingOff(room);
+        shc.addCommand(command);
+        return command;
+    }
+
+
+    /**
+     *  Make/Delete actions: ////////////////////////////////////
+     */
+
+    public void enterRoom(User user, Room room){
+        if(user.getRoom() != null){
+            System.out.println( "exiting " + user.getRoom().getName());
+            user.getRoom().removeUserFromRoom(user);
+            System.out.println(user + " is in this room now: " + room.getName());
+            user.enterRoom(room);
+        }
+        else{
+            System.out.println(user + " is in this room now: " + room.getName());
+            user.enterRoom(room);
+        }
+
+    }
+    public void doAction(User user, Command command, Room room){
+        shc.userAction(user, command, room);
+    }
+    public void increaseTemperature(int temperature){
+
+    }
 }
 
 // coordinate system (check wade3's branch)

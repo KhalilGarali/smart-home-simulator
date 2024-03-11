@@ -5,7 +5,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.java.model.lighting.Light;
+import main.java.model.fixtures.Light;
 import main.java.model.openings.Door;
 import main.java.model.openings.Window;
 import main.java.model.rooms.Bathroom;
@@ -32,6 +32,7 @@ public class Layout {
             Light currentLight = null;
             Window currentWindow = null;
             Door currentDoor = null;
+            String tempName = null;
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("Room:")) {
                     if (currentRoom != null) {
@@ -51,13 +52,14 @@ public class Layout {
                     if (line.startsWith("Light:")) {
                         currentLight = new Light();
                         if (line.substring(7).trim().equalsIgnoreCase("on")){
-                            currentLight.turnON();
+                            currentLight.setLightOn();
                         } else if (line.substring(7).trim().equalsIgnoreCase("off")){
-                            currentLight.turnOFF();
+                            currentLight.setLightOff();
                         }
                         currentRoom.setLight(currentLight);
                     } else if (line.startsWith("Door:")) {
-                        currentDoor = new Door();
+                        tempName = line.substring(6).trim();
+                        currentDoor = new Door(tempName);
                         if (line.substring(6).trim().equalsIgnoreCase("open")){
                             currentDoor.open();
                         } else if (line.substring(6).trim().equalsIgnoreCase("closed")){
@@ -65,7 +67,8 @@ public class Layout {
                         }
                         currentRoom.setDoor(currentDoor);
                     } else if (line.startsWith("Window:")) {
-                        currentWindow = new Window();
+                        tempName = line.substring(8).trim();
+                        currentWindow = new Window(tempName);
                         if (line.substring(8).trim().equalsIgnoreCase("open")){
                             currentWindow.open();
                         } else if (line.substring(8).trim().equalsIgnoreCase("closed")){

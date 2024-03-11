@@ -5,8 +5,12 @@ import main.java.logic.commands.close.CloseAWindow;
 import main.java.logic.commands.open.OpenADoor;
 import main.java.logic.commands.open.OpenAWindow;
 import main.java.logic.observerPattern.Observable;
+import main.java.logic.users.Parent;
 import main.java.logic.users.User;
 import main.java.model.rooms.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents the Smart Home Controller (SHC) module.
@@ -33,15 +37,27 @@ public class SHC extends Module{
      * @param c The command to be executed.
      * @return Boolean indicating if the action was successful. Currently always returns false.
      */
-    public Boolean userAction(User u, Command c){
-        if (u.hasPermission(c.requirePermissions())){
-            addCommand(c);
-            executeCommand();
-        }else {
-            System.out.println("\n--------------------------------------------------------------------------");
-            System.out.println(u + " doesn't have permission to " + c);
-            System.out.println("--------------------------------------------------------------------------");
+    public Boolean userAction(User u, Command c, Room room){
+        if(u instanceof Parent){
+            if (u.hasPermission(c.requirePermissions())){
+                addCommand(c);
+                executeCommand();
+                return true;
+            }
         }
+        else if(u.getRoom().equals(room)){
+            if (u.hasPermission(c.requirePermissions())){
+                addCommand(c);
+                executeCommand();
+                return true;
+            }else {
+                System.out.println("\n--------------------------------------------------------------------------");
+                System.out.println(u + " doesn't have permission to " + c);
+                System.out.println("--------------------------------------------------------------------------");
+            }
+        }
+
+        System.out.println(u.getName() + " is not in "+ room.getName() );
         return false;
     }
 

@@ -1,16 +1,15 @@
-package main.java.logic.commands.close;
+package main.java.logic.commands.change;
 
 import main.java.logic.commands.Command;
 import main.java.logic.users.Permissions;
 import main.java.model.rooms.Room;
 
-public class CloseAWindow implements Command{
+public class ChangeTemperature implements Command {
     protected Room room;
-    protected int windowNumber;
-
-    public CloseAWindow(Room room, int num){
+    protected int temperature;
+    public ChangeTemperature(Room room, int temperature){
         this.room = room;
-        this.windowNumber = num;
+        this.temperature = temperature;
     }
 
     @Override
@@ -18,18 +17,24 @@ public class CloseAWindow implements Command{
         return REQUIRED_PERMISSIONS;
     }
 
-    @Override
     public Boolean execute(){
+        // if(room.getHasDoors()){
+        // room.setDoorOpen(false);
+        // } else {
+        // potentially send a GUI error
+        // System.out.println("No doors to open in " + room);
+        // }
         System.out.println("\n--------------------------------------------------------------------");
         System.out.println(room);
         System.out.print("command done: ");
-        room.closeWindow(1);
+        room.setTemperature(temperature);
         System.out.println(room);
         System.out.println("----------------------------------------------------------------------");
         return true;
     }
+
     @Override
     public String toString(){
-        return "open a door";
+        return "change temperature";
     }
 }

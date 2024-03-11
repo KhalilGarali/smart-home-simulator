@@ -2,7 +2,7 @@ package main.java.logic.users;
 
 public class Admin extends User{
     public Admin(String name){
-        this.name = name;
+        super(name);
 
         permissions.add(Permissions.WINDOW);
         permissions.add(Permissions.DOOR);

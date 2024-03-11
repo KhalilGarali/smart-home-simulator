@@ -37,9 +37,9 @@ public class Dashboard {
   // temp house layout to build the use case logic
   public static Room[][] layout = {
     {new Kitchen("kitchen"), new Garage("garage"), new Bathroom("bathroom1")},
-    {new Bedroom("bedroom1"), new Bedroom("bedroom2"), new Bathroom("bathroom2")},
-    {new Bedroom("bedroom3"), new Bedroom("bedroom4"), new Bathroom("bathroom3")},
-    {new Bedroom("bedroom5"), new Bathroom("bathroom4"), new Bedroom("bedroom6")}
+    {new BedRoom("bedroom1"), new BedRoom("bedroom2"), new Bathroom("bathroom2")},
+    {new BedRoom("bedroom3"), new BedRoom("bedroom4"), new Bathroom("bathroom3")},
+    {new BedRoom("bedroom5"), new Bathroom("bathroom4"), new BedRoom("bedroom6")}
 };
 
   // adjust temperature every hour and make sure the temperature change makes sesne

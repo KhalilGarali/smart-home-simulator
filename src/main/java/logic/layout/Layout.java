@@ -14,6 +14,10 @@ import main.java.model.rooms.Garage;
 import main.java.model.rooms.Kitchen;
 import main.java.model.rooms.Room;
 
+// *******************
+// create a 2D array for the house layout
+// *******************
+
 public class Layout {
     private List<Room> rooms = new ArrayList<>();
 

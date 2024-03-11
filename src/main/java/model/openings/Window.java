@@ -2,15 +2,24 @@ package main.java.model.openings;
 
 public class Window implements Opening {
     private boolean open = false;
+    private boolean isBlocked = false;
 
     @Override
     public void open() {
-        open = true;
+        if (this.isBlocked == false) {
+            open = true;
+        } else {
+            System.out.println("Cannot perform action. Window is currently blocked from movement.");
+        } 
     }
 
     @Override
     public void close() {
-        open = false;
+        if (this.isBlocked == false) {
+            open = false;
+        } else {
+            System.out.println("Cannot perform action. Window is currently blocked from movement.");
+        } 
     }
 
     @Override
@@ -21,5 +30,13 @@ public class Window implements Opening {
     @Override
     public String toString() {
         return "Window [open=" + open + "]";
+    }
+
+    public void blockWindow() {
+        this.isBlocked = true;
+    }
+
+    public void unblockWindow() {
+        this.isBlocked = false;
     }
 }

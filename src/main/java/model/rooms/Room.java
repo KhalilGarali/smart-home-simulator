@@ -183,5 +183,9 @@ public abstract class Room implements Observable{
     public String toString() {
         return " has window1=" + window1 + ", door1=" + door1 + ", light=" + light1;
     }   
+
+    public String getName() {
+        return this.name;
+    }
     
 }

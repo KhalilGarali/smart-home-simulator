@@ -1,12 +1,16 @@
 package main.java.logic.modules;
 
 import main.java.logic.commands.open.*;
+import main.java.logic.commands.close.*;
 import main.java.logic.layout.Layout;
 import main.java.logic.users.*;
 import main.java.model.openings.*;
 import main.java.model.rooms.*;
+import main.java.logic.dashboard.*;
 
 import java.util.*;
+
+import java.util.concurrent.TimeUnit;
 
 public class SHS {
 
@@ -39,7 +43,7 @@ public class SHS {
         // SHC commands to be instantiated at the start of the simulation
         OpenAWindow openWindow1 = new OpenAWindow(kitchen, 1);
         OpenAWindow openWindow2 = new OpenAWindow(kitchen, 2);
-        // CloseWindow closeWindow = new CloseWindow(kitchen);
+        CloseAWindow closeWindow1 = new CloseAWindow(kitchen);
         // OpenDoor openDoor = new OpenDoor(kitchen);
         // CloseDoor closeDoor = new CloseDoor(kitchen);
 
@@ -62,6 +66,58 @@ public class SHS {
         anSHC.userAction(child, openWindow1);
         anSHC.userAction(guest, openWindow1);
 
+
+        // *************************************
+        System.out.println("------------------------------");
+        Dashboard dashboard = new Dashboard(father, stranger);
+
+        // Use Case: Modify the date and time
+        System.out.println("Use Case: Modify the date and time");
+        dashboard.setDateTime(2010, 6, 10, 12, 0);
+        System.out.println("------------------------------");
+
+        // Use Case: The simulated time speed can be increased or decreased
+        System.out.println("Use Case: The simulated time speed can be increased or decreased");
+        System.out.println("Current date time: " + dashboard.getDateTime());
+        dashboard.adjustTimeSpeed(0.5); // make time run faster
+
+        // try {
+        //     TimeUnit.SECONDS.sleep(60);
+        // } catch(InterruptedException e) {
+        //     System.out.println("error with time sleep");
+        // }
+        System.out.println("new date time: " + dashboard.getDateTime());
+        System.out.println("------------------------------");
+
+        // Use Case: Move the logged user to another room
+        System.out.println("Use Case: Move the logged user to another room");
+        System.out.println(dashboard.getCurrentRoomLoggedUser());
+        dashboard.moveLoggedUser(Dashboard.layout[3][2]); // moved to bedroom6
+        System.out.println(dashboard.getCurrentRoomLoggedUser());
+        System.out.println("------------------------------");
+
+        // Use Case: Place people in specific rooms, or outside the home
+        System.out.println("Use Case: Place people in specific rooms, or outside the home");
+        dashboard.getCurrentRoomNonLoggedUser();
+        dashboard.moveNonLoggedUser(Dashboard.layout[0][0]); // moved to kitchen
+        dashboard.getCurrentRoomNonLoggedUser();
+        System.out.println("------------------------------");
+
+        // Use Case: Modify the temperature outside the home
+        // System.out.println("Modify the temperature outside the home");
+        // dashboard.getExternalTemperature();
+        // System.out.println("------------------------------");
+
+        // Use Case: Block window movements by putting an arbitrary object
+        // dashboard.blockWindow(window1);
+        // anSHC.userAction(father, closeWindow1);
+        // dashboard.unblockWindow(window1);
+        // anSHC.userAction(father, closeWindow1);
     }
     
 }
+
+// coordinate system (check wade3's branch)
+// date and time increment by hour
+// temperature make it change by every hour, by incrementing/decrementing with a small random number
+// make sure all tests are through the command pattern

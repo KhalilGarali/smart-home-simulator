@@ -27,7 +27,7 @@ public abstract class Room implements Observable{
     private Door door1;
     private Door door2;
     private Light light = new Light();
-    private Temperature temp = new Temperature();
+    private int currentTemperature;
     private int desiredTemp;
     private int lightSensor;
     private HVAC hvac = new HVAC();
@@ -92,7 +92,9 @@ public abstract class Room implements Observable{
             System.out.println("can't add more than 2 doors to a room!");
         }    
     }
-
+    public void setCurrentTemperature(int temperature){
+        currentTemperature = temperature;
+    }
 
     public Window getWindow(int windowNumber){
         if (windowNumber==1){
@@ -113,8 +115,8 @@ public abstract class Room implements Observable{
     public Light getLight() {
         return light;
     }
-    public Temperature getTemp() {
-        return temp;
+    public int getCurrentTemperature() {
+        return currentTemperature;
     }
     public int getDesiredTemp() {
         return desiredTemp;
@@ -212,12 +214,14 @@ public abstract class Room implements Observable{
         } 
     }
     public void turnLightOn(){
-        System.out.println("turning light on in : " + this.getName());
-        light.setLightOn();
-        notifyObserver();
+        if(!light.getLight() && light.getAutolight()){
+            System.out.println("turning light on in : " + this.getName());
+            light.setLightOn();
+            notifyObserver();
+        }
     }
     public void turnLightOff(){
-        if(usersInThisRoomList.isEmpty()){
+        if(!usersInThisRoomList.isEmpty() && light.getAutolight()){
             System.out.println("cannot turn light off, someone is still in: " + this.getName());
         }
         else{
@@ -238,7 +242,7 @@ public abstract class Room implements Observable{
     }
     public void setTemperature(int temperature){
         System.out.println("setting temperature to: "+temperature);
-        temp.setTemperature(temperature);
+        setCurrentTemperature(temperature);
         notifyObserver();
     }
     public void setDesiredTemperature(int temperature){
@@ -246,10 +250,13 @@ public abstract class Room implements Observable{
         desiredTemp = temperature;
         notifyObserver();
     }
-    public void turnHeatingOn(){
+    public void turnHeatingOn() {
         turnCoolingOff();
         System.out.println("Turning On Heating : ");
         hvac.setHeating(true);
+        setTemperature(this.desiredTemp);
+        System.out.println("temperature is now: " + getCurrentTemperature() );
+        //set the temp object to something higher over time
         notifyObserver();
     }
     public void turnHeatingOff(){
@@ -261,6 +268,8 @@ public abstract class Room implements Observable{
         turnCoolingOff();
         System.out.println("Turning On Cooling : ");
         hvac.setCooling(true);
+        setTemperature(this.desiredTemp);
+        System.out.println("temperature is now: " + getCurrentTemperature() );
         notifyObserver();
     }
     public void turnCoolingOff(){
@@ -272,12 +281,17 @@ public abstract class Room implements Observable{
     public void addUserToRoom(User user){
         usersInThisRoomList.add(user);
     }
+
     public void removeUserFromRoom(User user){
         try {
             usersInThisRoomList.remove(user);
         }catch(Exception ignored){
             System.out.println("user isn't in: " + this.getName());
         }
+    }
+
+    public List<User> getUserFromRoom(){
+        return usersInThisRoomList;
     }
     
     //not showing window2 and door2 for now!
@@ -287,7 +301,8 @@ public abstract class Room implements Observable{
                 ", window2= " + window2 +
                 ", door= " + door1 +
                 ", light= " + light.getLight() +
-                ", temperature= " + temp.getTemperature() +
+                ", current temp= " + getCurrentTemperature() +
+                ", desired temp= " + getDesiredTemp() +
                 ", autoLight= " + light.getAutolight() +
                 " ";
     }   

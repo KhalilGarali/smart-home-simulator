@@ -4,11 +4,12 @@ import main.java.logic.commands.Command;
 import main.java.logic.users.Permissions;
 import main.java.model.rooms.Room;
 
-public class TurnHeatingOn implements Command {
+public class TurnHeatingOn extends Command {
     protected Room room;
 
     public TurnHeatingOn(Room room){
         this.room = room;
+        this.REQUIRED_PERMISSIONS = Permissions.TEMP;
     }
 
     @Override

@@ -9,6 +9,7 @@ public class OpenAllWindows extends Command {
 
     public OpenAllWindows(Room room){
         this.room = room;
+        this.REQUIRED_PERMISSIONS = Permissions.WINDOW;
     }
 
     @Override

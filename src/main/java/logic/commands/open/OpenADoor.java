@@ -11,6 +11,7 @@ public class OpenADoor extends Command{
     public OpenADoor(Room room, int doorNumber){
         this.room = room;
         this.doorNumber = doorNumber;
+        this.REQUIRED_PERMISSIONS = Permissions.DOOR;
     }
 
     @Override

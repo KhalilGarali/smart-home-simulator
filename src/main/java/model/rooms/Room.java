@@ -27,7 +27,7 @@ public abstract class Room implements Observable{
     private Door door1;
     private Door door2;
     private Light light = new Light();
-    private Temperature temp = new Temperature();
+    private int currentTemperature;
     private int desiredTemp;
     private int lightSensor;
     private HVAC hvac = new HVAC();
@@ -92,7 +92,9 @@ public abstract class Room implements Observable{
             System.out.println("can't add more than 2 doors to a room!");
         }    
     }
-
+    public void setCurrentTemperature(int temperature){
+        currentTemperature = temperature;
+    }
 
     public Window getWindow(int windowNumber){
         if (windowNumber==1){
@@ -113,8 +115,8 @@ public abstract class Room implements Observable{
     public Light getLight() {
         return light;
     }
-    public Temperature getTemp() {
-        return temp;
+    public int getCurrentTemperature() {
+        return currentTemperature;
     }
     public int getDesiredTemp() {
         return desiredTemp;
@@ -240,7 +242,7 @@ public abstract class Room implements Observable{
     }
     public void setTemperature(int temperature){
         System.out.println("setting temperature to: "+temperature);
-        temp.setTemperature(temperature);
+        setCurrentTemperature(temperature);
         notifyObserver();
     }
     public void setDesiredTemperature(int temperature){
@@ -248,10 +250,16 @@ public abstract class Room implements Observable{
         desiredTemp = temperature;
         notifyObserver();
     }
-    public void turnHeatingOn(){
+    public void turnHeatingOn() {
         turnCoolingOff();
         System.out.println("Turning On Heating : ");
         hvac.setHeating(true);
+        try {
+            wait(5000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        setTemperature(this.desiredTemp);
         //set the temp object to something higher over time
         notifyObserver();
     }
@@ -264,6 +272,12 @@ public abstract class Room implements Observable{
         turnCoolingOff();
         System.out.println("Turning On Cooling : ");
         hvac.setCooling(true);
+        try {
+            wait(5000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        setTemperature(this.desiredTemp);
         notifyObserver();
     }
     public void turnCoolingOff(){
@@ -295,7 +309,7 @@ public abstract class Room implements Observable{
                 ", window2= " + window2 +
                 ", door= " + door1 +
                 ", light= " + light.getLight() +
-                ", temperature= " + temp.getTemperature() +
+                ", temperature= " + getCurrentTemperature() +
                 ", autoLight= " + light.getAutolight() +
                 " ";
     }   

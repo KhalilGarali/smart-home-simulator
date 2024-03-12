@@ -9,6 +9,7 @@ public class TurnAutoLightOn extends Command {
 
     public TurnAutoLightOn(Room room){
         this.room = room;
+        this.REQUIRED_PERMISSIONS = Permissions.LIGHT;
     }
 
     @Override

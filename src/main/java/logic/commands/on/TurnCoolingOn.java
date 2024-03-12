@@ -9,6 +9,7 @@ public class TurnCoolingOn extends Command {
 
     public TurnCoolingOn(Room room){
         this.room = room;
+        this.REQUIRED_PERMISSIONS = Permissions.TEMP;
     }
 
     @Override

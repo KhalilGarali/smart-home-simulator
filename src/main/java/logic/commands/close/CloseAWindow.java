@@ -11,6 +11,7 @@ public class CloseAWindow extends Command{
     public CloseAWindow(Room room, int num){
         this.room = room;
         this.windowNumber = num;
+        this.REQUIRED_PERMISSIONS = Permissions.WINDOW;
     }
 
     @Override

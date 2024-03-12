@@ -9,6 +9,7 @@ public class TurnHeatingOff extends Command {
 
     public TurnHeatingOff(Room room){
         this.room = room;
+        this.REQUIRED_PERMISSIONS = Permissions.TEMP;
     }
 
     @Override

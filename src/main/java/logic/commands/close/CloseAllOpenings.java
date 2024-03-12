@@ -9,6 +9,8 @@ public class CloseAllOpenings extends Command {
 
     public CloseAllOpenings(Room room){
         this.room = room;
+        //problem with permissions here
+        this.REQUIRED_PERMISSIONS = Permissions.DOOR;
     }
 
     @Override

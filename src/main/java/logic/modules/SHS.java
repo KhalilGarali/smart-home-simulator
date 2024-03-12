@@ -271,7 +271,14 @@ public class SHS {
         return command;
     }
     public void shhDoAction(Command command, Room room){
-        shh.doAction(command, room);
+        if(command instanceof TurnHeatingOff||
+                command instanceof TurnHeatingOn ||
+                command instanceof TurnCoolingOn ||
+                command instanceof TurnCoolingOff) {
+            shh.regulateTemperature(room);
+        } else {
+            shh.doAction(command, room);
+        }
     }
     public void shpDoAction(Command command, Room room){
         shp.doAction(command, room);

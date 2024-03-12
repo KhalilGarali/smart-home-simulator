@@ -10,6 +10,7 @@ public class CloseAllWindows extends Command {
 
     public CloseAllWindows(Room room){
         this.room = room;
+        this.REQUIRED_PERMISSIONS = Permissions.WINDOW;
     }
 
     @Override

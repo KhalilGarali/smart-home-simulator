@@ -11,6 +11,7 @@ public class CloseADoor extends Command{
     public CloseADoor(Room room, int doorNumber){
         this.room = room;
         this.doorNumber = doorNumber;
+        this.REQUIRED_PERMISSIONS = Permissions.DOOR;
     }
 
     @Override

@@ -9,6 +9,7 @@ public class CloseAllDoors extends Command {
 
     public CloseAllDoors(Room room){
         this.room = room;
+        this.REQUIRED_PERMISSIONS = Permissions.DOOR;
     }
 
     @Override

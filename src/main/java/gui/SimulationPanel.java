@@ -18,9 +18,14 @@ import javax.swing.JToggleButton;
 import javax.swing.plaf.metal.MetalToggleButtonUI;
 
 import main.java.logic.dashboard.DateTime;
-import javax.swing.Timer;
+// import javax.swing.Timer;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
+import main.java.model.fixtures.Temperature;
+import java.util.Timer;
+import java.util.TimerTask;
+
 
 public class SimulationPanel extends JPanel {
     private JToggleButton simulationToggle;
@@ -28,6 +33,7 @@ public class SimulationPanel extends JPanel {
     private JSlider timeSpeedSlider;
     private JLabel userIcon;
     private JButton editButton;
+    private Temperature outsideTemperature;
 
     public SimulationPanel() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -92,13 +98,23 @@ public class SimulationPanel extends JPanel {
 
         // Organizing The Panel
         addComponents();
-        
+
         // Initialize date and time labels
         updateDateTimeLabels(); // Update labels with current date and time
 
         // Set up timer to update date and time labels every second
         javax.swing.Timer timer = new javax.swing.Timer(1000, new UpdateDateTimeListener());
         timer.start();
+
+        outsideTemperature = new Temperature();
+        // Set up a timer to update the outside temperature label every second
+        Timer temperatureTimer = new Timer();
+        temperatureTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                updateOutsideTempLabel();
+            }
+        }, 0, 1000); // Update every second
     }
 
     private void addComponents() {
@@ -154,5 +170,11 @@ public class SimulationPanel extends JPanel {
         DateTime currentDateTime = new DateTime();
         LocalDateTime timeOnly = currentDateTime.getTimeOnly();
         return timeOnly.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
-    }    
+    }
+
+    // Method to update outside temperature label
+    private void updateOutsideTempLabel() {
+        int temperature = outsideTemperature.getTemperature();
+        outsideTempLabel.setText("Outside Temp: " + temperature + "°C");
+    }
 }

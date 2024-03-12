@@ -4,11 +4,12 @@ import main.java.logic.commands.Command;
 import main.java.logic.users.Permissions;
 import main.java.model.rooms.Room;
 
-public class TurnAutoLightOn implements Command {
+public class TurnAutoLightOn extends Command {
     protected Room room;
 
     public TurnAutoLightOn(Room room){
         this.room = room;
+        this.REQUIRED_PERMISSIONS = Permissions.LIGHT;
     }
 
     @Override

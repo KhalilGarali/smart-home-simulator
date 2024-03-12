@@ -4,11 +4,12 @@ import main.java.logic.commands.Command;
 import main.java.logic.users.Permissions;
 import main.java.model.rooms.Room;
 
-public class TurnCoolingOff implements Command {
+public class TurnCoolingOff extends Command {
     protected Room room;
 
     public TurnCoolingOff(Room room){
         this.room = room;
+        this.REQUIRED_PERMISSIONS = Permissions.TEMP;
     }
 
     @Override

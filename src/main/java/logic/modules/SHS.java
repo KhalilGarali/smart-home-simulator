@@ -1,6 +1,8 @@
 package main.java.logic.modules;
 
+//can remove alot of the commands from here
 import main.java.logic.commands.Command;
+import main.java.logic.commands.CommandFactory;
 import main.java.logic.commands.change.ChangeTemperature;
 import main.java.logic.commands.close.*;
 import main.java.logic.commands.off.TurnAutoLightOff;
@@ -33,20 +35,38 @@ public class SHS {
     SHH shh;
     SHC shc;
     SHP shp ;
+    private static SHS shs;
+    public CommandFactory cf;
     private List<Room> houseLayout;
     private List<User> houseUsers;
     private List<Opening> houseOpenings;
     private List<Object> housefixtures;
-    public SHS(){
-        this.shc = new SHC();
-        this.shh = new SHH();
-        this.shp = new SHP();
+    private SHS(){
+        this.shc = SHC.getIntance();
+        //FIXME temp changes that might be permanent. (added the shc as arg)
+        this.shh = SHH.getInstance(shc);
+        this.shp = SHP.getInstance(shc);
+        this.cf = new CommandFactory(shc);
         this.houseLayout = new ArrayList<Room>();
         this.houseUsers = new ArrayList<User>();
         this.houseOpenings = new ArrayList<Opening>();
         this.housefixtures = new ArrayList<Object>();
     }
 
+    public static SHS getInstance(){
+        if(shs == null){
+            shs = new SHS();
+        }
+        return shs;
+    }
+    public void init(){
+        //GUI init
+        while(true){
+            //create father command
+            //father.enterRoom(kitchen)
+        }
+    }
+    
     /**
      *  Make/Delete users: ////////////////////////////////////
      */
@@ -82,6 +102,7 @@ public class SHS {
     /**
      *  Make/Delete rooms: ////////////////////////////////////
      */
+    //FIXME will be used only in Layout, not needed here
     public void removeRoom(Room room){
         houseLayout.remove(room);
     }
@@ -121,6 +142,7 @@ public class SHS {
         return room;
     }
 
+    //FIXME same here, the Layout class will handle the creation
     /**
      *  Make/Delete openings:  ////////////////////////////////////
      */
@@ -152,6 +174,7 @@ public class SHS {
     /**
      *  Make/Delete commands: ////////////////////////////////////
      */
+    //FIXME moved to the factory metho, confirm
     public OpenAWindow makeOpenAWindow(Room room, int number){
         OpenAWindow command = new OpenAWindow(room, number);
         shc.addCommand(command);
@@ -247,31 +270,49 @@ public class SHS {
         shc.addCommand(command);
         return command;
     }
-
-
+    public void shhDoAction(Command command, Room room){
+        if(command instanceof TurnHeatingOff||
+                command instanceof TurnHeatingOn ||
+                command instanceof TurnCoolingOn ||
+                command instanceof TurnCoolingOff) {
+            shh.regulateTemperature(room);
+        } else {
+            System.out.println("This command is for SHC");
+            shh.doAction(command, room);
+        }
+    }
+    public void shpDoAction(Command command, Room room){
+        shp.doAction(command, room);
+    }
+    public void shcDoAction(User user, Command command, Room room){
+        shc.userAction(user, command, room);
+    }
     /**
      *  Make/Delete actions: ////////////////////////////////////
      */
 
-    public void enterRoom(User user, Room room){
-        if(user.getRoom() != null){
-            System.out.println( "exiting " + user.getRoom().getName());
-            user.getRoom().removeUserFromRoom(user);
-            System.out.println(user + " is in this room now: " + room.getName());
-            user.enterRoom(room);
-        }
-        else{
-            System.out.println(user + " is in this room now: " + room.getName());
-            user.enterRoom(room);
-        }
+    //FIXME moved to the user class for now!
+    // public void enterRoom(User user, Room room){
+    //     if(user.getRoom() != null){
+    //         System.out.println( "exiting " + user.getRoom().getName());
+    //         user.getRoom().removeUserFromRoom(user);
+    //         System.out.println(user + " is in this room now: " + room.getName());
+    //         user.enterRoom(room);
+    //     }
+    //     else{
+    //         System.out.println(user + " is in this room now: " + room.getName());
+    //         user.enterRoom(room);
+    //     }
+    // }
 
-    }
-    public void doAction(User user, Command command, Room room){
-        shc.userAction(user, command, room);
-    }
-    public void increaseTemperature(int temperature){
+    //FIXME the wrapper function is not needed, we can use the shc. call directly
+    // public void doAction(User user, Command command, Room room){
+    //     shc.userAction(user, command, room);
+    // }
 
-    }
+    //FIXME the wrapper function is not needed, we can use the shh. call directly
+    // public void increaseTemperature(int temperature){
+    // }
 }
 
 // coordinate system (check wade3's branch)

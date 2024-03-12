@@ -19,7 +19,11 @@ public class HomeSimulatorFrame extends JFrame {
 
         // House Layout Panel 
         HouseLayoutPanel houseLayoutPanel = new HouseLayoutPanel();
-        add(houseLayoutPanel, BorderLayout.EAST);
+        JScrollPane scrolableHouseLayoutPanel = new JScrollPane(houseLayoutPanel);
+        scrolableHouseLayoutPanel.setBorder(null);
+        scrolableHouseLayoutPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrolableHouseLayoutPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        add(scrolableHouseLayoutPanel, BorderLayout.EAST);
 
         // module Panel
         ModulePanel ModulePanel = new ModulePanel();

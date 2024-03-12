@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JToggleButton;
+import javax.swing.JTextField;
 
 public class ModulePanel extends JPanel {
     private JTabbedPane tabbedPane;
@@ -25,11 +26,13 @@ public class ModulePanel extends JPanel {
 
         // Create SHC Panel
         JPanel shcPanel = createShcPanel();
+        JPanel shsPanel = createShsPanel();
 
         // Add the SHC panel to the tabbed pane
         tabbedPane.addTab("SHC", new JScrollPane(shcPanel));
         tabbedPane.addTab("SHP", new JLabel("SHP Content"));
         tabbedPane.addTab("SHH", new JLabel("SHH Content"));
+        tabbedPane.addTab("SHS", new JScrollPane(shsPanel));
         // ... Add other tabs as needed
 
         add(tabbedPane, BorderLayout.CENTER);
@@ -98,5 +101,43 @@ public class ModulePanel extends JPanel {
 
     private void resizeButton(JToggleButton button) {
         button.setMaximumSize(new Dimension(Integer.MAX_VALUE, button.getMinimumSize().height));
+    }
+
+    private JPanel createShsPanel(){
+        JPanel shsPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.anchor = GridBagConstraints.WEST;
+        JPanel editPanel = createEditPanel();
+        shsPanel.add(editPanel, gbc);
+
+        return shsPanel;
+    }
+
+    private JPanel createEditPanel(){
+        JPanel editPanel = new JPanel();
+        editPanel.setLayout(new BoxLayout(editPanel, BoxLayout.Y_AXIS));
+        editPanel.setBorder(BorderFactory.createTitledBorder("Edit User Profile"));
+
+        JTextField usernameField = new JTextField("username");
+        JTextField locationField = new JTextField("location");
+
+        editPanel.add(usernameField);
+        editPanel.add(locationField);
+        
+        resizePanel(usernameField);
+        resizePanel(locationField);
+
+        editPanel.add(usernameField);
+        editPanel.add(locationField);
+        
+        return editPanel;
+    }
+
+    private void resizePanel(JTextField textfield){
+        textfield.setMaximumSize(new Dimension(Integer.MAX_VALUE, textfield.getPreferredSize().height));
     }
 }

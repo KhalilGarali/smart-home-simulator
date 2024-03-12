@@ -3,6 +3,8 @@ package main.java.gui;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -14,6 +16,11 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JToggleButton;
 import javax.swing.plaf.metal.MetalToggleButtonUI;
+
+import main.java.logic.dashboard.DateTime;
+import javax.swing.Timer;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class SimulationPanel extends JPanel {
     private JToggleButton simulationToggle;
@@ -85,6 +92,13 @@ public class SimulationPanel extends JPanel {
 
         // Organizing The Panel
         addComponents();
+        
+        // Initialize date and time labels
+        updateDateTimeLabels(); // Update labels with current date and time
+
+        // Set up timer to update date and time labels every second
+        javax.swing.Timer timer = new javax.swing.Timer(1000, new UpdateDateTimeListener());
+        timer.start();
     }
 
     private void addComponents() {
@@ -109,5 +123,36 @@ public class SimulationPanel extends JPanel {
         add(Box.createVerticalStrut(10));
         add(timeSpeedSlider);
     }
-    
+
+    // ActionListener class to update date and time labels
+    private class UpdateDateTimeListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            updateDateTimeLabels();
+        }
+    }
+
+    // Method to update date and time labels
+    private void updateDateTimeLabels() {
+        String currentDate = getCurrentDateAsString();
+        String currentTime = getCurrentTimeAsString();
+
+        // Update labels
+        dateLabel.setText("Date: " + currentDate);
+        timeLabel.setText("Time: " + currentTime);
+    }
+
+    // Method to get current date as string
+    private String getCurrentDateAsString() {
+        DateTime currentDateTime = new DateTime();
+        LocalDateTime dateOnly = currentDateTime.getDateOnly();
+        return dateOnly.format(DateTimeFormatter.ofPattern("E MMM dd yyyy"));
+    }
+
+    // Method to get current time as string
+    private String getCurrentTimeAsString() {
+        DateTime currentDateTime = new DateTime();
+        LocalDateTime timeOnly = currentDateTime.getTimeOnly();
+        return timeOnly.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+    }    
 }

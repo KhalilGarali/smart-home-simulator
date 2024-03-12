@@ -272,6 +272,18 @@ public class SimulationPanel extends JPanel {
                     int year = Integer.parseInt(dateEditField1.getText());
                     int month = Integer.parseInt(dateEditField2.getText());
                     int day = Integer.parseInt(dateEditField3.getText());
+
+                    if (month == 5  || month == 6 || month == 8 || month == 9) {
+                        outsideTemperature.setTemperature(25);
+                    } else if (month == 1 || month == 2 || month == 12) {
+                        outsideTemperature.setTemperature(0);
+                    } else if (month == 3 || month == 4 || month == 10 || month == 11) {
+                        outsideTemperature.setTemperature(10);
+                    } else if (month == 7) {
+                        outsideTemperature.setTemperature(30);
+                    } else {
+                        outsideTemperature.setTemperature(10);
+                    }
     
                     // Check if the date is valid
                     if (isValidDate(year, month, day)) {

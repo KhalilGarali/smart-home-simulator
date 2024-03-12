@@ -214,14 +214,14 @@ public abstract class Room implements Observable{
         } 
     }
     public void turnLightOn(){
-        if(!light.getLight()){
+        if(!light.getLight() && light.getAutolight()){
             System.out.println("turning light on in : " + this.getName());
             light.setLightOn();
             notifyObserver();
         }
     }
     public void turnLightOff(){
-        if(!usersInThisRoomList.isEmpty()){
+        if(!usersInThisRoomList.isEmpty() && light.getAutolight()){
             System.out.println("cannot turn light off, someone is still in: " + this.getName());
         }
         else{
@@ -254,12 +254,8 @@ public abstract class Room implements Observable{
         turnCoolingOff();
         System.out.println("Turning On Heating : ");
         hvac.setHeating(true);
-        try {
-            wait(5000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
         setTemperature(this.desiredTemp);
+        System.out.println("temperature is now: " + getCurrentTemperature() );
         //set the temp object to something higher over time
         notifyObserver();
     }
@@ -272,12 +268,8 @@ public abstract class Room implements Observable{
         turnCoolingOff();
         System.out.println("Turning On Cooling : ");
         hvac.setCooling(true);
-        try {
-            wait(5000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
         setTemperature(this.desiredTemp);
+        System.out.println("temperature is now: " + getCurrentTemperature() );
         notifyObserver();
     }
     public void turnCoolingOff(){
@@ -309,7 +301,8 @@ public abstract class Room implements Observable{
                 ", window2= " + window2 +
                 ", door= " + door1 +
                 ", light= " + light.getLight() +
-                ", temperature= " + getCurrentTemperature() +
+                ", current temp= " + getCurrentTemperature() +
+                ", desired temp= " + getDesiredTemp() +
                 ", autoLight= " + light.getAutolight() +
                 " ";
     }   

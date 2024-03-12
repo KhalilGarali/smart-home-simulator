@@ -1,10 +1,11 @@
-package main.java;
+package main.java.logic.modules;
 
 import javax.swing.*;
 import main.java.gui.HomeSimulatorFrame;
 import main.java.logic.commands.Command;
 import main.java.logic.commands.CommandFactory;
 import main.java.logic.commands.change.ChangeTemperature;
+import main.java.logic.commands.off.TurnAutoLightOff;
 import main.java.logic.commands.off.TurnCoolingOff;
 import main.java.logic.commands.off.TurnHeatingOff;
 import main.java.logic.commands.off.TurnLightOff;
@@ -57,6 +58,7 @@ public class main {
         Opening basementDoor = shs.makeDoor("basement Door");
         Opening masterDoor = shs.makeDoor("master bedroom Door");
         Opening kidsDoor = shs.makeDoor("Kids bedroom Door");
+        Opening kitchenDoor = shs.makeDoor("kitchen door");
 
         kitchen.setWindow((Window) kitchenWindow);
         masterBedroom.setWindow((Window) masterWindow);
@@ -73,17 +75,14 @@ public class main {
         basement.setDoor((Door) basementDoor);
         bathroom1.setDoor((Door) uBathroomDoor);
         bathroom2.setDoor((Door) dBathroomDoor);
+        kitchen.setDoor((Door) kitchenDoor);
 
         User father = shs.makeParent("John");
         father.moveToRoom(kitchen);
         User child = shs.makeChild("Joseph");
         User guest = shs.makeGuest("Julie");
         User cousin = shs.makeFamilyMember("Jordan");
-        User stranger = shs.makeStranger("J...");
-
-        //FIXME moved from shs to user class
-        // shs.enterRoom(father, masterBedroom);
-        // shs.enterRoom(child, kidsBedroom);
+        User stranger = shs.makeStranger("Jamal");
 
         // examples for the command factory application
         Command openKitchenWindow1 = shs.cf.createCommand("openawindow",kitchen, 1);
@@ -95,12 +94,14 @@ public class main {
         OpenAWindow openLivingWindow = shs.makeOpenAWindow(livingRoom, 1);
         OpenAWindow openUBathroomWindow = shs.makeOpenAWindow(bathroom1, 1);
         OpenAWindow openDBathroomWindow = shs.makeOpenAWindow(bathroom2, 1);
+        OpenADoor openKitchenDoor = shs.makeOpenADoor(kitchen,1);
         TurnLightOn turnLivingLightOn = shs.makeTurnLightOn(livingRoom);
         TurnLightOff turnKitchenLightOff = shs.makeTurnLightOff(kitchen);
         TurnCoolingOn turnMasterCoolingOn = shs.makeTurnCoolingOn(masterBedroom);
         TurnCoolingOff turnMasterCoolingOff = shs.makeTurnCoolingOff(masterBedroom);
         TurnHeatingOn turnMasterHeatingOn = shs.makeTurnHeatingOn(masterBedroom);
         TurnHeatingOff turnMasterHeatingOff = shs.makeTurnHeatingOff(masterBedroom);
+        TurnAutoLightOff turnKitchenAutoLightOff = shs.makeTurnAutoLightOff(kitchen);
         ChangeTemperature changeLivingTemperature = shs.makeChangeTemperature(livingRoom, 27);
 
         //tester for moving a user form room using the new command
@@ -112,7 +113,15 @@ public class main {
         // end of test
 
         //test for open window
-//        shs.doAction(father, openKitchenWindow1, kitchen);
+        bathroom1.setDesiredTemperature(25);
+        bathroom1.setCurrentTemperature(57);
+
+        shs.shcDoAction(father, turnKitchenAutoLightOff, kitchen);
+        shs.shcDoAction(father, openKitchenWindow1, kitchen);
+        shs.shcDoAction(father, openKitchenDoor, kitchen);
+        father.moveToRoom(kitchen);
+        shs.shcDoAction(father, changeLivingTemperature, livingRoom);
+        shs.shhDoAction(turnMasterHeatingOn, bathroom1);
 
         //FIXME to be moved to shc and called from shs. Wade
         // shs.doAction(father,openDBathroomWindow, kitchen);

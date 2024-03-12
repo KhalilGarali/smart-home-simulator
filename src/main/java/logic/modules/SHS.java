@@ -277,6 +277,7 @@ public class SHS {
                 command instanceof TurnCoolingOff) {
             shh.regulateTemperature(room);
         } else {
+            System.out.println("This command is for SHC");
             shh.doAction(command, room);
         }
     }

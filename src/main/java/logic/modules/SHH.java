@@ -31,7 +31,7 @@ public class SHH extends Module {
             room.turnHeatingOn();
         }
         if(room.getCurrentTemperature() > room.getDesiredTemp()){
-            room.turnHeatingOn();
+            room.turnCoolingOn();
         }
     }
 

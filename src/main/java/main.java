@@ -2,6 +2,7 @@ package main.java;
 
 import javax.swing.*;
 import main.java.gui.HomeSimulatorFrame;
+import main.java.gui.LogInFrame;
 import main.java.logic.commands.Command;
 import main.java.logic.commands.change.ChangeTemperature;
 import main.java.logic.commands.off.TurnCoolingOff;
@@ -24,7 +25,8 @@ public class main {
     public static void main(String[] args){
         SwingUtilities.invokeLater(() -> {
             HomeSimulatorFrame frame = new HomeSimulatorFrame();
-            frame.setVisible(true);
+            LogInFrame logInF = new LogInFrame(frame);
+            logInF.setVisible(true);
         });
 
         SHS shs = new SHS();
@@ -145,7 +147,7 @@ public class main {
 
 
         // anSHC.addCommand(openWindow2);
-        // anSHC.executeCommand();
+        // an0.executeCommand();
 
     }
     

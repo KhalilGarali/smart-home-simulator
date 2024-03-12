@@ -8,10 +8,13 @@ import java.util.List;
 import main.java.model.fixtures.Light;
 import main.java.model.openings.Door;
 import main.java.model.openings.Window;
+import main.java.model.rooms.Basement;
 import main.java.model.rooms.Bathroom;
 import main.java.model.rooms.BedRoom;
 import main.java.model.rooms.Garage;
 import main.java.model.rooms.Kitchen;
+import main.java.model.rooms.LivingRoom;
+import main.java.model.rooms.Porch;
 import main.java.model.rooms.Room;
 
 // *******************
@@ -48,6 +51,12 @@ public class Layout {
                         currentRoom = new Garage("garage");
                     } else if (line.substring(6).trim().equalsIgnoreCase("bathroom")){
                         currentRoom = new Bathroom("bathroom");
+                    } else if (line.substring(6).trim().equalsIgnoreCase("livingroom")){
+                        currentRoom = new LivingRoom("living room");
+                    } else if (line.substring(6).trim().equalsIgnoreCase("basement")){
+                        currentRoom = new Basement("basement");
+                    } else if (line.substring(6).trim().equalsIgnoreCase("porch")){
+                        currentRoom = new Porch("porch");
                     }
                     
                     //should implement other types of rooms once made

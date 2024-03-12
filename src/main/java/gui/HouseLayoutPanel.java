@@ -30,12 +30,12 @@ public class HouseLayoutPanel extends JPanel {
     private void checkRoomInfo(){
         for (Room room : this.rooms) {
             System.out.println("INFO: " + room.getName() + " --- Light: " + room.getLight().getLight() + "  --- Temp: " 
-            + room.getTemp().getTemperature() + "  --- Door: " + room.getDoor1().isOpen() + "  --- Window: " + room.getWindow(1).isOpen());
+            + room.getCurrentTemperature() + "  --- Door: " + room.getDoor1().isOpen() + "  --- Window: " + room.getWindow(1).isOpen());
         }
     }
 
     private void initializeRooms() {
-        Layout extractLayout = new Layout("src/main/java/logic/modules/houseLayoutFile.txt");
+        Layout extractLayout = new Layout("src\\main\\java\\logic\\layout\\houseLayoutFile.txt");
         ArrayList<Room> fileRooms = (ArrayList<Room>) extractLayout.getRooms();
         for (Room room : fileRooms) {
             addRoom(room);

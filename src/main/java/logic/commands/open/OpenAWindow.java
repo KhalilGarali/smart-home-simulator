@@ -9,7 +9,7 @@ import main.java.logic.users.Permissions;
  * Command to open a specific window in a room.
  * Implements the Command interface, allowing execution of the window-opening action.
  */
-public class OpenAWindow implements Command{
+public class OpenAWindow extends Command{
     protected Room room; // The room in which a window will be opened
     protected int windowNumber; // The specific window number to be opened
     
@@ -21,6 +21,7 @@ public class OpenAWindow implements Command{
     public OpenAWindow(Room room, int num){
         this.room = room;
         windowNumber = num;
+        this.REQUIRED_PERMISSIONS = Permissions.WINDOW;
     }
 
     /**

@@ -5,19 +5,19 @@ Door: Closed
 Light: on
 
 Room: garage
-Name: My Kitchen
+Name: My Garage
 Window: Open
 Door: Closed
 Light: on
 
 Room: Bedroom
-Name: My Kitchen
+Name: My Bedroom
 Window: Open
 Door: Closed
 Light: on
 
 Room: bathroom
-Name: My Kitchen
+Name: My Bathroom
 Window: Open
 Door: Closed
 Light: on

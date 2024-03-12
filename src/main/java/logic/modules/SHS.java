@@ -166,7 +166,7 @@ public class SHS {
         return light;
     }
     public Temperature makeTemp(String openingName){
-        Temperature temperature = new Temperature();
+        Temperature temperature = new Temperature(11);
         housefixtures.add(temperature);
         return temperature;
     }

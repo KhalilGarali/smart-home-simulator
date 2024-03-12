@@ -7,13 +7,13 @@ import java.time.format.DateTimeFormatter;
 import java.util.Random;
 
 public class DateTime {
-    private LocalDateTime dateTime;
+    private static LocalDateTime dateTime;
 
-    public DateTime() {
+    static {
         generateRandomDateTime();
     }
 
-    public void generateRandomDateTime() {
+    private static void generateRandomDateTime() {
         Random random = new Random();
         int year = random.nextInt(2100 - 1970) + 1970; // Random year between 1970 and 2099
         int month = random.nextInt(12) + 1; // Random month between 1 and 12
@@ -21,35 +21,34 @@ public class DateTime {
         int hour = random.nextInt(24); // Random hour between 0 and 23
         int minute = random.nextInt(60); // Random minute between 0 and 59
         int second = random.nextInt(60); // Random second between 0 and 59
-        this.dateTime = LocalDateTime.of(year, month, day, hour, minute, second);
+        dateTime = LocalDateTime.of(year, month, day, hour, minute, second);
     }
 
-    public void incrementTime(int hours, int minutes, int seconds) {
-        this.dateTime = this.dateTime.plusHours(hours).plusMinutes(minutes).plusSeconds(seconds);
+    public static void incrementTime(int hours, int minutes, int seconds) {
+        dateTime = dateTime.plusHours(hours).plusMinutes(minutes).plusSeconds(seconds);
     }
 
-    public void incrementSecond() {
-        this.dateTime = this.dateTime.plusSeconds(1);
-    }    
-    
-    public void setDate(int year, int month, int day) {
-        this.dateTime = this.dateTime.withYear(year).withMonth(month).withDayOfMonth(day);
+    public static void incrementSecond() {
+        dateTime = dateTime.plusSeconds(1);
     }
 
-    public void setTime(int hour, int minute, int second) {
-        this.dateTime = this.dateTime.withHour(hour).withMinute(minute).withSecond(second);
+    public static void setDate(int year, int month, int day) {
+        dateTime = dateTime.withYear(year).withMonth(month).withDayOfMonth(day);
     }
 
-    public LocalDate getDate() {
-        return this.dateTime.toLocalDate();
+    public static void setTime(int hour, int minute, int second) {
+        dateTime = dateTime.withHour(hour).withMinute(minute).withSecond(second);
     }
 
-    public LocalTime getTime() {
-        return this.dateTime.toLocalTime();
+    public static LocalDate getDate() {
+        return dateTime.toLocalDate();
     }
 
-    @Override
-    public String toString() {
-        return this.dateTime.toString();
+    public static LocalTime getTime() {
+        return dateTime.toLocalTime();
+    }
+
+    public static String toStringDateTime() {
+        return dateTime.toString();
     }
 }

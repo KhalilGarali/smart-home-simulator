@@ -1,6 +1,5 @@
 package main.java.gui;
 
-import java.time.LocalDateTime;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -19,12 +18,7 @@ import java.util.Random;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.time.DateTimeException;
+// import java.time.DateTimeException;
 
 public class SimulationPanel extends JPanel {
     private JToggleButton simulationToggle;
@@ -32,7 +26,6 @@ public class SimulationPanel extends JPanel {
     private JSlider timeSpeedSlider;
     private JLabel userIcon;
     private JButton editButton;
-    private Temperature outsideTemperature;
     DateTime currentDateTime = new DateTime();
     private TimeSpeed timeSpeed;
 
@@ -72,9 +65,6 @@ public class SimulationPanel extends JPanel {
         // // Open a dialog or another frame to edit simulation parameters
         // editSimulationParameters();
         // });
-        editButton.addActionListener(e -> {
-            editSimulationParameters(); // Call method to open edit dialog
-        });
 
         // User and Location
         userLabel = new JLabel("User: Parent");
@@ -116,7 +106,8 @@ public class SimulationPanel extends JPanel {
         javax.swing.Timer timer = new javax.swing.Timer(1000, new UpdateDateTimeListener());
         timer.start();
 
-        outsideTemperature = new Temperature(11);
+        // outsideTemperature = new Temperature(11);
+        Temperature.setTemperature(11);
         // Set up a timer to update the outside temperature label every second
         Timer temperatureTimer = new Timer();
         temperatureTimer.scheduleAtFixedRate(new TimerTask() {
@@ -155,14 +146,14 @@ public class SimulationPanel extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             // Get the current time before incrementing
-            LocalTime beforeTime = currentDateTime.getTime();
+            LocalTime beforeTime = DateTime.getTime();
 
             // currentDateTime.incrementSecond();
             int increment = timeSpeed.calculateIncrement();
-            currentDateTime.incrementTime(0, 0, increment);
+            DateTime.incrementTime(0, 0, increment);
 
             // Get the current time after incrementing
-            LocalTime afterTime = currentDateTime.getTime();
+            LocalTime afterTime = DateTime.getTime();
 
             // Check if an hour has passed
             if (afterTime.getHour() != beforeTime.getHour()) {
@@ -186,26 +177,26 @@ public class SimulationPanel extends JPanel {
 
     // Method to get current date as string
     private String getCurrentDateAsString() {
-        LocalDate dateOnly = currentDateTime.getDate();
+        LocalDate dateOnly = DateTime.getDate();
         return dateOnly.format(DateTimeFormatter.ofPattern("E MMM dd yyyy"));
     }
 
     // Method to get current time as string
     private String getCurrentTimeAsString() {
-        LocalTime timeOnly = currentDateTime.getTime();
+        LocalTime timeOnly = DateTime.getTime();
         return timeOnly.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
     }
 
     // Method to update outside temperature label
     private void updateOutsideTempLabel() {
-        int temperature = outsideTemperature.getTemperature();
+        int temperature = Temperature.getTemperature();
         outsideTempLabel.setText("Outside Temp: " + temperature + "°C");
     }
 
     // Method to adjust temperature display based on simulation time
     private void adjustTemperatureDisplay() {
         // Get the current temperature
-        int currentTemperature = outsideTemperature.getTemperature();
+        int currentTemperature = Temperature.getTemperature();
 
         // Generate a random boolean value to decide whether to increase or decrease temperature
         boolean increaseTemp = new Random().nextBoolean();
@@ -214,130 +205,7 @@ public class SimulationPanel extends JPanel {
         int newTemperature = increaseTemp ? currentTemperature + 1 : currentTemperature - 1;
 
         // Update the temperature display
-        outsideTemperature.setTemperature(newTemperature); // Update temperature in Temperature class
+        Temperature.setTemperature(newTemperature); // Update temperature in Temperature class
         outsideTempLabel.setText("Outside Temp: " + newTemperature + "°C");
-    }
-
-    // Method to handle editing simulation parameters
-    private void editSimulationParameters() {
-        // Create a dialog window
-        JDialog editDialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), "Edit Parameters", true);
-        editDialog.setLayout(new BorderLayout());
-    
-        // Panel to hold components
-        JPanel editPanel = new JPanel();
-        editPanel.setLayout(new GridLayout(6, 2, 5, 5));
-    
-        // Date Labels and TextFields
-        JLabel dateEditLabel1 = new JLabel("Year:");
-        JTextField dateEditField1 = new JTextField();
-        JLabel dateEditLabel2 = new JLabel("Month:");
-        JTextField dateEditField2 = new JTextField();
-        JLabel dateEditLabel3 = new JLabel("Day:");
-        JTextField dateEditField3 = new JTextField();
-    
-        // Time Label and TextField
-        JLabel timeEditLabel1 = new JLabel("Hour:");
-        JTextField timeEditField1 = new JTextField();
-        JLabel timeEditLabel2 = new JLabel("Minute:");
-        JTextField timeEditField2 = new JTextField();
-        JLabel timeEditLabel3 = new JLabel("Second:");
-        JTextField timeEditField3 = new JTextField();
-    
-        // Add components to edit panel
-        editPanel.add(dateEditLabel1);
-        editPanel.add(dateEditField1);
-        editPanel.add(dateEditLabel2);
-        editPanel.add(dateEditField2);
-        editPanel.add(dateEditLabel3);
-        editPanel.add(dateEditField3);
-        editPanel.add(timeEditLabel1);
-        editPanel.add(timeEditField1);
-        editPanel.add(timeEditLabel2);
-        editPanel.add(timeEditField2);
-        editPanel.add(timeEditLabel3);
-        editPanel.add(timeEditField3);
-    
-        // Buttons Panel
-        JPanel buttonPanel = new JPanel();
-        JButton saveButton = new JButton("Save");
-        JButton cancelButton = new JButton("Cancel");
-    
-        // Add action listeners to buttons
-        saveButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    // Parse the entered values to integers
-                    int year = Integer.parseInt(dateEditField1.getText());
-                    int month = Integer.parseInt(dateEditField2.getText());
-                    int day = Integer.parseInt(dateEditField3.getText());
-
-                    if (month == 5  || month == 6 || month == 8 || month == 9) {
-                        outsideTemperature.setTemperature(25);
-                    } else if (month == 1 || month == 2 || month == 12) {
-                        outsideTemperature.setTemperature(0);
-                    } else if (month == 3 || month == 4 || month == 10 || month == 11) {
-                        outsideTemperature.setTemperature(10);
-                    } else if (month == 7) {
-                        outsideTemperature.setTemperature(30);
-                    } else {
-                        outsideTemperature.setTemperature(10);
-                    }
-    
-                    // Check if the date is valid
-                    if (isValidDate(year, month, day)) {
-                        int hour = Integer.parseInt(timeEditField1.getText());
-                        int minute = Integer.parseInt(timeEditField2.getText());
-                        int second = Integer.parseInt(timeEditField3.getText());
-    
-                        // Update date and time labels with user input
-                        currentDateTime.setDate(year, month, day);
-                        currentDateTime.setTime(hour, minute, second);
-                        dateLabel.setText("Date: " + currentDateTime.getDate());
-                        timeLabel.setText("Time: " + currentDateTime.getTime());
-    
-                        // Close the dialog
-                        editDialog.dispose();
-                    } else {
-                        JOptionPane.showMessageDialog(editDialog, "Please enter a valid date.", "Error", JOptionPane.ERROR_MESSAGE);
-                    }
-                } catch (NumberFormatException ex) {
-                    // Display an error message if parsing fails
-                    JOptionPane.showMessageDialog(editDialog, "Please enter valid integers for date fields.", "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        });
-    
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Close the dialog without saving changes
-                editDialog.dispose();
-            }
-        });
-    
-        // Add buttons to button panel
-        buttonPanel.add(saveButton);
-        buttonPanel.add(cancelButton);
-    
-        // Add panels to dialog
-        editDialog.add(editPanel, BorderLayout.CENTER);
-        editDialog.add(buttonPanel, BorderLayout.SOUTH);
-    
-        // Set dialog properties
-        editDialog.setSize(300, 200);
-        editDialog.setLocationRelativeTo(null); // Center the dialog
-        editDialog.setVisible(true); // Display the dialog
-    }
-
-    // Method to validate if the given year, month, and day form a valid date
-    private boolean isValidDate(int year, int month, int day) {
-        try {
-            LocalDate.of(year, month, day);
-            return true;
-        } catch (DateTimeException e) {
-            return false;
-        }
     }
 }

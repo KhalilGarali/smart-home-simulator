@@ -5,17 +5,13 @@ import java.util.TimerTask;
 
 public class Temperature {
 
-    private int temperature; // Temperature variable
+    private static int temperature; // Temperature variable
 
-    public Temperature(int initialTemperature) {
-        this.temperature = initialTemperature; // Initialize temperature
-    }
-
-    public int getTemperature() {
+    public static int getTemperature() {
         return temperature;
     }
 
-    public void setTemperature(int temperature) {
-        this.temperature = temperature;
+    public static void setTemperature(int temperature) {
+        Temperature.temperature = temperature;
     }
 }

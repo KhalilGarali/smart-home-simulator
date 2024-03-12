@@ -16,7 +16,6 @@ import main.java.logic.users.*;
 import main.java.model.openings.*;
 import main.java.model.rooms.*;
 
-import java.util.*;
 
 public class main {
 
@@ -27,87 +26,87 @@ public class main {
             frame.setVisible(true);
         });
 
-        SHS shs = new SHS();
+        // SHS shs = new SHS();
 
-        Room kitchen = shs.makeKitchen("My Kitchen");
-        Room masterBedroom = shs.makeBedRoom("Master bedroom");
-        Room kidsBedroom = shs.makeBedRoom("kid's bedroom");
-        Room garage = shs.makeGarage("my garage");
-        Room bathroom1 = shs.makeBathroom("u bathroom 1");
-        Room bathroom2 = shs.makeBathroom("d bathroom 2");
-        Room livingRoom = shs.makeLivingRoom("living room");
-        Room porch = shs.makePorch("porch");
-        Room basement = shs.makeBasement("basement");
+        // Room kitchen = shs.makeKitchen("My Kitchen");
+        // Room masterBedroom = shs.makeBedRoom("Master bedroom");
+        // Room kidsBedroom = shs.makeBedRoom("kid's bedroom");
+        // Room garage = shs.makeGarage("my garage");
+        // Room bathroom1 = shs.makeBathroom("u bathroom 1");
+        // Room bathroom2 = shs.makeBathroom("d bathroom 2");
+        // Room livingRoom = shs.makeLivingRoom("living room");
+        // Room porch = shs.makePorch("porch");
+        // Room basement = shs.makeBasement("basement");
 
-        Opening kitchenWindow = shs.makeWindow("kitchen Window");
-        Opening window2 = shs.makeWindow("Window 2");
-        Opening masterWindow = shs.makeWindow("master Window");
-        Opening kidsWindow = shs.makeWindow("kids Window");
-        Opening livingRoomWindow = shs.makeWindow("living Room Window");
-        Opening basementWindow = shs.makeWindow("basement Window");
-        Opening uBathroomWindow = shs.makeWindow("uBathroom Window");
-        Opening dBathroomWindow = shs.makeWindow("dBathroom Window");
+        // Opening kitchenWindow = shs.makeWindow("kitchen Window");
+        // Opening window2 = shs.makeWindow("Window 2");
+        // Opening masterWindow = shs.makeWindow("master Window");
+        // Opening kidsWindow = shs.makeWindow("kids Window");
+        // Opening livingRoomWindow = shs.makeWindow("living Room Window");
+        // Opening basementWindow = shs.makeWindow("basement Window");
+        // Opening uBathroomWindow = shs.makeWindow("uBathroom Window");
+        // Opening dBathroomWindow = shs.makeWindow("dBathroom Window");
 
-        Opening garageDoor = shs.makeDoor("garage door");
-        Opening livingRoomDoor = shs.makeDoor("living Room Door");
-        Opening uBathroomDoor = shs.makeDoor("u Bathroom Door");
-        Opening dBathroomDoor = shs.makeDoor("d Bathroom Door");
-        Opening basementDoor = shs.makeDoor("basement Door");
-        Opening masterDoor = shs.makeDoor("master bedroom Door");
-        Opening kidsDoor = shs.makeDoor("Kids bedroom Door");
+        // Opening garageDoor = shs.makeDoor("garage door");
+        // Opening livingRoomDoor = shs.makeDoor("living Room Door");
+        // Opening uBathroomDoor = shs.makeDoor("u Bathroom Door");
+        // Opening dBathroomDoor = shs.makeDoor("d Bathroom Door");
+        // Opening basementDoor = shs.makeDoor("basement Door");
+        // Opening masterDoor = shs.makeDoor("master bedroom Door");
+        // Opening kidsDoor = shs.makeDoor("Kids bedroom Door");
 
-        kitchen.setWindow((Window) kitchenWindow);
-        masterBedroom.setWindow((Window) masterWindow);
-        kidsBedroom.setWindow((Window) kidsWindow);
-        livingRoom.setWindow((Window) livingRoomWindow);
-        basement.setWindow((Window) basementWindow);
-        bathroom1.setWindow((Window) uBathroomWindow);
-        bathroom2.setWindow((Window) dBathroomWindow);
+        // kitchen.setWindow((Window) kitchenWindow);
+        // masterBedroom.setWindow((Window) masterWindow);
+        // kidsBedroom.setWindow((Window) kidsWindow);
+        // livingRoom.setWindow((Window) livingRoomWindow);
+        // basement.setWindow((Window) basementWindow);
+        // bathroom1.setWindow((Window) uBathroomWindow);
+        // bathroom2.setWindow((Window) dBathroomWindow);
 
-        garage.setDoor((Door) garageDoor);
-        masterBedroom.setDoor((Door) masterDoor);
-        kidsBedroom.setDoor((Door) kidsDoor);
-        livingRoom.setDoor((Door) livingRoomDoor);
-        basement.setDoor((Door) basementDoor);
-        bathroom1.setDoor((Door) uBathroomDoor);
-        bathroom2.setDoor((Door) dBathroomDoor);
+        // garage.setDoor((Door) garageDoor);
+        // masterBedroom.setDoor((Door) masterDoor);
+        // kidsBedroom.setDoor((Door) kidsDoor);
+        // livingRoom.setDoor((Door) livingRoomDoor);
+        // basement.setDoor((Door) basementDoor);
+        // bathroom1.setDoor((Door) uBathroomDoor);
+        // bathroom2.setDoor((Door) dBathroomDoor);
 
-        User father = shs.makeParent("John");
-        User child = shs.makeChild("Joseph");
-        User guest = shs.makeGuest("Julie");
-        User cousin = shs.makeFamilyMember("Jordan");
-        User stranger = shs.makeStranger("J...");
+        // User father = shs.makeParent("John");
+        // User child = shs.makeChild("Joseph");
+        // User guest = shs.makeGuest("Julie");
+        // User cousin = shs.makeFamilyMember("Jordan");
+        // User stranger = shs.makeStranger("J...");
 
-        shs.enterRoom(father, masterBedroom);
-        shs.enterRoom(child, kidsBedroom);
+        // shs.enterRoom(father, masterBedroom);
+        // shs.enterRoom(child, kidsBedroom);
 
-        OpenAWindow openKitchenWindow = shs.makeOpenAWindow(kitchen, 1);
-        OpenAWindow openMasterWindow = shs.makeOpenAWindow(masterBedroom, 1);
-        OpenAWindow openKidsWindow = shs.makeOpenAWindow(kidsBedroom, 1);
-        OpenAWindow openBasementWindow = shs.makeOpenAWindow(basement, 1);
-        OpenAWindow openLivingWindow = shs.makeOpenAWindow(livingRoom, 1);
-        OpenAWindow openUBathroomWindow = shs.makeOpenAWindow(bathroom1, 1);
-        OpenAWindow openDBathroomWindow = shs.makeOpenAWindow(bathroom2, 1);
-        TurnLightOn turnLivingLightOn = shs.makeTurnLightOn(livingRoom);
-        TurnLightOff turnKitchenLightOff = shs.makeTurnLightOff(kitchen);
-        TurnCoolingOn turnMasterCoolingOn = shs.makeTurnCoolingOn(masterBedroom);
-        TurnCoolingOff turnMasterCoolingOff = shs.makeTurnCoolingOff(masterBedroom);
-        TurnHeatingOn turnMasterHeatingOn = shs.makeTurnHeatingOn(masterBedroom);
-        TurnHeatingOff turnMasterHeatingOff = shs.makeTurnHeatingOff(masterBedroom);
-        ChangeTemperature changeLivingTemperature = shs.makeChangeTemperature(livingRoom, 27);
+        // OpenAWindow openKitchenWindow = shs.makeOpenAWindow(kitchen, 1);
+        // OpenAWindow openMasterWindow = shs.makeOpenAWindow(masterBedroom, 1);
+        // OpenAWindow openKidsWindow = shs.makeOpenAWindow(kidsBedroom, 1);
+        // OpenAWindow openBasementWindow = shs.makeOpenAWindow(basement, 1);
+        // OpenAWindow openLivingWindow = shs.makeOpenAWindow(livingRoom, 1);
+        // OpenAWindow openUBathroomWindow = shs.makeOpenAWindow(bathroom1, 1);
+        // OpenAWindow openDBathroomWindow = shs.makeOpenAWindow(bathroom2, 1);
+        // TurnLightOn turnLivingLightOn = shs.makeTurnLightOn(livingRoom);
+        // TurnLightOff turnKitchenLightOff = shs.makeTurnLightOff(kitchen);
+        // TurnCoolingOn turnMasterCoolingOn = shs.makeTurnCoolingOn(masterBedroom);
+        // TurnCoolingOff turnMasterCoolingOff = shs.makeTurnCoolingOff(masterBedroom);
+        // TurnHeatingOn turnMasterHeatingOn = shs.makeTurnHeatingOn(masterBedroom);
+        // TurnHeatingOff turnMasterHeatingOff = shs.makeTurnHeatingOff(masterBedroom);
+        // ChangeTemperature changeLivingTemperature = shs.makeChangeTemperature(livingRoom, 27);
 
-        shs.enterRoom(child, kitchen);
+        // shs.enterRoom(child, kitchen);
 
-        shs.doAction(father,openDBathroomWindow, kitchen);
-        shs.doAction(child,openBasementWindow, kitchen);
-        shs.doAction(father, turnLivingLightOn, kidsBedroom);
-        shs.doAction(father, turnKitchenLightOff, kidsBedroom);
-        shs.doAction(father, turnMasterCoolingOn, kidsBedroom);
-        shs.doAction(father, turnMasterCoolingOff, kidsBedroom);
-        shs.doAction(father, turnMasterHeatingOn, kidsBedroom);
-        shs.doAction(father, turnMasterHeatingOff, kidsBedroom);
-        shs.doAction(father, changeLivingTemperature, kidsBedroom);
-        shs.doAction(father, openUBathroomWindow, kidsBedroom);
+        // shs.doAction(father, openDBathroomWindow, kitchen);
+        // shs.doAction(child, openBasementWindow, kitchen);
+        // shs.doAction(father, turnLivingLightOn, kidsBedroom);
+        // shs.doAction(father, turnKitchenLightOff, kidsBedroom);
+        // shs.doAction(father, turnMasterCoolingOn, kidsBedroom);
+        // shs.doAction(father, turnMasterCoolingOff, kidsBedroom);
+        // shs.doAction(father, turnMasterHeatingOn, kidsBedroom);
+        // shs.doAction(father, turnMasterHeatingOff, kidsBedroom);
+        // shs.doAction(father, changeLivingTemperature, kidsBedroom);
+        // shs.doAction(father, openUBathroomWindow, kidsBedroom);
 
 //        Room kitchen = new Kitchen();
 //        Window window1 = new Window();

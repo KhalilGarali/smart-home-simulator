@@ -26,7 +26,7 @@ public abstract class Room implements Observable{
     public Window window2;
     private Door door1;
     private Door door2;
-    private Light light = new Light();
+    private Light light;
     private Temperature temp = new Temperature();
     private int desiredTemp;
     private int lightSensor;
@@ -34,7 +34,6 @@ public abstract class Room implements Observable{
     protected String name;
 
     protected List<User> usersInThisRoomList = new ArrayList<>();
-    private Light light1;
 
     //default constructor
     public Room(String name){
@@ -73,6 +72,9 @@ public abstract class Room implements Observable{
     }
     // END OF THE OBSERVER PATTERN IMPLEMENTATION
 
+    public void setName(String name){
+        this.name = name;
+    }
     // Setters for the Openings in the Room
     public void setWindow(Window window) {
         if(window1 == null){
@@ -101,8 +103,8 @@ public abstract class Room implements Observable{
         return window2;
     }
 
-    public void setLight(Light l){
-        this.light1 = l;
+    public void setLight(Light light){
+        this.light = light;
     }
     public Door getDoor1() {
         return door1;

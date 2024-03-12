@@ -20,14 +20,6 @@ public class HomeSimulatorFrame extends JFrame {
         // House Layout Panel 
         HouseLayoutPanel houseLayoutPanel = new HouseLayoutPanel();
         add(houseLayoutPanel, BorderLayout.EAST);
-        houseLayoutPanel.addRoom(new Kitchen("Kitchen"));
-        houseLayoutPanel.addRoom(new Kitchen("Kitchen"));
-        houseLayoutPanel.addRoom(new Kitchen("Kitchen"));
-        houseLayoutPanel.addRoom(new Kitchen("Kitchen"));
-        houseLayoutPanel.addRoom(new Kitchen("Kitchen"));
-        houseLayoutPanel.addRoom(new Kitchen("Kitchen"));
-        houseLayoutPanel.addRoom(new Kitchen("Kitchen"));
-        houseLayoutPanel.addRoom(new Kitchen("Kitchen"));
 
         // module Panel
         ModulePanel ModulePanel = new ModulePanel();

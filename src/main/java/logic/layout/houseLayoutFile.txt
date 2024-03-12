@@ -1,19 +1,23 @@
 Room: Kitchen
+Name: My Kitchen
 Window: Open
 Door: Closed
-Light: ON
-
-Room: Bedroom
-Window: Open
-Door: open
-Light: OFF
-
-Room: bathroom
-Window: closed
-Door: Closed
-Light: ON
+Light: on
 
 Room: garage
-Window: closed
-Door: open
-Light: off
+Name: My Kitchen
+Window: Open
+Door: Closed
+Light: on
+
+Room: Bedroom
+Name: My Kitchen
+Window: Open
+Door: Closed
+Light: on
+
+Room: bathroom
+Name: My Kitchen
+Window: Open
+Door: Closed
+Light: on

@@ -1,7 +1,7 @@
 package main.java.model.fixtures;
 
 public class Light {
-    private  boolean lightON = true ;
+    private  boolean lightON = false ;
     private boolean AutoLightON = true;
 
     public boolean getAutolight() {

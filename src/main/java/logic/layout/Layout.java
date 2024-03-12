@@ -30,7 +30,7 @@ public class Layout {
 
     private void readLayout(String filePath) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            String line;
+            String line, roomName;
             Room currentRoom = null;
             Light currentLight = null;
             Window currentWindow = null;
@@ -42,7 +42,9 @@ public class Layout {
                         rooms.add(currentRoom);
                     }
                     if(line.substring(6).trim().equalsIgnoreCase("kitchen")){
-                        currentRoom = new Kitchen("kitchen");
+                        // tempName = line.substring(15).trim();
+                        // System.out.println(" feofhqiofhiqpehjpiofj " + tempName);
+                        currentRoom = new Kitchen("Kitchen");
                     } else if (line.substring(6).trim().equalsIgnoreCase("bedroom")){
                         currentRoom = new BedRoom("bedroom");
                     } else if (line.substring(6).trim().equalsIgnoreCase("garage")){
@@ -56,13 +58,18 @@ public class Layout {
                     } else if (line.substring(6).trim().equalsIgnoreCase("porch")){
                         currentRoom = new Porch("porch");
                     }
+                    
                     //should implement other types of rooms once made
                 } else if (currentRoom != null) {
-                    if (line.startsWith("Light:")) {
+                    if (line.startsWith("Name:")) {
+                        roomName = line.substring(6);
+                        System.out.println(roomName);
+                        currentRoom.setName(roomName);
+                    }else if (line.startsWith("Light:")) {
                         currentLight = new Light();
-                        if (line.substring(7).trim().equalsIgnoreCase("on")){
+                        if (line.substring(6).trim().equalsIgnoreCase("on")){
                             currentLight.setLightOn();
-                        } else if (line.substring(7).trim().equalsIgnoreCase("off")){
+                        } else if (line.substring(6).trim().equalsIgnoreCase("off")){
                             currentLight.setLightOff();
                         }
                         currentRoom.setLight(currentLight);

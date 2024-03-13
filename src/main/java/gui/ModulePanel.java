@@ -167,6 +167,13 @@ public class ModulePanel extends JPanel {
                 }
             }
         });
+        editButton = new JButton("Edit Date and Time");
+        editButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                editSimulationParameters();
+            }
+        });
 
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -202,6 +209,11 @@ public class ModulePanel extends JPanel {
         gbc.gridy = 3;
         gbc.anchor = GridBagConstraints.CENTER;
         editPanel.add(submitButton, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.anchor = GridBagConstraints.CENTER;
+        editPanel.add(editButton, gbc);
         
         return editPanel;
     }
@@ -213,7 +225,7 @@ public class ModulePanel extends JPanel {
     // Method to handle editing simulation parameters
     private void editSimulationParameters() {
         // Create a dialog window
-        JDialog editDialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), "Edit Parameters", true);
+        JDialog editDialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), "Edit Date and Time", true);
         editDialog.setLayout(new BorderLayout());
     
         // Panel to hold components

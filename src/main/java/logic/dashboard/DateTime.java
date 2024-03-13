@@ -51,4 +51,8 @@ public class DateTime {
     public static String toStringDateTime() {
         return dateTime.toString();
     }
+
+    public static int getMonth() {
+        return dateTime.getMonthValue();
+    }
 }

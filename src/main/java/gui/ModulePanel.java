@@ -1,9 +1,18 @@
 package main.java.gui;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 // import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
@@ -31,14 +40,16 @@ public class ModulePanel extends JPanel {
     private JTabbedPane tabbedPane;
     private JButton editButton;
 
-    public ModulePanel() {
+    public ModulePanel(JLabel usernameDisplay, JLabel locationDisplay) {
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createTitledBorder("Modules"));
         tabbedPane = new JTabbedPane();
 
-        // Create Panels Here 
+        // Create Panels Here
         SHCPanel SHCPanel = new SHCPanel();
-        JPanel shsPanel = createShsPanel();
+        // Create SHC Panel
+        JPanel shcPanel = createShcPanel();
+        JPanel shsPanel = createShsPanel(usernameDisplay, locationDisplay);
 
         // Module Tabs
         tabbedPane.addTab("SHC", new JScrollPane(SHCPanel));
@@ -50,44 +61,148 @@ public class ModulePanel extends JPanel {
         add(tabbedPane, BorderLayout.CENTER);
     }
 
-
-    private JPanel createShsPanel(){
-        JPanel shsPanel = new JPanel(new GridBagLayout());
+      private JPanel createShcPanel() {
+        JPanel shcPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
-        gbc.anchor = GridBagConstraints.WEST;
-        JPanel editPanel = createEditPanel();
-        shsPanel.add(editPanel, gbc);
 
+        // Items Panel
+        JPanel itemsPanel = createItemsPanel();
+
+        // Open/Close Panel
+        JPanel openClosePanel = createOpenClosePanel();
+
+        // Add the items and open/close panels to the SHC panel
+        shcPanel.add(itemsPanel, gbc);
+        shcPanel.add(openClosePanel, gbc);
+
+        return shcPanel;
+    }
+
+    private JPanel createItemsPanel() {
+        JPanel itemsPanel = new JPanel();
+        itemsPanel.setLayout(new BoxLayout(itemsPanel, BoxLayout.Y_AXIS));
+        itemsPanel.setBorder(BorderFactory.createTitledBorder("Items"));
+
+        // Create and add buttons
+        JToggleButton windowsButton = new JToggleButton("Windows");
+        JToggleButton lightsButton = new JToggleButton("Lights");
+        JToggleButton doorsButton = new JToggleButton("Doors");
+
+        ButtonGroup itemsGroup = new ButtonGroup();
+        itemsGroup.add(windowsButton);
+        itemsGroup.add(lightsButton);
+        itemsGroup.add(doorsButton);
+
+        // resize buttons
+        resizeButton(windowsButton);
+        resizeButton(lightsButton);
+        resizeButton(doorsButton);
+
+        itemsPanel.add(windowsButton);
+        itemsPanel.add(lightsButton);
+        itemsPanel.add(doorsButton);
+
+        return itemsPanel;
+    }
+
+    private JPanel createOpenClosePanel() {
+        JPanel openClosePanel = new JPanel();
+        openClosePanel.setLayout(new BoxLayout(openClosePanel, BoxLayout.Y_AXIS));
+        openClosePanel.setBorder(BorderFactory.createTitledBorder("Open/Close"));
+        
+        // Create and add checkboxes
+        openClosePanel.add(new JCheckBox("Garage"));
+        openClosePanel.add(new JCheckBox("Living Room"));
+        openClosePanel.add(new JCheckBox("Backyard"));
+
+        return openClosePanel;
+    }
+
+    private void resizeButton(JToggleButton button) {
+        button.setMaximumSize(new Dimension(Integer.MAX_VALUE, button.getMinimumSize().height));
+    }
+
+    private JPanel createShsPanel(JLabel usernameDisplay, JLabel locationDisplay){
+        JPanel shsPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        JPanel editPanel = createEditPanel(usernameDisplay, locationDisplay);
+        shsPanel.add(editPanel, gbc);
         return shsPanel;
     }
 
-    private JPanel createEditPanel(){
-        JPanel editPanel = new JPanel();
-        editPanel.setLayout(new BoxLayout(editPanel, BoxLayout.Y_AXIS));
+    private JPanel createEditPanel(JLabel usernameDisplay, JLabel locationDisplay){
+        JPanel editPanel = new JPanel(new GridBagLayout());
         editPanel.setBorder(BorderFactory.createTitledBorder("Edit User Profile"));
-    
-        JTextField usernameField = new JTextField("username");
-        JTextField locationField = new JTextField("location");
-    
-        editButton = new JButton("Edit Date and Time");
-        editButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        editButton.setMaximumSize(new Dimension(150, 40)); // Similar to the toggle, ensures the button size
-        // editButton.setIcon(new ImageIcon("src\\main\\resources\\editIcon.png"));
-        editButton.addActionListener(e -> {
-            editSimulationParameters(); // Call method to open edit dialog
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);//Add paddings
+
+        JLabel usernameLabel = new JLabel ("Username: ");
+        JLabel locationLabel = new JLabel ("Location: ");
+        JLabel passwordLabel = new JLabel ("Password: ");
+        JTextField usernameField = new JTextField(20);
+        JTextField locationField = new JTextField(20);
+        JTextField passwordField = new JTextField(20);
+        JButton submitButton = new JButton("Submit");
+        submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Update the JLabel in the other module
+                String newUsername = usernameField.getText();
+                String newLocation = locationField.getText();
+                if (!newUsername.equals("")) {
+                    usernameDisplay.setText("User: " + newUsername);
+                }
+                if (!newLocation.equals(""))
+                {
+                    locationDisplay.setText("Location " + newLocation);
+                }
+            }
         });
-    
-        editPanel.add(usernameField);
-        editPanel.add(locationField);
-        editPanel.add(editButton); // Add the edit button to the panel
-    
-        resizePanel(usernameField);
-        resizePanel(locationField);
-    
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.WEST;
+        editPanel.add(usernameLabel, gbc);
+        
+        gbc.gridx = 1;
+        gbc.weightx = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        editPanel.add(usernameField, gbc);
+        
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.anchor = GridBagConstraints.WEST;
+        editPanel.add(locationLabel, gbc);
+
+        gbc.gridx = 1;
+        gbc.weightx = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        editPanel.add(locationField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.anchor = GridBagConstraints.WEST;
+        editPanel.add(passwordLabel, gbc);
+        
+        gbc.gridx = 1;
+        gbc.weightx = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        editPanel.add(passwordField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.anchor = GridBagConstraints.CENTER;
+        editPanel.add(submitButton, gbc);
+        
         return editPanel;
     }
 

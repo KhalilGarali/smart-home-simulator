@@ -58,7 +58,7 @@ public class SimulationPanel extends JPanel {
         editButton = new JButton();
         editButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         editButton.setMaximumSize(new Dimension(40, 40)); // Similar to the toggle, ensures the button size
-        editButton.setIcon(new ImageIcon("src\\main\\resources\\editIcon.png"));
+        editButton.setIcon(new ImageIcon("src/main/resources/editIcon.png"));
         // Add an action listener for the edit button
         // editButton.addActionListener(e -> {
         // // Open a dialog or another frame to edit simulation parameters
@@ -70,7 +70,7 @@ public class SimulationPanel extends JPanel {
         userLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         locationLabel = new JLabel("Location: Kitchen");
         locationLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        userIcon = new JLabel(new ImageIcon("src\\main\\resources\\profilePicture.png"));
+        userIcon = new JLabel(new ImageIcon("src/main/resources/profilePicture.png"));
         userIcon.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Outside Temperature
@@ -140,6 +140,14 @@ public class SimulationPanel extends JPanel {
         add(timeSpeedSlider);
     }
 
+    public JLabel getUserLabel()
+    {
+        return userLabel;
+    }
+
+    public JLabel getLocationLabel(){
+        return locationLabel;
+    }
     // ActionListener class to update date and time labels
     private class UpdateDateTimeListener implements ActionListener {
         @Override

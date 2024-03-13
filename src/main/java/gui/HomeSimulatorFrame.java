@@ -22,7 +22,7 @@ public class HomeSimulatorFrame extends JFrame {
         add(houseLayoutPanel, BorderLayout.EAST);
 
         // module Panel
-        ModulePanel ModulePanel = new ModulePanel();
+        ModulePanel ModulePanel = new ModulePanel(simulationPanel.getUserLabel(), simulationPanel.getLocationLabel());
         add(ModulePanel, BorderLayout.CENTER);
 
         // Output Console

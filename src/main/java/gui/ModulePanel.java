@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -21,14 +23,14 @@ import javax.swing.JTextField;
 public class ModulePanel extends JPanel {
     private JTabbedPane tabbedPane;
 
-    public ModulePanel() {
+    public ModulePanel(JLabel usernameDisplay, JLabel locationDisplay) {
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createTitledBorder("Modules"));
         tabbedPane = new JTabbedPane();
 
         // Create SHC Panel
         JPanel shcPanel = createShcPanel();
-        JPanel shsPanel = createShsPanel();
+        JPanel shsPanel = createShsPanel(usernameDisplay, locationDisplay);
 
         // Add the SHC panel to the tabbed pane
         tabbedPane.addTab("SHC", new JScrollPane(shcPanel));
@@ -105,7 +107,7 @@ public class ModulePanel extends JPanel {
         button.setMaximumSize(new Dimension(Integer.MAX_VALUE, button.getMinimumSize().height));
     }
 
-    private JPanel createShsPanel(){
+    private JPanel createShsPanel(JLabel usernameDisplay, JLabel locationDisplay){
         JPanel shsPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridwidth = GridBagConstraints.REMAINDER;
@@ -113,12 +115,12 @@ public class ModulePanel extends JPanel {
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.anchor = GridBagConstraints.NORTHWEST;
-        JPanel editPanel = createEditPanel();
+        JPanel editPanel = createEditPanel(usernameDisplay, locationDisplay);
         shsPanel.add(editPanel, gbc);
         return shsPanel;
     }
 
-    private JPanel createEditPanel(){
+    private JPanel createEditPanel(JLabel usernameDisplay, JLabel locationDisplay){
         JPanel editPanel = new JPanel(new GridBagLayout());
         editPanel.setBorder(BorderFactory.createTitledBorder("Edit User Profile"));
         GridBagConstraints gbc = new GridBagConstraints();
@@ -131,9 +133,21 @@ public class ModulePanel extends JPanel {
         JTextField locationField = new JTextField(20);
         JTextField passwordField = new JTextField(20);
         JButton submitButton = new JButton("Submit");
-
-        //usernameField.setMaximumSize(new Dimension(Integer.MAX_VALUE, usernameField.getPreferredSize().height));
-        //locationField.setMaximumSize(new Dimension(Integer.MAX_VALUE, locationField.getPreferredSize().height));
+        submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Update the JLabel in the other module
+                String newUsername = usernameField.getText();
+                String newLocation = locationField.getText();
+                if (!newUsername.equals("")) {
+                    usernameDisplay.setText("User: " + newUsername);
+                }
+                if (!newLocation.equals(""))
+                {
+                    locationDisplay.setText("Location " + newLocation);
+                }
+            }
+        });
 
         gbc.gridx = 0;
         gbc.gridy = 0;

@@ -110,4 +110,12 @@ public class SimulationPanel extends JPanel {
         add(timeSpeedSlider);
     }
     
+    public JLabel getUserLabel()
+    {
+        return userLabel;
+    }
+
+    public JLabel getLocationLabel(){
+        return locationLabel;
+    }
 }

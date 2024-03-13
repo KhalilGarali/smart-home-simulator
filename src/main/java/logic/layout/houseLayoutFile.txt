@@ -41,27 +41,3 @@ Name: Guest LivingRoom
 Window: Open
 Door: Closed
 Light: off
-
-Room: LivingRoom
-Name: Master LivingRoom
-Window: Closed
-Door: Open
-Light: on
-
-Room: LivingRoom
-Name: Guest LivingRoom
-Window: Open
-Door: Closed
-Light: off
-
-Room: LivingRoom
-Name: Master LivingRoom
-Window: Closed
-Door: Open
-Light: on
-
-Room: LivingRoom
-Name: Guest LivingRoom
-Window: Open
-Door: Closed
-Light: off

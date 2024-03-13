@@ -14,6 +14,10 @@ public abstract class User {
     String name;
     Room room = null;
 
+    public User(){
+        permissions = new ArrayList<>();
+    }
+
     //non-default constructor
     public User(String name){
         permissions = new ArrayList<>();

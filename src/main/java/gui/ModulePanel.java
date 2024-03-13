@@ -21,6 +21,7 @@ import javax.swing.JToggleButton;
 import javax.swing.JTextField;
 
 import main.java.gui.ModulePanelTabs.SHCPanel;
+import main.java.model.rooms.Room;
 
 public class ModulePanel extends JPanel {
     private JTabbedPane tabbedPane;
@@ -120,7 +121,13 @@ public class ModulePanel extends JPanel {
         gbc.weighty = 1.0;
         gbc.anchor = GridBagConstraints.NORTHWEST;
         JPanel editPanel = createEditPanel(usernameDisplay, locationDisplay);
+        JPanel permissionsPanel = createPermissionsPanel();
         shsPanel.add(editPanel, gbc);
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        shsPanel.add(permissionsPanel, gbc);
         return shsPanel;
     }
 
@@ -190,4 +197,20 @@ public class ModulePanel extends JPanel {
         
         return editPanel;
     }
+
+    private JPanel createPermissionsPanel() {
+        JPanel permissionsPanel = new JPanel();
+        permissionsPanel.setLayout(new BoxLayout(permissionsPanel, BoxLayout.Y_AXIS));
+        permissionsPanel.setBorder(BorderFactory.createTitledBorder("User Profile Permissions"));
+
+        permissionsPanel.add(new JCheckBox("Open/Close Windows"));
+        permissionsPanel.add(new JCheckBox("Open/Close Doors"));
+        permissionsPanel.add(new JCheckBox("Turn on/off the lights"));
+        permissionsPanel.add(new JCheckBox("Change House Temperature"));
+
+
+
+        return permissionsPanel;
+    }
+
 }

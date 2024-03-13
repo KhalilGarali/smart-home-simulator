@@ -27,7 +27,7 @@ public abstract class Room implements Observable{
     private Door door1;
     private Door door2;
     private Light light;
-    private int currentTemperature;
+    private int currentTemperature = 25;
     private int desiredTemp;
     private int lightSensor;
     private HVAC hvac = new HVAC();

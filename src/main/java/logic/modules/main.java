@@ -13,6 +13,7 @@ import main.java.logic.commands.on.TurnCoolingOn;
 import main.java.logic.commands.on.TurnHeatingOn;
 import main.java.logic.commands.on.TurnLightOn;
 import main.java.logic.commands.open.*;
+import main.java.logic.layout.Layout;
 import main.java.logic.modules.SHS;
 import main.java.logic.users.*;
 import main.java.model.openings.*;
@@ -28,6 +29,7 @@ public class main {
             HomeSimulatorFrame frame = new HomeSimulatorFrame();
             frame.setVisible(true);
         });
+
 
         // SHS shs = SHS.getInstance();
 

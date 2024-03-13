@@ -29,6 +29,8 @@ public abstract class User {
         this.room = room;
     }
 
+
+
     // PERMISSION MANAGEMENT FUNCTIONS
     // check the user has a specific permission, function to be used in SHC
     public Boolean hasPermission(Permissions permission){

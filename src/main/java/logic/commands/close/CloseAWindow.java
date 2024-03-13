@@ -4,15 +4,22 @@ import main.java.logic.commands.Command;
 import main.java.logic.users.Permissions;
 import main.java.model.rooms.Room;
 
-public class CloseAWindow implements Command{
+public class CloseAWindow extends Command{
     protected Room room;
     protected int windowNumber;
 
     public CloseAWindow(Room room, int num){
         this.room = room;
         this.windowNumber = num;
+        this.REQUIRED_PERMISSIONS = Permissions.WINDOW;
+    }
+    public Room getRoom() {
+        return room;
     }
 
+    public int getWindowNumber() {
+        return windowNumber;
+    }
     @Override
     public Permissions requirePermissions(){
         return REQUIRED_PERMISSIONS;
@@ -23,7 +30,7 @@ public class CloseAWindow implements Command{
         System.out.println("\n--------------------------------------------------------------------");
         System.out.println(room);
         System.out.print("command done: ");
-        room.closeWindow(1);
+        room.closeWindow(windowNumber);
         System.out.println(room);
         System.out.println("----------------------------------------------------------------------");
         return true;

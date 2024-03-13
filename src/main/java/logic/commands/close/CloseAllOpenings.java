@@ -4,13 +4,18 @@ import main.java.logic.commands.Command;
 import main.java.logic.users.Permissions;
 import main.java.model.rooms.Room;
 
-public class CloseAllOpenings implements Command {
+public class CloseAllOpenings extends Command {
     protected Room room;
 
     public CloseAllOpenings(Room room){
         this.room = room;
+        //problem with permissions here
+        this.REQUIRED_PERMISSIONS = Permissions.DOOR;
     }
 
+    public Room getRoom() {
+        return room;
+    }
     @Override
     public Permissions requirePermissions(){
         return REQUIRED_PERMISSIONS;

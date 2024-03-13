@@ -4,14 +4,20 @@ import main.java.logic.commands.Command;
 import main.java.logic.users.Permissions;
 import main.java.model.rooms.Room;
 
-public class ChangeTemperature implements Command {
+
+public class ChangeTemperature extends Command {
     protected Room room;
     protected int temperature;
     public ChangeTemperature(Room room, int temperature){
         this.room = room;
         this.temperature = temperature;
     }
-
+    public Room getRoom() {
+        return room;
+    }
+    public int getTemperature(){
+        return temperature;
+    }
     @Override
     public Permissions requirePermissions(){
         return REQUIRED_PERMISSIONS;

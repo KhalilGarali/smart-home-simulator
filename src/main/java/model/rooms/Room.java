@@ -19,13 +19,14 @@ import main.java.model.openings.*;
  */
 
 public abstract class Room implements Observable{
+    // String name;
     //making the assumption that the room can have max 2 openings of the same kind
     public Window window1;
     public Window window2;
     private Door door1;
     private Door door2;
-    private Light light = new Light();
-    private Temperature temp = new Temperature();
+    private Light light;
+    private int currentTemperature;
     private int desiredTemp;
     private int lightSensor;
     private HVAC hvac = new HVAC();
@@ -69,6 +70,9 @@ public abstract class Room implements Observable{
     }
     // END OF THE OBSERVER PATTERN IMPLEMENTATION
 
+    public void setName(String name){
+        this.name = name;
+    }
     // Setters for the Openings in the Room
     public void setWindow(Window window) {
         if(window1 == null){
@@ -88,8 +92,22 @@ public abstract class Room implements Observable{
             System.out.println("can't add more than 2 doors to a room!");
         }    
     }
-    public Window getWindow1(){
-        return this.window1;
+    public void setCurrentTemperature(int temperature){
+        currentTemperature = temperature;
+    }
+
+    public Window getWindow(int windowNumber){
+        if (windowNumber==1){
+            return window1;
+        }
+        return window2;
+    }
+
+    public void setLight(Light light){
+        this.light = light;
+    }
+    public int getCurrentTemperature() {
+        return currentTemperature;
     }
     public Door getDoor1() {
         return door1;
@@ -99,9 +117,6 @@ public abstract class Room implements Observable{
     }
     public Light getLight() {
         return light;
-    }
-    public Temperature getTemp() {
-        return temp;
     }
     public int getDesiredTemp() {
         return desiredTemp;
@@ -199,12 +214,15 @@ public abstract class Room implements Observable{
         } 
     }
     public void turnLightOn(){
-        System.out.println("turning light on in : " + this.getName());
-        light.setLightOn();
-        notifyObserver();
+
+        if(!light.getLight() && light.getAutolight()){
+            System.out.println("turning light on in : " + this.getName());
+            light.setLightOn();
+            notifyObserver();
+        }
     }
     public void turnLightOff(){
-        if(usersInThisRoomList.isEmpty()){
+        if(!usersInThisRoomList.isEmpty() && light.getAutolight()){
             System.out.println("cannot turn light off, someone is still in: " + this.getName());
         }
         else{
@@ -225,7 +243,8 @@ public abstract class Room implements Observable{
     }
     public void setTemperature(int temperature){
         System.out.println("setting temperature to: "+temperature);
-        temp.setTemperature(temperature);
+
+        setCurrentTemperature(temperature);
         notifyObserver();
     }
     public void setDesiredTemperature(int temperature){
@@ -233,10 +252,13 @@ public abstract class Room implements Observable{
         desiredTemp = temperature;
         notifyObserver();
     }
-    public void turnHeatingOn(){
+    public void turnHeatingOn() {
         turnCoolingOff();
         System.out.println("Turning On Heating : ");
         hvac.setHeating(true);
+        setCurrentTemperature(this.desiredTemp);
+        System.out.println("temperature is now: " + getCurrentTemperature() );
+        //set the temp object to something higher over time
         notifyObserver();
     }
     public void turnHeatingOff(){
@@ -248,6 +270,9 @@ public abstract class Room implements Observable{
         turnCoolingOff();
         System.out.println("Turning On Cooling : ");
         hvac.setCooling(true);
+
+        setCurrentTemperature(this.desiredTemp);
+        System.out.println("temperature is now: " + getCurrentTemperature() );
         notifyObserver();
     }
     public void turnCoolingOff(){
@@ -259,6 +284,7 @@ public abstract class Room implements Observable{
     public void addUserToRoom(User user){
         usersInThisRoomList.add(user);
     }
+
     public void removeUserFromRoom(User user){
         try {
             usersInThisRoomList.remove(user);
@@ -266,14 +292,21 @@ public abstract class Room implements Observable{
             System.out.println("user isn't in: " + this.getName());
         }
     }
-    
+
+
+    public List<User> getUserFromRoom(){
+        return usersInThisRoomList;
+    }
+
+    //not showing window2 and door2 for now!
     @Override
     public String toString() {
         return " has window1= " + window1 +
                 ", window2= " + window2 +
                 ", door= " + door1 +
                 ", light= " + light.getLight() +
-                ", temperature= " + temp.getTemperature() +
+                ", current temp= " + getCurrentTemperature() +
+                ", desired temp= " + getDesiredTemp() +
                 ", autoLight= " + light.getAutolight() +
                 " ";
     }

@@ -1,0 +1,23 @@
+Room: Kitchen
+Name: My Kitchen
+Window: Open
+Door: Closed
+Light: on
+
+Room: garage
+Name: My Kitchen
+Window: Open
+Door: Closed
+Light: on
+
+Room: Bedroom
+Name: My Kitchen
+Window: Open
+Door: Closed
+Light: on
+
+Room: bathroom
+Name: My Kitchen
+Window: Open
+Door: Closed
+Light: on

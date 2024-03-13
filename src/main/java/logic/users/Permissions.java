@@ -4,5 +4,5 @@ public enum Permissions{
     WINDOW, 
     DOOR, 
     LIGHT,
-    TEMP, 
+    TEMP,
 }

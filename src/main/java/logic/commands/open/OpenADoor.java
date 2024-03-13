@@ -4,13 +4,23 @@ import main.java.logic.commands.Command;
 import main.java.logic.users.Permissions;
 import main.java.model.rooms.Room;
 
-public class OpenADoor implements Command{
+public class OpenADoor extends Command{
     protected Room room;
     protected int doorNumber;
 
     public OpenADoor(Room room, int doorNumber){
         this.room = room;
         this.doorNumber = doorNumber;
+        this.REQUIRED_PERMISSIONS = Permissions.DOOR;
+
+    }
+
+    public Room getRoom() {
+        return room;
+    }
+
+    public int getDoorNumber() {
+        return doorNumber;
     }
 
     @Override

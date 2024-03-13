@@ -21,11 +21,19 @@ public class SHC extends Module{
     //this potentially has to be a list
     private Command aCommand;
 
+    private static SHC instance = null;
+
+    private SHC(){
+
+    }
     /**
      * Default constructor for the SHC module.
      */
-    public SHC (){
-        
+    public static SHC getIntance(){
+        if(instance ==null){
+            instance = new SHC();
+        }
+        return instance;
     }
 
     /**
@@ -37,6 +45,7 @@ public class SHC extends Module{
      * @param c The command to be executed.
      * @return Boolean indicating if the action was successful. Currently always returns false.
      */
+
     public Boolean userAction(User u, Command c, Room room){
         if(u instanceof Parent){
             if (u.hasPermission(c.requirePermissions())){
@@ -56,9 +65,20 @@ public class SHC extends Module{
                 System.out.println("--------------------------------------------------------------------------");
             }
         }
-
         System.out.println(u.getName() + " is not in "+ room.getName() );
         return false;
+    }
+
+    //SHS -->
+    //SHH.regulatetemp() -->
+    //regulatetemp(){
+    // shc.moduleAction
+    //}
+    // FIXME must be called from SHH when temp is up for example.
+    public Boolean moduleAction(Command c, Room room){
+            addCommand(c);
+            executeCommand();
+            return true;
     }
 
     /**

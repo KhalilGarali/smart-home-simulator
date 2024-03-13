@@ -11,7 +11,7 @@ public class House {
     ArrayList<Room> rooms = new ArrayList<>();
 
     private House(){
-        houseLayout = new Layout("src\\main\\java\\logic\\layout\\houseLayoutFile.txt");
+        houseLayout = new Layout("src/main/java/logic/layout/houseLayoutFile.txt");
         ArrayList<Room> fileRooms = (ArrayList<Room>) houseLayout.getRooms();
         for (Room room : fileRooms) {
             addRoom(room);

@@ -1,77 +1,77 @@
 package main.java.gui;
 
+import main.java.logic.layout.House;
 import main.java.logic.layout.Layout;
-import main.java.model.rooms.Kitchen;
 import main.java.model.rooms.Room;
-
 import java.awt.*;
-import java.util.ArrayList;
 import javax.swing.*;
 
 public class HouseLayoutPanel extends JPanel {
-    private ImageIcon windowOpenIcon, windowClosedIcon, doorOpenIcon, doorClosedIcon, lightOnIcon, lightOffIcon;
-    private ArrayList<Room> rooms;
+    private ImageIcon windowOpenIcon, windowClosedIcon, doorOpenIcon, doorClosedIcon, lightOnIcon, lightOffIcon, userIcon;
+    private String tempInfo, userCountInfo;
     private int rowHeight;
-    
+    Layout extractLayout;
+    House house = House.getInstance();
 
     public HouseLayoutPanel() {
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setBorder(BorderFactory.createTitledBorder("House Layout"));
         windowOpenIcon = new ImageIcon("src\\main\\resources\\houseLayoutIcons\\WindowOpenIcon.png");
         doorOpenIcon = new ImageIcon("src\\main\\resources\\houseLayoutIcons\\DoorOpenIcon.png");
         lightOnIcon = new ImageIcon("src\\main\\resources\\houseLayoutIcons\\LightOnIcon.png");
         windowClosedIcon = new ImageIcon("src\\main\\resources\\houseLayoutIcons\\WindowClosedIcon.png");
         doorClosedIcon = new ImageIcon("src\\main\\resources\\houseLayoutIcons\\DoorClosedIcon.png");
         lightOffIcon = new ImageIcon("src\\main\\resources\\houseLayoutIcons\\LightOffIcon.png");
-        this.rooms = new ArrayList<>();
+        userIcon = new ImageIcon("src\\main\\resources\\houseLayoutIcons\\UserIcon.png");
         this.rowHeight = 150 + 10; // Assuming room height of 150 and 10 units of spacing
-        initializeRooms(); // Call this method to add rooms upon panel initialization
         checkRoomInfo();
+        updatePanelSize();
     }
 
     private void checkRoomInfo(){
-        for (Room room : this.rooms) {
+        for (Room room : house.getRooms()) {
             System.out.println("INFO: " + room.getName() + " --- Light: " + room.getLight().getLight() + "  --- Temp: " 
-            + room.getCurrentTemperature() + "  --- Door: " + room.getDoor1().isOpen() + "  --- Window: " + room.getWindow(1).isOpen());
+            + room.getCurrentTemperature() + "  --- Door: " + room.getDoor1().isOpen() + "  --- Window: " + 
+            room.getWindow(1).isOpen() + " --- Number Of Users " + room.getUserFromRoom().size());
         }
-    }
-
-    private void initializeRooms() {
-        Layout extractLayout = new Layout("src\\main\\java\\logic\\layout\\houseLayoutFile.txt");
-        ArrayList<Room> fileRooms = (ArrayList<Room>) extractLayout.getRooms();
-        for (Room room : fileRooms) {
-            addRoom(room);
-        }
-    }
-
-    public void addRoom(Room room) {
-        this.rooms.add(room);
-        updatePanelSize();
-        repaint(); // Trigger the paintComponent to redraw with the new room
     }
 
     private void updatePanelSize() {
-        // Calculate total height needed based on the number of rooms and the row height
-        int rows = (rooms.size() / 4) + 1;
-        int totalHeight = this.rowHeight * rows;
-        setPreferredSize(new Dimension(670, totalHeight));
-        revalidate(); // Revalidate the layout after changing the size
+        int totalRows = (int) Math.ceil((double) house.getRooms().size() / 2); // 2 rooms per row
+        // Calculate total height needed based on the number of rooms
+        int totalHeight = totalRows * rowHeight + 100;
+        Dimension panelSize = new Dimension(670, totalHeight);
+        setPreferredSize(panelSize);
+        setMinimumSize(panelSize); 
+        revalidate();
+        repaint();
+    }
+
+    public void updateRoomIcon() {
+        // Simply repaint the panel to update the icons based on the current state of the rooms
+        repaint();
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        int roomWidth = 150;
-        int roomHeight = 150;
+        int numRoomsPerRow = 2;
+        int panelWidth = getWidth();
+        int roomWidth = (panelWidth - 40) / numRoomsPerRow; // Subtract margins and divide by number of rooms
+        int roomHeight = 150; // Keeping the height constant 
         int x = 10; // Initial x position
-        int y = 20; // Initial y position
-        int maxWidth = getWidth() - 10; // Panel width minus some margin
-        for (Room room : rooms) {
-            if (x + roomWidth > maxWidth) {
+        int y = 30; // Initial y position
+        int roomCounter = 0; // Counter to track the number of rooms in the current row
+        for (Room room : house.getRooms()) {
+             // Check if we've reached the number of rooms per row and need to start a new row
+            if (roomCounter >= numRoomsPerRow) {
                 x = 10; // Reset x position
-                y += rowHeight + 10; // Move y position to the next row
+                y += rowHeight + 15; // Move y position to the next row
+                roomCounter = 0; // Reset room counter
             }
             g.drawRect(x, y, roomWidth, roomHeight); // Draw the room
 
-             // Draw the room name centered above the square
+            // Draw the room name centered above the rectangle
             FontMetrics fm = g.getFontMetrics();
             int nameWidth = fm.stringWidth(room.getName());
             int nameX = x + (roomWidth - nameWidth) / 2; // Center the name horizontally
@@ -106,7 +106,27 @@ public class HouseLayoutPanel extends JPanel {
                 lightOffIcon.paintIcon(this, g, iconX, iconY);
             }
 
+            iconX += userIcon.getIconWidth() + 10; // Move to the right for the next icon
+
+            // Draw the User icon
+            if (room.getUserFromRoom().size() > 0) {
+                userIcon.paintIcon(this, g, iconX, iconY);
+            }
+
+            // Draw the temperature and number of users to the right of the room box
+            int infoX = iconX + 120; // Set a margin of 10 pixels from the room box
+            int infoY = y + 30; // Align with the top of the room box
+
+            tempInfo = "Temperature: " + room.getCurrentTemperature();
+            userCountInfo = "Nb. Of Users: " + room.getUserFromRoom().size();
+
+            g.drawString(tempInfo, infoX, infoY);
+            infoY += 15; // Add some vertical space between lines
+            g.drawString(userCountInfo, infoX, infoY);
+
             x += roomWidth + 10; // Increment x position for the next room
+            roomCounter++; // Increment room counter
         }
+        updatePanelSize();
     }
 }

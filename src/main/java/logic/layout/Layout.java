@@ -42,8 +42,6 @@ public class Layout {
                         rooms.add(currentRoom);
                     }
                     if(line.substring(6).trim().equalsIgnoreCase("kitchen")){
-                        // tempName = line.substring(15).trim();
-                        // System.out.println(" feofhqiofhiqpehjpiofj " + tempName);
                         currentRoom = new Kitchen("Kitchen");
                     } else if (line.substring(6).trim().equalsIgnoreCase("bedroom")){
                         currentRoom = new BedRoom("bedroom");
@@ -63,7 +61,6 @@ public class Layout {
                 } else if (currentRoom != null) {
                     if (line.startsWith("Name:")) {
                         roomName = line.substring(6);
-                        System.out.println(roomName);
                         currentRoom.setName(roomName);
                     }else if (line.startsWith("Light:")) {
                         currentLight = new Light();

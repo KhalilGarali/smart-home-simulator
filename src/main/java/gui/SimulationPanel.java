@@ -58,7 +58,6 @@ public class SimulationPanel extends JPanel {
         editButton = new JButton();
         editButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         editButton.setMaximumSize(new Dimension(40, 40)); // Similar to the toggle, ensures the button size
-        // Set the icon of the button
         editButton.setIcon(new ImageIcon("src\\main\\resources\\editIcon.png"));
         // Add an action listener for the edit button
         // editButton.addActionListener(e -> {

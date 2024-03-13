@@ -7,6 +7,11 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.ArrayList;
+import java.util.List;
+
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -21,6 +26,9 @@ import javax.swing.JToggleButton;
 import javax.swing.JTextField;
 
 import main.java.gui.ModulePanelTabs.SHCPanel;
+import main.java.logic.users.Child;
+import main.java.logic.users.Permissions;
+import main.java.logic.users.User;
 import main.java.model.rooms.Room;
 
 public class ModulePanel extends JPanel {
@@ -199,16 +207,85 @@ public class ModulePanel extends JPanel {
     }
 
     private JPanel createPermissionsPanel() {
+
+        //Hard coded user for testing purposes waiting to get Active user +++++++++++++++++++++++++++++++++++++++++
+        User testUser = new Child("Test User");
+        List<Permissions> testPermissions = new ArrayList<>();
+        testPermissions.add(Permissions.WINDOW);
+        testPermissions.add(Permissions.DOOR);
+        testUser.setPermissions(testPermissions);
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+        //TODO: Change testUser by Active User once it's implemented
+
         JPanel permissionsPanel = new JPanel();
         permissionsPanel.setLayout(new BoxLayout(permissionsPanel, BoxLayout.Y_AXIS));
         permissionsPanel.setBorder(BorderFactory.createTitledBorder("User Profile Permissions"));
 
-        permissionsPanel.add(new JCheckBox("Open/Close Windows"));
-        permissionsPanel.add(new JCheckBox("Open/Close Doors"));
-        permissionsPanel.add(new JCheckBox("Turn on/off the lights"));
-        permissionsPanel.add(new JCheckBox("Change House Temperature"));
+        JCheckBox windowsCheckBox = new JCheckBox("Open/Close Windows");
+        JCheckBox doorsCheckBox = new JCheckBox("Open/Close Doors");
+        JCheckBox lightsCheckBox = new JCheckBox("Turn on/off the lights");
+        JCheckBox temperatureCheckBox = new JCheckBox("Change House Temperature");
 
+        List<Permissions> tempPermissions = testUser.getPermissions();
 
+        // Add ItemListeners to the checkboxes
+        windowsCheckBox.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent e) {
+                if (windowsCheckBox.isSelected()) {
+                    tempPermissions.add(Permissions.WINDOW);
+                } else {
+                    if(testUser.getPermissions().contains(Permissions.WINDOW)){
+                        tempPermissions.remove(Permissions.WINDOW);
+                    }
+                }
+            }
+        });
+
+        doorsCheckBox.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent e) {
+                if (doorsCheckBox.isSelected()) {
+                    tempPermissions.add(Permissions.DOOR);
+                } else {
+                    if(testUser.getPermissions().contains(Permissions.DOOR)){
+                        tempPermissions.remove(Permissions.DOOR);
+                    }                }
+            }
+        });
+
+        lightsCheckBox.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent e) {
+                if (lightsCheckBox.isSelected()) {
+                    if()
+                    tempPermissions.add(Permissions.LIGHT);
+                } else {
+                    if(testUser.getPermissions().contains(Permissions.LIGHT)){
+                        tempPermissions.remove(Permissions.LIGHT);
+                    }                }
+            }
+        });
+
+        temperatureCheckBox.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent e) {
+                if (temperatureCheckBox.isSelected()) {
+                    tempPermissions.add(Permissions.TEMP);
+                    System.out.println(tempPermissions);
+                } else {
+                    if(testUser.getPermissions().contains(Permissions.TEMP)){
+                        tempPermissions.remove(Permissions.TEMP);
+                        System.out.println(tempPermissions);
+                    }
+                }
+            }
+        });
+
+        testUser.setPermissions(tempPermissions);
+
+        // Add checkboxes to the permissionsPanel
+        permissionsPanel.add(windowsCheckBox);
+        permissionsPanel.add(doorsCheckBox);
+        permissionsPanel.add(lightsCheckBox);
+        permissionsPanel.add(temperatureCheckBox);
 
         return permissionsPanel;
     }

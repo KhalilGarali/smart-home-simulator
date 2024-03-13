@@ -4,10 +4,12 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -107,37 +109,67 @@ public class ModulePanel extends JPanel {
         JPanel shsPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.fill = GridBagConstraints.BOTH;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
-        gbc.anchor = GridBagConstraints.WEST;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
         JPanel editPanel = createEditPanel();
         shsPanel.add(editPanel, gbc);
-
         return shsPanel;
     }
 
     private JPanel createEditPanel(){
-        JPanel editPanel = new JPanel();
-        editPanel.setLayout(new BoxLayout(editPanel, BoxLayout.Y_AXIS));
+        JPanel editPanel = new JPanel(new GridBagLayout());
         editPanel.setBorder(BorderFactory.createTitledBorder("Edit User Profile"));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);//Add paddings
 
-        JTextField usernameField = new JTextField("username");
-        JTextField locationField = new JTextField("location");
+        JLabel usernameLabel = new JLabel ("Username: ");
+        JLabel locationLabel = new JLabel ("Location: ");
+        JLabel passwordLabel = new JLabel ("Password: ");
+        JTextField usernameField = new JTextField(20);
+        JTextField locationField = new JTextField(20);
+        JTextField passwordField = new JTextField(20);
+        JButton submitButton = new JButton("Submit");
 
-        editPanel.add(usernameField);
-        editPanel.add(locationField);
+        //usernameField.setMaximumSize(new Dimension(Integer.MAX_VALUE, usernameField.getPreferredSize().height));
+        //locationField.setMaximumSize(new Dimension(Integer.MAX_VALUE, locationField.getPreferredSize().height));
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.WEST;
+        editPanel.add(usernameLabel, gbc);
         
-        resizePanel(usernameField);
-        resizePanel(locationField);
+        gbc.gridx = 1;
+        gbc.weightx = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        editPanel.add(usernameField, gbc);
+        
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.anchor = GridBagConstraints.WEST;
+        editPanel.add(locationLabel, gbc);
 
-        editPanel.add(usernameField);
-        editPanel.add(locationField);
+        gbc.gridx = 1;
+        gbc.weightx = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        editPanel.add(locationField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.anchor = GridBagConstraints.WEST;
+        editPanel.add(passwordLabel, gbc);
+        
+        gbc.gridx = 1;
+        gbc.weightx = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        editPanel.add(passwordField, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.anchor = GridBagConstraints.CENTER;
+        editPanel.add(submitButton, gbc);
         
         return editPanel;
-    }
-
-    private void resizePanel(JTextField textfield){
-        textfield.setMaximumSize(new Dimension(Integer.MAX_VALUE, textfield.getPreferredSize().height));
     }
 }

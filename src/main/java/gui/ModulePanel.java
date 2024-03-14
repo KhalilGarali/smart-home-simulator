@@ -52,10 +52,10 @@ public class ModulePanel extends JPanel {
         JPanel shsPanel = createShsPanel(usernameDisplay, locationDisplay);
 
         // Module Tabs
+        tabbedPane.addTab("SHS", new JScrollPane(shsPanel));
         tabbedPane.addTab("SHC", new JScrollPane(SHCPanel));
         tabbedPane.addTab("SHP", new JLabel("SHP Content"));
         tabbedPane.addTab("SHH", new JLabel("SHH Content"));
-        tabbedPane.addTab("SHS", new JScrollPane(shsPanel));
         // ... Add other tabs as needed
 
         add(tabbedPane, BorderLayout.CENTER);

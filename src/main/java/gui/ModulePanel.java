@@ -8,6 +8,7 @@ import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import main.java.logic.observerPattern.*;
 
 
 import javax.swing.BorderFactory;
@@ -49,7 +50,7 @@ import main.java.model.rooms.Room;
 import main.java.logic.users.*;
 import main.java.model.rooms.Room;
 
-public class ModulePanel extends JPanel {
+public class ModulePanel extends JPanel implements Observer{
     
     private JTabbedPane tabbedPane;
     House house = House.getInstance();
@@ -58,7 +59,12 @@ public class ModulePanel extends JPanel {
     List<User> listOfUsers = shs.getHouseUser();
     private JButton editButton;
 
+    JTextField usernameField;
+    JCheckBox windowsCheckBox, doorsCheckBox, lightsCheckBox, temperatureCheckBox;
+
+    
     public ModulePanel(JLabel usernameDisplay, JLabel locationDisplay) {
+        shs.addObserver(this);
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createTitledBorder("Modules"));
 
@@ -107,18 +113,18 @@ public class ModulePanel extends JPanel {
         gbc.insets = new Insets(5, 5, 5, 5);//Add paddings
 
         JLabel usernameLabel = new JLabel ("Username: ");
-        JTextField usernameField = new JTextField(20);
-          usernameField.setText(shs.activeUser.getName());
+        usernameField = new JTextField(20);
+          usernameField.setText(shs.activeUser.toString());
 
 
         //Permission checkboxes
-        JCheckBox windowsCheckBox = new JCheckBox("Open/Close Windows");
+        windowsCheckBox = new JCheckBox("Open/Close Windows");
             windowsCheckBox.setSelected(shs.activeUser.getPermissions().contains(Permissions.WINDOW) ? true : false);
-        JCheckBox doorsCheckBox = new JCheckBox("Open/Close Doors");
+        doorsCheckBox = new JCheckBox("Open/Close Doors");
             doorsCheckBox.setSelected(shs.activeUser.getPermissions().contains(Permissions.DOOR) ? true : false);
-        JCheckBox lightsCheckBox = new JCheckBox("Turn on/off the lights");
+        lightsCheckBox = new JCheckBox("Turn on/off the lights");
             lightsCheckBox.setSelected(shs.activeUser.getPermissions().contains(Permissions.LIGHT) ? true : false);
-        JCheckBox temperatureCheckBox = new JCheckBox("Change House Temperature");
+        temperatureCheckBox = new JCheckBox("Change House Temperature");
             temperatureCheckBox.setSelected(shs.activeUser.getPermissions().contains(Permissions.TEMP) ? true : false);
 
         List<Permissions> tempPermissions = shs.activeUser.getPermissions();
@@ -587,6 +593,17 @@ public class ModulePanel extends JPanel {
         }
     }
 
+    @Override
+    public void update(Observable o) {
+        SwingUtilities.invokeLater(() -> {
+            User activeUser = SHS.getInstance().getActiveUser();
+            usernameField.setText(activeUser.toString());
+            windowsCheckBox.setSelected(activeUser.getPermissions().contains(Permissions.WINDOW));
+            doorsCheckBox.setSelected(activeUser.getPermissions().contains(Permissions.DOOR));
+            lightsCheckBox.setSelected(activeUser.getPermissions().contains(Permissions.LIGHT));
+            temperatureCheckBox.setSelected(activeUser.getPermissions().contains(Permissions.TEMP));
+        });
+    }
 //    private JPanel createPermissionsPanel() {
 //
 //        //Hard coded user for testing purposes waiting to get Active user +++++++++++++++++++++++++++++++++++++++++

@@ -46,10 +46,10 @@ public class SimulationPanel extends JPanel {
 
     public SimulationPanel() {
         // dummy variable
-        shs.activeUser = new Stranger("BOBOBOJ");
+        users.add(new Stranger("BOBOBOJ"));
         Room dummyRoom = rooms.get(5);
-        shs.activeUser.moveToRoom(dummyRoom);
-        
+        users.get(0).moveToRoom(dummyRoom);
+        shs.activeUser = users.get(0);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createTitledBorder("Simulation"));
 
@@ -344,10 +344,8 @@ public class SimulationPanel extends JPanel {
                 // Iterate over the rooms ArrayList and compare the selected room name
                 for (User user : users) {
                     if (user.getName().equals(selectedUserName)) {
-                        //FIXME
                         shs.setActiveUser(user);
-                        System.out.println(shs.activeUser);
-                        System.out.println(user);
+                        shs.notifyObserver();
                         userLabel.setText(selectedUserName);
                     }
                 }

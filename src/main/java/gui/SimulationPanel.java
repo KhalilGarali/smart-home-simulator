@@ -46,7 +46,7 @@ public class SimulationPanel extends JPanel {
 
     public SimulationPanel() {
         // dummy variable
-        users.add(new Stranger("BOBOBOJ"));
+        users.add(new Stranger("Example"));
         Room dummyRoom = rooms.get(5);
         users.get(0).moveToRoom(dummyRoom);
         shs.activeUser = users.get(0);

@@ -28,9 +28,9 @@ public class main {
     public static void main(String[] args){
         SwingUtilities.invokeLater(() -> {
             HomeSimulatorFrame frame = new HomeSimulatorFrame();
-            //LogInFrame logInF = new LogInFrame(frame);
-            //logInF.setVisible(true);
-            frame.setVisible(true);
+            LogInFrame logInF = new LogInFrame(frame);
+            logInF.setVisible(true);
+            // frame.setVisible(true);
         });
 
 

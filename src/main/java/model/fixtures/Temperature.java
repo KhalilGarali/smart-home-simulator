@@ -1,14 +1,17 @@
 package main.java.model.fixtures;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class Temperature {
 
-    private int temperature = 25;
+    private static int temperature; // Temperature variable
 
-    public int getTemperature() {
+    public static int getTemperature() {
         return temperature;
     }
 
-    public void setTemperature(int temperature) {
-        this.temperature = temperature;
+    public static void setTemperature(int temperature) {
+        Temperature.temperature = temperature;
     }
 }

@@ -2,10 +2,10 @@ package main.java.logic.commands;
 
 import main.java.logic.users.Permissions;
 
-public interface Command {
-    public final Permissions REQUIRED_PERMISSIONS = Permissions.WINDOW;
+public abstract class Command {
+    public Permissions REQUIRED_PERMISSIONS = Permissions.WINDOW;
 
-    public Boolean execute();
+    public abstract Boolean execute();
 
-    public Permissions requirePermissions();
+    public abstract Permissions requirePermissions();
 }

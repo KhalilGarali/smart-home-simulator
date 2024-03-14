@@ -4,7 +4,7 @@ import main.java.logic.commands.Command;
 import main.java.logic.users.Permissions;
 import main.java.model.rooms.Room;
 
-public class ChangeTemperature implements Command {
+public class ChangeTemperature extends Command {
     protected Room room;
     protected int temperature;
     public ChangeTemperature(Room room, int temperature){

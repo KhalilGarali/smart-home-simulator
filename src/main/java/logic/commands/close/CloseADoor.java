@@ -4,13 +4,14 @@ import main.java.logic.commands.Command;
 import main.java.logic.users.Permissions;
 import main.java.model.rooms.Room;
 
-public class CloseADoor implements Command{
+public class CloseADoor extends Command{
     protected Room room;
     protected int doorNumber;
 
     public CloseADoor(Room room, int doorNumber){
         this.room = room;
         this.doorNumber = doorNumber;
+        this.REQUIRED_PERMISSIONS = Permissions.DOOR;
     }
 
     @Override

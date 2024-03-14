@@ -7,6 +7,11 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.ArrayList;
+import java.util.List;
+
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -25,6 +30,7 @@ import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
 import main.java.logic.dashboard.DateTime;
+import main.java.logic.modules.SHS;
 import main.java.model.fixtures.Temperature;
 
 import javax.swing.JTextField;
@@ -35,10 +41,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 import main.java.gui.ModulePanelTabs.SHCPanel;
+import main.java.logic.users.*;
+import main.java.model.rooms.Room;
 
 public class ModulePanel extends JPanel {
     private JTabbedPane tabbedPane;
     private JButton editButton;
+    private SHS shs = SHS.getInstance();
 
     public ModulePanel(JLabel usernameDisplay, JLabel locationDisplay) {
         setLayout(new BorderLayout());
@@ -140,31 +149,97 @@ public class ModulePanel extends JPanel {
     }
 
     private JPanel createEditPanel(JLabel usernameDisplay, JLabel locationDisplay){
+
+        //Hard coded user for testing purposes waiting to get Active user +++++++++++++++++++++++++++++++++++++++++
+        User testUser = new Parent("Test User");
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+        //TODO: Change testUser by Active User once it's implemented
+
+
         JPanel editPanel = new JPanel(new GridBagLayout());
         editPanel.setBorder(BorderFactory.createTitledBorder("Edit User Profile"));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);//Add paddings
 
         JLabel usernameLabel = new JLabel ("Username: ");
-        JLabel locationLabel = new JLabel ("Location: ");
-        JLabel passwordLabel = new JLabel ("Password: ");
         JTextField usernameField = new JTextField(20);
-        JTextField locationField = new JTextField(20);
-        JTextField passwordField = new JTextField(20);
+          usernameField.setText(shs.activeUser.getName());
+
+
+        //Permission checkboxes
+        JCheckBox windowsCheckBox = new JCheckBox("Open/Close Windows");
+            windowsCheckBox.setSelected(shs.activeUser.getPermissions().contains(Permissions.WINDOW) ? true : false);
+        JCheckBox doorsCheckBox = new JCheckBox("Open/Close Doors");
+            doorsCheckBox.setSelected(shs.activeUser.getPermissions().contains(Permissions.DOOR) ? true : false);
+        JCheckBox lightsCheckBox = new JCheckBox("Turn on/off the lights");
+            lightsCheckBox.setSelected(shs.activeUser.getPermissions().contains(Permissions.LIGHT) ? true : false);
+        JCheckBox temperatureCheckBox = new JCheckBox("Change House Temperature");
+            temperatureCheckBox.setSelected(shs.activeUser.getPermissions().contains(Permissions.TEMP) ? true : false);
+
+        List<Permissions> tempPermissions = shs.activeUser.getPermissions();
+
+
+        // Add checkboxes to the permissionsPanel
+        editPanel.add(windowsCheckBox);
+        editPanel.add(doorsCheckBox);
+        editPanel.add(lightsCheckBox);
+        editPanel.add(temperatureCheckBox);
+
+
         JButton submitButton = new JButton("Submit");
         submitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Update the JLabel in the other module
                 String newUsername = usernameField.getText();
-                String newLocation = locationField.getText();
-                if (!newUsername.equals("")) {
-                    usernameDisplay.setText("User: " + newUsername);
+
+                //Check if WINDOW permission is selected
+                if (windowsCheckBox.isSelected()) {
+                    if(!shs.activeUser.getPermissions().contains(Permissions.WINDOW)){
+                        tempPermissions.add(Permissions.WINDOW);
+                    }
+                } else {
+                    if(shs.activeUser.getPermissions().contains(Permissions.WINDOW)){
+                        tempPermissions.remove(Permissions.WINDOW);
+                    }
                 }
-                if (!newLocation.equals(""))
-                {
-                    locationDisplay.setText("Location " + newLocation);
+
+                //Check if LIGHT permission is selected
+                if (lightsCheckBox.isSelected()) {
+                    if(!shs.activeUser.getPermissions().contains(Permissions.LIGHT)){
+                        tempPermissions.add(Permissions.LIGHT);
+                    }
+                } else {
+                    if(shs.activeUser.getPermissions().contains(Permissions.LIGHT)){
+                        tempPermissions.remove(Permissions.LIGHT);
+                    }
                 }
+
+                //Check if DOOR permission is selected
+                if (doorsCheckBox.isSelected()) {
+                    if(!shs.activeUser.getPermissions().contains(Permissions.DOOR)) {
+                        tempPermissions.add(Permissions.DOOR);
+                    }
+                } else {
+                    if(shs.activeUser.getPermissions().contains(Permissions.DOOR)){
+                        tempPermissions.remove(Permissions.DOOR);
+                    }                }
+
+                //Check if TEMPERATURE permission is selected
+                if (temperatureCheckBox.isSelected()) {
+                    if(!shs.activeUser.getPermissions().contains(Permissions.TEMP)) {
+                        tempPermissions.add(Permissions.TEMP);
+                    }
+                } else {
+                    if(shs.activeUser.getPermissions().contains(Permissions.TEMP)){
+                        tempPermissions.remove(Permissions.TEMP);
+                    }
+                }
+
+                shs.activeUser.setName(newUsername);
+                shs.activeUser.setPermissions(tempPermissions);
+                //TODO: Update the user in left panel
             }
         });
         editButton = new JButton("Edit Date and Time");
@@ -184,34 +259,35 @@ public class ModulePanel extends JPanel {
         gbc.weightx = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
         editPanel.add(usernameField, gbc);
-        
+
+
         gbc.gridx = 0;
         gbc.gridy = 1;
-        gbc.anchor = GridBagConstraints.WEST;
-        editPanel.add(locationLabel, gbc);
-
-        gbc.gridx = 1;
-        gbc.weightx = 1.0;
-        gbc.fill = GridBagConstraints.BOTH;
-        editPanel.add(locationField, gbc);
+        gbc.anchor = GridBagConstraints.CENTER;
+        editPanel.add(windowsCheckBox, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 2;
-        gbc.anchor = GridBagConstraints.WEST;
-        editPanel.add(passwordLabel, gbc);
-        
-        gbc.gridx = 1;
-        gbc.weightx = 1.0;
-        gbc.fill = GridBagConstraints.BOTH;
-        editPanel.add(passwordField, gbc);
+        gbc.anchor = GridBagConstraints.CENTER;
+        editPanel.add(lightsCheckBox, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 3;
         gbc.anchor = GridBagConstraints.CENTER;
-        editPanel.add(submitButton, gbc);
+        editPanel.add(doorsCheckBox, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 4;
+        gbc.anchor = GridBagConstraints.CENTER;
+        editPanel.add(temperatureCheckBox, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 5;
+        gbc.anchor = GridBagConstraints.CENTER;
+        editPanel.add(submitButton, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 6;
         gbc.anchor = GridBagConstraints.CENTER;
         editPanel.add(editButton, gbc);
         
@@ -342,4 +418,88 @@ public class ModulePanel extends JPanel {
             return false;
         }
     }
+
+//    private JPanel createPermissionsPanel() {
+//
+//        //Hard coded user for testing purposes waiting to get Active user +++++++++++++++++++++++++++++++++++++++++
+//        User testUser = new Child("Test User");
+//        List<Permissions> testPermissions = new ArrayList<>();
+//        testPermissions.add(Permissions.WINDOW);
+//        testPermissions.add(Permissions.DOOR);
+//        testUser.setPermissions(testPermissions);
+//        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//
+//        //TODO: Change testUser by Active User once it's implemented
+//
+//        JPanel permissionsPanel = new JPanel();
+//        permissionsPanel.setLayout(new BoxLayout(permissionsPanel, BoxLayout.Y_AXIS));
+//        permissionsPanel.setBorder(BorderFactory.createTitledBorder("User Profile Permissions"));
+//
+//        JCheckBox windowsCheckBox = new JCheckBox("Open/Close Windows");
+//        JCheckBox doorsCheckBox = new JCheckBox("Open/Close Doors");
+//        JCheckBox lightsCheckBox = new JCheckBox("Turn on/off the lights");
+//        JCheckBox temperatureCheckBox = new JCheckBox("Change House Temperature");
+//
+//        List<Permissions> tempPermissions = testUser.getPermissions();
+//
+//        // Add ItemListeners to the checkboxes
+//        windowsCheckBox.addItemListener(new ItemListener() {
+//            public void itemStateChanged(ItemEvent e) {
+//                if (windowsCheckBox.isSelected()) {
+//                    tempPermissions.add(Permissions.WINDOW);
+//                } else {
+//                    if(testUser.getPermissions().contains(Permissions.WINDOW)){
+//                        tempPermissions.remove(Permissions.WINDOW);
+//                    }
+//                }
+//            }
+//        });
+//
+//        doorsCheckBox.addItemListener(new ItemListener() {
+//            public void itemStateChanged(ItemEvent e) {
+//                if (doorsCheckBox.isSelected()) {
+//                    tempPermissions.add(Permissions.DOOR);
+//                } else {
+//                    if(testUser.getPermissions().contains(Permissions.DOOR)){
+//                        tempPermissions.remove(Permissions.DOOR);
+//                    }                }
+//            }
+//        });
+//
+//        lightsCheckBox.addItemListener(new ItemListener() {
+//            public void itemStateChanged(ItemEvent e) {
+//                if (lightsCheckBox.isSelected()) {
+//                    tempPermissions.add(Permissions.LIGHT);
+//                } else {
+//                    if(testUser.getPermissions().contains(Permissions.LIGHT)){
+//                        tempPermissions.remove(Permissions.LIGHT);
+//                    }                }
+//            }
+//        });
+//
+//        temperatureCheckBox.addItemListener(new ItemListener() {
+//            public void itemStateChanged(ItemEvent e) {
+//                if (temperatureCheckBox.isSelected()) {
+//                    tempPermissions.add(Permissions.TEMP);
+//                    System.out.println(tempPermissions);
+//                } else {
+//                    if(testUser.getPermissions().contains(Permissions.TEMP)){
+//                        tempPermissions.remove(Permissions.TEMP);
+//                        System.out.println(tempPermissions);
+//                    }
+//                }
+//            }
+//        });
+//
+//        testUser.setPermissions(tempPermissions);
+//
+//        // Add checkboxes to the permissionsPanel
+//        permissionsPanel.add(windowsCheckBox);
+//        permissionsPanel.add(doorsCheckBox);
+//        permissionsPanel.add(lightsCheckBox);
+//        permissionsPanel.add(temperatureCheckBox);
+//
+//        return permissionsPanel;
+//    }
+
 }

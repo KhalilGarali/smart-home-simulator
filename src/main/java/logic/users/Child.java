@@ -1,6 +1,10 @@
 package main.java.logic.users;
 
 public class Child extends FamilyMember{
+
+    public Child(){
+        super();
+    }
     public Child(String name){
         super(name);
         permissions.add(Permissions.LIGHT);

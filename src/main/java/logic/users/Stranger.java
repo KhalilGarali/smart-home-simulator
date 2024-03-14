@@ -1,6 +1,10 @@
 package main.java.logic.users;
 
 public class Stranger extends User{
+
+    public Stranger(){
+        super();
+    }
     public Stranger(String name){
         super(name);
         this.name = name;

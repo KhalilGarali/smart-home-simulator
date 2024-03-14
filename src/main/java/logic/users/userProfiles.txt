@@ -1,0 +1,45 @@
+User: Parent
+Name: John Smith
+Window Permission: true
+Light Permission: true
+Tempature Permission: true
+Door Permission: true
+
+User: Child
+Name: Hunter Smith
+Window Permission: false
+Light Permission: true
+Tempature Permission: true
+Door Permission: false
+
+User: Child
+Name: Maddie Smith
+Window Permission: false
+Light Permission: true
+Tempature Permission: true
+Door Permission: true
+
+User: Parent
+Name: Lara Croft
+Window Permission: true
+Light Permission: true
+Tempature Permission: true
+Door Permission: true
+
+User: Guest
+Name: Samuel Turner
+Window Permission: false
+Light Permission: false
+Tempature Permission: false
+Door Permission: false
+
+User: Stranger
+Name: Rodrigo Morales
+Window Permission: false
+Light Permission: false
+Tempature Permission: false
+Door Permission: false
+
+
+
+

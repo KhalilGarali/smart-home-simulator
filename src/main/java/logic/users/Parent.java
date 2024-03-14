@@ -4,6 +4,10 @@ import main.java.model.rooms.Room;
 
 public class Parent extends FamilyMember{
 
+    public Parent(){
+        super();
+    }
+
     public Parent(String name){
 
         super(name);

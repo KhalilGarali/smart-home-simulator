@@ -14,6 +14,10 @@ public abstract class User {
     String name;
     Room room = null;
 
+    public User(){
+        permissions = new ArrayList<>();
+    }
+
     //non-default constructor
     public User(String name){
         permissions = new ArrayList<>();
@@ -24,6 +28,8 @@ public abstract class User {
         this.name = name;
         this.room = room;
     }
+
+
 
     // PERMISSION MANAGEMENT FUNCTIONS
     // check the user has a specific permission, function to be used in SHC

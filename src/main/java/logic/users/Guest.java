@@ -3,6 +3,10 @@ package main.java.logic.users;
 import main.java.model.rooms.Room;
 
 public class Guest extends User{
+
+    public Guest(){
+        super();
+    }
     public Guest(String name){
         super(name);
         this.name = name;

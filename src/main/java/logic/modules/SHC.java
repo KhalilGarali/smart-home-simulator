@@ -66,9 +66,10 @@ public class SHC extends Module{
                 System.out.println(u + " doesn't have permission to " + c);
                 System.out.println("--------------------------------------------------------------------------");
             }
+        } else {
+            System.out.println(u.getName() + " is not in "+ room.getName() );
         }
 
-        System.out.println(u.getName() + " is not in "+ room.getName() );
         return false;
     }
 

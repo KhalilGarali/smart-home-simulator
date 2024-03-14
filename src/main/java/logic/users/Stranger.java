@@ -3,6 +3,10 @@ package main.java.logic.users;
 import main.java.model.rooms.Room;
 
 public class Stranger extends User{
+
+    public Stranger(){
+        super();
+    }
     public Stranger(String name){
         super(name);
     }

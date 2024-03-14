@@ -39,10 +39,10 @@ public class SHS {
     private static SHS shs;
     public CommandFactory cf;
     private List<Room> houseLayout;
-    private List<User> houseUsers;
+    private ArrayList<User> houseUsers;
     private List<Opening> houseOpenings;
     private List<Object> housefixtures;
-    private User activateUser;
+    public User activeUser;
     private House house;
     private SHS(){
         this.shc = SHC.getIntance();
@@ -54,14 +54,17 @@ public class SHS {
         this.houseUsers = new ArrayList<User>();
         this.houseOpenings = new ArrayList<Opening>();
         this.housefixtures = new ArrayList<Object>();
-        this.activateUser = null;
+        this.activeUser = null;
         this.house = House.getInstance();
         houseLayout = house.getRooms();
     }
 
+    public ArrayList<User> getHouseUsers(){
+        return this.houseUsers;
+    }
     public User getActivetUser()
     {
-        return this.activateUser;
+        return this.activeUser;
     }
 
     public List<User> getHouseUser(){
@@ -90,7 +93,10 @@ public class SHS {
             //father.enterRoom(kitchen)
         }
     }
-    
+
+    public void setActiveUser(User user){
+        this.activeUser = user;
+    }
     /**
      *  Make/Delete users: ////////////////////////////////////
      */
@@ -189,8 +195,8 @@ public class SHS {
         housefixtures.add(light);
         return light;
     }
-    public Temperature makeTemp(String openingName){
-        Temperature temperature = new Temperature();
+    public int makeTemp(String openingName){
+        int temperature = Temperature.getTemperature();
         housefixtures.add(temperature);
         return temperature;
     }
@@ -338,8 +344,3 @@ public class SHS {
     // public void increaseTemperature(int temperature){
     // }
 }
-
-// coordinate system (check wade3's branch)
-// date and time increment by hour
-// temperature make it change by every hour, by incrementing/decrementing with a small random number
-// make sure all tests are through the command pattern

@@ -25,7 +25,7 @@ public class OpenAWindow extends Command{
     }
 
     public Room getRoom() {
-        return room;
+        return this.room;
     }
 
     public int getWindowNumber() {

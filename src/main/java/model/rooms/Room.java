@@ -110,6 +110,7 @@ public abstract class Room implements Observable{
         return currentTemperature;
     }
     public Door getDoor1() {
+
         return door1;
     }
     public Door getDoor2() {

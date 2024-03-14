@@ -32,6 +32,10 @@ public class Window implements Opening {
         return open;
     }
 
+    public boolean isBlocked() {
+        return isBlocked;
+    }
+
     @Override
     public String toString() {
         return "Window [open=" + open + "]";

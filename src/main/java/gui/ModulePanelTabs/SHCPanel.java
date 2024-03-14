@@ -13,6 +13,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import main.java.gui.HouseLayoutPanel;
+import main.java.gui.SimulationPanel;
 import main.java.logic.commands.Command;
 import main.java.logic.commands.CommandFactory;
 import main.java.logic.commands.close.CloseADoor;
@@ -25,6 +26,7 @@ import main.java.logic.layout.House;
 import main.java.logic.modules.SHC;
 import main.java.logic.modules.SHS;
 import main.java.logic.users.Parent;
+import main.java.logic.users.User;
 import main.java.model.rooms.Room;
 
 public class SHCPanel extends JPanel {
@@ -34,8 +36,10 @@ public class SHCPanel extends JPanel {
     private String selectedToggle; // This will store the command of the last toggled button
     private ArrayList<JCheckBox> roomCheckBoxes;
     SHC shc = SHC.getIntance();
-    SHS shs = SHS.getInstance();
-    Parent parent = new Parent("Dave");
+
+    private SHS shs = SHS.getInstance();
+    // User activeUser = shs.activeUser;
+
     Command aCommand;
     
 
@@ -151,10 +155,10 @@ public class SHCPanel extends JPanel {
                     boolean isSelected = e.getStateChange() == ItemEvent.SELECTED;
                     if (isSelected) {
                         aCommand = shs.cf.createCommand("OpenAWindow", room, 1);
-                        shc.userAction(parent, aCommand, room);
+                        shc.userAction(shs.activeUser, aCommand, room);
                     } else {
                         aCommand = shs.cf.createCommand("CloseAWindow", room, 1);
-                        shc.userAction(parent, aCommand, room); // Assuming Room has a method to close the window
+                        shc.userAction(shs.activeUser, aCommand, room); // Assuming Room has a method to close the window
                     }
                     houseLayout.updateRoomIcon(); // Update the icon in HouseLayoutPanel
                 }
@@ -163,10 +167,10 @@ public class SHCPanel extends JPanel {
                     
                     if (isSelected) {
                         aCommand = shs.cf.createCommand("TurnLightOn", room, 1);
-                        shc.userAction(parent, aCommand, room); // Assuming Room has a method to open the window
+                        shc.userAction(shs.activeUser, aCommand, room); // Assuming Room has a method to open the window
                     } else {
                         aCommand = shs.cf.createCommand("TurnLightOff", room, 1);
-                        shc.userAction(parent, aCommand, room); // Assuming Room has a method to close the window
+                        shc.userAction(shs.activeUser, aCommand, room); // Assuming Room has a method to close the window
                     }
                     houseLayout.updateRoomIcon(); // Update the icon in HouseLayoutPanel
                 }
@@ -174,10 +178,10 @@ public class SHCPanel extends JPanel {
                     boolean isSelected = e.getStateChange() == ItemEvent.SELECTED;
                     if (isSelected) {
                         aCommand = shs.cf.createCommand("OpenADoor", room, 1);
-                        shc.userAction(parent, aCommand, room);
+                        shc.userAction(shs.activeUser, aCommand, room);
                     } else {
                         aCommand = shs.cf.createCommand("CloseADoor", room, 1);
-                        shc.userAction(parent, aCommand, room);
+                        shc.userAction(shs.activeUser, aCommand, room);
                     }
                     houseLayout.updateRoomIcon(); // Update the icon in HouseLayoutPanel
                 }

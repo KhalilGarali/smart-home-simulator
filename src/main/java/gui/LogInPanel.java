@@ -10,6 +10,7 @@ public class LogInPanel extends JPanel{
     private JPasswordField password;
     private JButton loginButton;
     public LogInPanel(LogInFrame frame, HomeSimulatorFrame home) {
+        GridBagConstraints gbc = new GridBagConstraints();
         setLayout(new GridLayout(3, 2));
         setBorder(BorderFactory.createTitledBorder("Log In"));
         username = new JTextField(20);
@@ -30,7 +31,7 @@ public class LogInPanel extends JPanel{
                 String usernameField = username.getText();
                 String passwordField = new String(password.getPassword());
 
-                // Perform authentication (dummy check in this example)
+                // Perform authentication (dummy check)
                 if (usernameField.equals("username") && passwordField.equals("password")) {
                     JOptionPane.showMessageDialog(null, "Login successful!");
                     LogInPanel.goTohome(frame, home);

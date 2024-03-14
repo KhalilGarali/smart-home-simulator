@@ -15,6 +15,7 @@ import main.java.logic.commands.on.TurnHeatingOn;
 import main.java.logic.commands.on.TurnLightOn;
 import main.java.logic.commands.open.*;
 import main.java.logic.commands.close.*;
+import main.java.logic.layout.House;
 import main.java.logic.layout.Layout;
 import main.java.logic.users.*;
 import main.java.model.fixtures.Light;
@@ -41,6 +42,8 @@ public class SHS {
     private List<User> houseUsers;
     private List<Opening> houseOpenings;
     private List<Object> housefixtures;
+    private User activateUser;
+    private House house;
     private SHS(){
         this.shc = SHC.getIntance();
         //FIXME temp changes that might be permanent. (added the shc as arg)
@@ -51,8 +54,29 @@ public class SHS {
         this.houseUsers = new ArrayList<User>();
         this.houseOpenings = new ArrayList<Opening>();
         this.housefixtures = new ArrayList<Object>();
+        this.activateUser = null;
+        this.house = House.getInstance();
+        houseLayout = house.getRooms();
     }
 
+    public User getActivetUser()
+    {
+        return this.activateUser;
+    }
+
+    public List<User> getHouseUser(){
+        return this.houseUsers;
+    }
+    
+    public Room getRoomByName(String name)
+    {
+        for (Room room: houseLayout)
+        {
+            if (room.getName().equals(name))
+                return room;
+        }
+        return null;
+    }
     public static SHS getInstance(){
         if(shs == null){
             shs = new SHS();

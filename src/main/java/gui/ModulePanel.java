@@ -1,115 +1,54 @@
 package main.java.gui;
 
-import java.awt.BorderLayout;
+import java.awt.*;
+import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JToggleButton;
-import javax.swing.JTextField;
-
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import javax.swing.*;
 import main.java.gui.ModulePanelTabs.SHCPanel;
+import main.java.logic.layout.House;
+import main.java.logic.modules.SHS;
+import main.java.logic.users.*;
+import main.java.logic.users.User;
+import main.java.model.rooms.Room;
 
 public class ModulePanel extends JPanel {
+    
     private JTabbedPane tabbedPane;
-
+    House house = House.getInstance();
+    SHS shs = SHS.getInstance();
+    User activateUser = shs.getActivetUser();
+    List<User> listOfUsers = shs.getHouseUser();
+    
     public ModulePanel(JLabel usernameDisplay, JLabel locationDisplay) {
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createTitledBorder("Modules"));
-        tabbedPane = new JTabbedPane();
 
-        // Create Panels Here
+        // Create SHC Here
         SHCPanel SHCPanel = new SHCPanel();
-        // Create SHC Panel
-        JPanel shcPanel = createShcPanel();
+        // Create SHS Panel
         JPanel shsPanel = createShsPanel(usernameDisplay, locationDisplay);
 
         // Module Tabs
+        tabbedPane = new JTabbedPane();
         tabbedPane.addTab("SHC", new JScrollPane(SHCPanel));
         tabbedPane.addTab("SHP", new JLabel("SHP Content"));
         tabbedPane.addTab("SHH", new JLabel("SHH Content"));
         tabbedPane.addTab("SHS", new JScrollPane(shsPanel));
-        // ... Add other tabs as needed
 
         add(tabbedPane, BorderLayout.CENTER);
     }
 
-      private JPanel createShcPanel() {
-        JPanel shcPanel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.weightx = 1.0;
-        gbc.weighty = 1.0;
-
-        // Items Panel
-        JPanel itemsPanel = createItemsPanel();
-
-        // Open/Close Panel
-        JPanel openClosePanel = createOpenClosePanel();
-
-        // Add the items and open/close panels to the SHC panel
-        shcPanel.add(itemsPanel, gbc);
-        shcPanel.add(openClosePanel, gbc);
-
-        return shcPanel;
-    }
-
-    private JPanel createItemsPanel() {
-        JPanel itemsPanel = new JPanel();
-        itemsPanel.setLayout(new BoxLayout(itemsPanel, BoxLayout.Y_AXIS));
-        itemsPanel.setBorder(BorderFactory.createTitledBorder("Items"));
-
-        // Create and add buttons
-        JToggleButton windowsButton = new JToggleButton("Windows");
-        JToggleButton lightsButton = new JToggleButton("Lights");
-        JToggleButton doorsButton = new JToggleButton("Doors");
-
-        ButtonGroup itemsGroup = new ButtonGroup();
-        itemsGroup.add(windowsButton);
-        itemsGroup.add(lightsButton);
-        itemsGroup.add(doorsButton);
-
-        // resize buttons
-        resizeButton(windowsButton);
-        resizeButton(lightsButton);
-        resizeButton(doorsButton);
-
-        itemsPanel.add(windowsButton);
-        itemsPanel.add(lightsButton);
-        itemsPanel.add(doorsButton);
-
-        return itemsPanel;
-    }
-
-    private JPanel createOpenClosePanel() {
-        JPanel openClosePanel = new JPanel();
-        openClosePanel.setLayout(new BoxLayout(openClosePanel, BoxLayout.Y_AXIS));
-        openClosePanel.setBorder(BorderFactory.createTitledBorder("Open/Close"));
-        
-        // Create and add checkboxes
-        openClosePanel.add(new JCheckBox("Garage"));
-        openClosePanel.add(new JCheckBox("Living Room"));
-        openClosePanel.add(new JCheckBox("Backyard"));
-
-        return openClosePanel;
-    }
-
-    private void resizeButton(JToggleButton button) {
-        button.setMaximumSize(new Dimension(Integer.MAX_VALUE, button.getMinimumSize().height));
-    }
+    // private void resizeButton(JToggleButton button) {
+    //     button.setMaximumSize(new Dimension(Integer.MAX_VALUE, button.getMinimumSize().height));
+    // }
 
     private JPanel createShsPanel(JLabel usernameDisplay, JLabel locationDisplay){
         JPanel shsPanel = new JPanel(new GridBagLayout());
@@ -119,75 +58,233 @@ public class ModulePanel extends JPanel {
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.anchor = GridBagConstraints.NORTHWEST;
-        JPanel editPanel = createEditPanel(usernameDisplay, locationDisplay);
-        shsPanel.add(editPanel, gbc);
+        
+        JPanel newPanel = createNewUserPanel();
+        shsPanel.add(newPanel, gbc);
+        JPanel deletePanel = createDeletePanel();
+        shsPanel.add(deletePanel, gbc);
+
         return shsPanel;
     }
 
-    private JPanel createEditPanel(JLabel usernameDisplay, JLabel locationDisplay){
-        JPanel editPanel = new JPanel(new GridBagLayout());
-        editPanel.setBorder(BorderFactory.createTitledBorder("Edit User Profile"));
+    private JPanel createNewUserPanel()
+    {
+        JPanel newPanel = new JPanel(new GridBagLayout());
+        newPanel.setBorder(BorderFactory.createTitledBorder("Create New User Profile"));
         GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.NORTHWEST;
         gbc.insets = new Insets(5, 5, 5, 5);//Add paddings
 
         JLabel usernameLabel = new JLabel ("Username: ");
         JLabel locationLabel = new JLabel ("Location: ");
-        JLabel passwordLabel = new JLabel ("Password: ");
-        JTextField usernameField = new JTextField(20);
-        JTextField locationField = new JTextField(20);
-        JTextField passwordField = new JTextField(20);
-        JButton submitButton = new JButton("Submit");
+        JLabel usertypeLabel = new JLabel ("User Type: ");
+        
+        JTextField usernameField = new JTextField (20);
+
+        JMenuBar locationBar = new JMenuBar();
+        JMenu locationMenu = new JMenu("Location");
+        locationMenu.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+        for (Room room: house.getRooms())
+        {
+            JMenuItem locationItem = new JMenuItem(room.getName());
+            locationItem.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e){
+                    locationMenu.setText(((JMenuItem) e.getSource()).getText());
+                }
+            });
+            locationMenu.add(locationItem);
+        }
+        locationBar.add(locationMenu);
+
+        JMenuBar usertypeBar = new JMenuBar();
+        JMenu usertypeMenu = new JMenu("Usertype");
+        usertypeMenu.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+        List<String> usertypes = Arrays.asList("Admin", "Child", "FamilyMember", "Guest", "Parent", "Stranger");
+        for (String types: usertypes)
+        {
+            JMenuItem usertypeItem = new JMenuItem(types);
+            usertypeItem.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e){
+                    usertypeMenu.setText(((JMenuItem) e.getSource()).getText());
+                }
+            });
+            usertypeMenu.add(usertypeItem);
+        }
+        usertypeBar.add(usertypeMenu);
+        
+        JButton submitButton = new JButton ("Create");
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 0.5;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.fill = GridBagConstraints.BOTH;
+        newPanel.add(usernameLabel, gbc);
+
+        gbc.gridx = 1;
+        newPanel.add(usernameField, gbc);
+        
+        gbc.gridx = 0;
+        gbc.gridy++;
+        newPanel.add(locationLabel, gbc);
+        
+        gbc.gridx = 1;
+        newPanel.add(locationBar, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy++;
+        newPanel.add(usertypeLabel, gbc);
+        
+        gbc.gridx = 1;
+        newPanel.add(usertypeBar, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.anchor = GridBagConstraints.CENTER;
+        newPanel.add(submitButton, gbc);
+
         submitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Update the JLabel in the other module
-                String newUsername = usernameField.getText();
-                String newLocation = locationField.getText();
-                if (!newUsername.equals("")) {
-                    usernameDisplay.setText("User: " + newUsername);
-                }
-                if (!newLocation.equals(""))
-                {
-                    locationDisplay.setText("Location " + newLocation);
+                String newUsername = usernameField.getText().trim();
+                String newUserType = usertypeMenu.getText().trim();
+                Room newRoom = shs.getRoomByName(locationMenu.getText());
+                User newUser;
+                switch (newUserType){
+                    case "Admin":
+                        newUser = new Admin(newUsername, newRoom);
+                        listOfUsers.add(newUser);
+                        JOptionPane.showMessageDialog(null, "Create user " + newUser.getClass().getSimpleName() + " " + newUser.getName() + " succeed.");
+                        break;
+                    case "Child": 
+                        newUser = new Child(newUsername, newRoom);
+                        listOfUsers.add(newUser);
+                        JOptionPane.showMessageDialog(null, "Create user " + newUser.getClass().getSimpleName() + " " + newUser.getName() + " succeed.");
+                        break;
+                    case "FamilyMember":
+                        newUser = new FamilyMember(newUsername, newRoom);
+                        listOfUsers.add(newUser);
+                        JOptionPane.showMessageDialog(null, "Create user " + newUser.getClass().getSimpleName() + " " + newUser.getName() + " succeed.");
+                        break;
+                    case "Guest":
+                        newUser = new Guest(newUsername, newRoom);
+                        listOfUsers.add(newUser);
+                        JOptionPane.showMessageDialog(null, "Create user " + newUser.getClass().getSimpleName() + " " + newUser.getName() + " succeed.");
+                        break;
+                    case "Stranger":
+                        newUser = new Stranger(newUsername, newRoom);
+                        listOfUsers.add(newUser);
+                        JOptionPane.showMessageDialog(null, "Create user " + newUser.getClass().getSimpleName() + " " + newUser.getName() + " succeed.");
+                        break;
+                    default:
+                        JOptionPane.showMessageDialog(null, "Create user failed. Please try again.");
                 }
             }
         });
 
+        return newPanel;
+    }
+
+    private JPanel createDeletePanel(){
+        JPanel deletePanel = new JPanel(new GridBagLayout());
+        deletePanel.setBorder(BorderFactory.createTitledBorder("Delete User Profile"));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.insets = new Insets(5, 5, 5, 5);//Add paddings
+        
+        JButton deleteButton = new JButton ("Delete");
+        JButton updateButton = new JButton ("Update");
+        JLabel profileLabel = new JLabel ("Choose user profile to delete");
+
+        JMenuBar profileBar = new JMenuBar();
+        JMenu profileMenu = new JMenu("Profile");
+        profileMenu.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+        for (User user: listOfUsers)
+        {
+            JMenuItem profileItem = new JMenuItem(user.getClass().getSimpleName() + " " + user.getName());
+            profileItem.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e){
+                    profileMenu.setText(((JMenuItem) e.getSource()).getText());
+                }
+            });
+            profileMenu.add(profileItem);
+        }
+        profileBar.add(profileMenu);
+
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.WEST;
-        editPanel.add(usernameLabel, gbc);
-        
-        gbc.gridx = 1;
-        gbc.weightx = 1.0;
+        gbc.weightx = 0.5;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
         gbc.fill = GridBagConstraints.BOTH;
-        editPanel.add(usernameField, gbc);
-        
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.anchor = GridBagConstraints.WEST;
-        editPanel.add(locationLabel, gbc);
+        deletePanel.add(profileLabel, gbc);
 
         gbc.gridx = 1;
-        gbc.weightx = 1.0;
-        gbc.fill = GridBagConstraints.BOTH;
-        editPanel.add(locationField, gbc);
+        deletePanel.add(profileBar, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 2;
-        gbc.anchor = GridBagConstraints.WEST;
-        editPanel.add(passwordLabel, gbc);
-        
-        gbc.gridx = 1;
-        gbc.weightx = 1.0;
-        gbc.fill = GridBagConstraints.BOTH;
-        editPanel.add(passwordField, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbc.gridy++;
         gbc.anchor = GridBagConstraints.CENTER;
-        editPanel.add(submitButton, gbc);
-        
-        return editPanel;
+        deletePanel.add(deleteButton, gbc);
+
+        //This button updates the list of users
+        gbc.gridx = 1;
+        deletePanel.add(updateButton, gbc);
+
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Update the JLabel in the other module
+                Iterator<User> iterator = listOfUsers.iterator();
+                while (iterator.hasNext()){
+                    User user = iterator.next();
+                    if (profileMenu.getText().equals(user.getClass().getSimpleName() + " " + user.getName())){
+                        user.exitRoom();
+                        iterator.remove();
+                    }
+                }
+                for (User user: listOfUsers){
+                    System.out.println(user.toString());
+                }
+                profileMenu.removeAll();
+                profileMenu.setText("Profile");
+                for (User user: listOfUsers)
+                {
+                    JMenuItem profileItem = new JMenuItem(user.getClass().getSimpleName() + " " + user.getName());
+                    profileItem.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e){
+                            profileMenu.setText(((JMenuItem) e.getSource()).getText());
+                        }
+                    });
+                    profileMenu.add(profileItem);
+                }
+                profileBar.revalidate();
+                profileBar.repaint();
+                
+            }
+        });
+
+        updateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Update the JLabel in the other module
+                profileMenu.removeAll();
+                profileMenu.setText("Profile");
+                for (User user: listOfUsers)
+                {
+                    JMenuItem profileItem = new JMenuItem(user.getClass().getSimpleName() + " " + user.getName());
+                    profileItem.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e){
+                            profileMenu.setText(((JMenuItem) e.getSource()).getText());
+                        }
+                    });
+                    profileMenu.add(profileItem);
+                }
+                profileBar.revalidate();
+                profileBar.repaint();
+            }
+        });
+
+        return deletePanel;
     }
 }

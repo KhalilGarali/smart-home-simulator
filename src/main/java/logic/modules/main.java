@@ -28,8 +28,9 @@ public class main {
     public static void main(String[] args){
         SwingUtilities.invokeLater(() -> {
             HomeSimulatorFrame frame = new HomeSimulatorFrame();
-            LogInFrame logInF = new LogInFrame(frame);
-            logInF.setVisible(true);
+            //LogInFrame logInF = new LogInFrame(frame);
+            //logInF.setVisible(true);
+            frame.setVisible(true);
         });
 
 
@@ -65,7 +66,7 @@ public class main {
         // Opening kitchenDoor = shs.makeDoor("kitchen door");
 
         // kitchen.setWindow((Window) kitchenWindow);
-        // masterBedroom.setWindow((Window) masterWindow);
+        // masterBedroom8.setWindow((Window) masterWindow);
         // kidsBedroom.setWindow((Window) kidsWindow);
         // livingRoom.setWindow((Window) livingRoomWindow);
         // basement.setWindow((Window) basementWindow);

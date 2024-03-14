@@ -9,7 +9,6 @@ public class Window implements Opening {
         this.name = name;
     }
 
-
     @Override
     public void open() {
         if (this.isBlocked == false) {

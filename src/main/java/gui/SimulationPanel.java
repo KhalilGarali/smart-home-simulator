@@ -1,19 +1,30 @@
 package main.java.gui;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSlider;
-import javax.swing.JToggleButton;
 import javax.swing.plaf.metal.MetalToggleButtonUI;
+
+import main.java.logic.dashboard.DateTime;
+import main.java.logic.dashboard.TimeSpeed;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+import main.java.model.fixtures.Temperature;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.ArrayList;
+import java.util.Random;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.Vector;
+
+import main.java.logic.layout.House;
+import main.java.logic.users.*;
+import main.java.logic.modules.SHS;
+import main.java.model.rooms.*;
 
 public class SimulationPanel extends JPanel {
     private JToggleButton simulationToggle;
@@ -21,8 +32,24 @@ public class SimulationPanel extends JPanel {
     private JSlider timeSpeedSlider;
     private JLabel userIcon;
     private JButton editButton;
+    DateTime currentDateTime = new DateTime();
+    private TimeSpeed timeSpeed;
+    private House house = House.getInstance();
+    private ArrayList<Room> rooms = house.getRooms();
+    private JButton editLocationButton;
+    private String selection;
+
+    // used as a dummy value
+    private SHS shs = SHS.getInstance();
+    // User activeUser = shs.activeUser;
+    // activeUser = new User("Active user");
 
     public SimulationPanel() {
+        // dummy variable
+        shs.activeUser = new Stranger("Youssef");
+        Room dummyRoom = rooms.get(5);
+        shs.activeUser.moveToRoom(dummyRoom);
+
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createTitledBorder("Simulation"));
 
@@ -51,7 +78,7 @@ public class SimulationPanel extends JPanel {
         editButton = new JButton();
         editButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         editButton.setMaximumSize(new Dimension(40, 40)); // Similar to the toggle, ensures the button size
-        editButton.setIcon(new ImageIcon("src\\main\\resources\\editIcon.png"));
+        editButton.setIcon(new ImageIcon("src/main/resources/editIcon.png"));
         // Add an action listener for the edit button
         // editButton.addActionListener(e -> {
         // // Open a dialog or another frame to edit simulation parameters
@@ -59,11 +86,21 @@ public class SimulationPanel extends JPanel {
         // });
 
         // User and Location
-        userLabel = new JLabel("User: Parent");
+        userLabel = new JLabel(shs.activeUser.toString());
         userLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        locationLabel = new JLabel("Location: Kitchen");
+        locationLabel = new JLabel("Location: " + shs.activeUser.getRoom().getName());
+        editLocationButton = new JButton("Move");
+        editLocationButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        editLocationButton.setMaximumSize(new Dimension(100, 40));
+        editLocationButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // list all rooms to the user, and update based on user selection
+                handleMoveUser();
+            }
+        });
         locationLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        userIcon = new JLabel(new ImageIcon("src\\main\\resources\\profilePicture.png"));
+        userIcon = new JLabel(new ImageIcon("src/main/resources/profilePicture.png"));
         userIcon.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Outside Temperature
@@ -77,13 +114,48 @@ public class SimulationPanel extends JPanel {
         timeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Time Speed Slider
+        timeSpeedSlider = new JSlider();
+        timeSpeed = new TimeSpeed();
+        timeSpeedSlider.addChangeListener(e -> {
+            int speed = timeSpeedSlider.getValue();
+            timeSpeed.setSpeed(speed*10);
+        });
+
         timeSpeedLabel = new JLabel("Time Speed");
         timeSpeedLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        timeSpeedSlider = new JSlider();
         timeSpeedSlider.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Organizing The Panel
         addComponents();
+
+        // Initialize date and time labels
+        updateDateTimeLabels(); // Update labels with current date and time
+
+        // Set up timer to update date and time labels every second
+        javax.swing.Timer timer = new javax.swing.Timer(1000, new UpdateDateTimeListener());
+        timer.start();
+
+        // outsideTemperature = new Temperature(11);
+        // Temperature.setTemperature(11);
+
+        if (DateTime.getMonth() >= 0 && DateTime.getMonth() < 3) {
+            Temperature.setTemperature(0);
+        } else if(DateTime.getMonth() >= 3 && DateTime.getMonth() < 5) {
+            Temperature.setTemperature(15);
+        } else if(DateTime.getMonth() >= 5 && DateTime.getMonth() < 9) {
+            Temperature.setTemperature(30);
+        } else if(DateTime.getMonth() >= 9 && DateTime.getMonth() < 12) {
+            Temperature.setTemperature(20);
+        }
+
+        // Set up a timer to update the outside temperature label every second
+        Timer temperatureTimer = new Timer();
+        temperatureTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                updateOutsideTempLabel();
+            }
+        }, 0, 1000); // Update every second
     }
 
     private void addComponents() {
@@ -107,8 +179,10 @@ public class SimulationPanel extends JPanel {
         add(timeSpeedLabel);
         add(Box.createVerticalStrut(10));
         add(timeSpeedSlider);
+        add(Box.createVerticalStrut(30));
+        add(editLocationButton);
     }
-    
+
     public JLabel getUserLabel()
     {
         return userLabel;
@@ -117,4 +191,124 @@ public class SimulationPanel extends JPanel {
     public JLabel getLocationLabel(){
         return locationLabel;
     }
+    // ActionListener class to update date and time labels
+    private class UpdateDateTimeListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Get the current time before incrementing
+            LocalTime beforeTime = DateTime.getTime();
+
+            // currentDateTime.incrementSecond();
+            int increment = timeSpeed.calculateIncrement();
+            DateTime.incrementTime(0, 0, increment);
+
+            // Get the current time after incrementing
+            LocalTime afterTime = DateTime.getTime();
+
+            // Check if an hour has passed
+            if (afterTime.getHour() != beforeTime.getHour()) {
+                // If an hour has passed, adjust the temperature display
+                adjustTemperatureDisplay();
+            }
+
+            updateDateTimeLabels();
+        }
+    }
+
+    // Method to update date and time labels
+    private void updateDateTimeLabels() {
+        String currentDate = getCurrentDateAsString();
+        String currentTime = getCurrentTimeAsString();
+
+        // Update labels
+        dateLabel.setText("Date: " + currentDate);
+        timeLabel.setText("Time: " + currentTime);
+    }
+
+    // Method to get current date as string
+    private String getCurrentDateAsString() {
+        LocalDate dateOnly = DateTime.getDate();
+        return dateOnly.format(DateTimeFormatter.ofPattern("E MMM dd yyyy"));
+    }
+
+    // Method to get current time as string
+    private String getCurrentTimeAsString() {
+        LocalTime timeOnly = DateTime.getTime();
+        return timeOnly.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+    }
+
+    // Method to update outside temperature label
+    private void updateOutsideTempLabel() {
+        int temperature = Temperature.getTemperature();
+        outsideTempLabel.setText("Outside Temp: " + temperature + "°C");
+    }
+
+    // Method to adjust temperature display based on simulation time
+    private void adjustTemperatureDisplay() {
+        // Get the current temperature
+        int currentTemperature = Temperature.getTemperature();
+
+        // Generate a random boolean value to decide whether to increase or decrease temperature
+        boolean increaseTemp = new Random().nextBoolean();
+
+        // Increment or decrement temperature by 1
+        int newTemperature = increaseTemp ? currentTemperature + 1 : currentTemperature - 1;
+
+        // Update the temperature display
+        Temperature.setTemperature(newTemperature); // Update temperature in Temperature class
+        outsideTempLabel.setText("Outside Temp: " + newTemperature + "°C");
+    }
+
+    private void handleMoveUser() {
+        JDialog moveDialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), "Change Location", true);
+        moveDialog.setLayout(new BorderLayout());
+    
+        Vector<String> locations = new Vector<>();
+        int selectedIndex = -1; // Default value for no selection
+        for (int i = 0; i < rooms.size(); i++) {
+            Room room = rooms.get(i);
+            locations.add(room.getName());
+            // Check if the current room matches the active user's room
+            if (room.getName().equals(shs.activeUser.getRoom().getName())) {
+                selectedIndex = i; // Set the index as the selected index
+            }
+        }
+    
+        JComboBox<String> locationDropdown = new JComboBox<>(locations);
+    
+        // Set the selected index to match the active user's room
+        if (selectedIndex != -1) {
+            locationDropdown.setSelectedIndex(selectedIndex);
+        }
+    
+        // Add ActionListener to capture user selection
+        locationDropdown.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JComboBox<String> comboBox = (JComboBox<String>) e.getSource();
+                String selectedRoomName = (String) comboBox.getSelectedItem();
+                // Store the selected room name in the variable selection
+                selection = selectedRoomName;
+    
+                // Iterate over the rooms ArrayList and compare the selected room name
+                for (Room room : rooms) {
+                    if (room.getName().equals(selectedRoomName)) {
+                        // Do something with the room object if needed
+                        // System.out.println("Selected Room: " + room.getName());
+                        shs.activeUser.moveToRoom(room);
+                        locationLabel.setText("Location: " + selectedRoomName);
+                    }
+                }
+            }
+        });
+    
+        moveDialog.add(locationDropdown, BorderLayout.CENTER);
+    
+        // Set dialog size and visibility
+        moveDialog.setSize(300, 150);
+        moveDialog.setLocationRelativeTo(null); // Center the dialog on the screen
+        moveDialog.setVisible(true);
+    }
+    
+    
 }

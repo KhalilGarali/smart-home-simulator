@@ -16,13 +16,13 @@ public class HouseLayoutPanel extends JPanel {
     public HouseLayoutPanel() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createTitledBorder("House Layout"));
-        windowOpenIcon = new ImageIcon("src\\main\\resources\\houseLayoutIcons\\WindowOpenIcon.png");
-        doorOpenIcon = new ImageIcon("src\\main\\resources\\houseLayoutIcons\\DoorOpenIcon.png");
-        lightOnIcon = new ImageIcon("src\\main\\resources\\houseLayoutIcons\\LightOnIcon.png");
-        windowClosedIcon = new ImageIcon("src\\main\\resources\\houseLayoutIcons\\WindowClosedIcon.png");
-        doorClosedIcon = new ImageIcon("src\\main\\resources\\houseLayoutIcons\\DoorClosedIcon.png");
-        lightOffIcon = new ImageIcon("src\\main\\resources\\houseLayoutIcons\\LightOffIcon.png");
-        userIcon = new ImageIcon("src\\main\\resources\\houseLayoutIcons\\UserIcon.png");
+        windowOpenIcon = new ImageIcon("src/main/resources/houseLayoutIcons/WindowOpenIcon.png");
+        doorOpenIcon = new ImageIcon("src/main/resources/houseLayoutIcons/DoorOpenIcon.png");
+        lightOnIcon = new ImageIcon("src/main/resources/houseLayoutIcons/LightOnIcon.png");
+        windowClosedIcon = new ImageIcon("src/main/resources/houseLayoutIcons/WindowClosedIcon.png");
+        doorClosedIcon = new ImageIcon("src/main/resources/houseLayoutIcons/DoorClosedIcon.png");
+        lightOffIcon = new ImageIcon("src/main/resources/houseLayoutIcons/LightOffIcon.png");
+        userIcon = new ImageIcon("src/main/resources/houseLayoutIcons/UserIcon.png");
         this.rowHeight = 150 + 10; // Assuming room height of 150 and 10 units of spacing
         checkRoomInfo();
         updatePanelSize();

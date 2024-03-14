@@ -41,6 +41,10 @@ public class SHS {
     private List<User> houseUsers;
     private List<Opening> houseOpenings;
     private List<Object> housefixtures;
+
+    // dummy attribute
+    public User activeUser;
+
     private SHS(){
         this.shc = SHC.getIntance();
         //FIXME temp changes that might be permanent. (added the shc as arg)
@@ -165,8 +169,8 @@ public class SHS {
         housefixtures.add(light);
         return light;
     }
-    public Temperature makeTemp(String openingName){
-        Temperature temperature = new Temperature();
+    public int makeTemp(String openingName){
+        int temperature = Temperature.getTemperature();
         housefixtures.add(temperature);
         return temperature;
     }

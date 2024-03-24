@@ -1,14 +1,21 @@
 package main.java.gui;
 
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import javax.swing.plaf.metal.MetalToggleButtonUI;
 
 import main.java.logic.dashboard.DateTime;
 import main.java.logic.dashboard.TimeSpeed;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.awt.event.ActionEvent;
 
 import main.java.model.fixtures.Temperature;
@@ -18,6 +25,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 import java.awt.*;
 import java.util.Vector;
 
@@ -38,6 +47,7 @@ public class SimulationPanel extends JPanel {
     private ArrayList<Room> rooms = house.getRooms();
     private JButton editLocationButton;
     private String selection;
+    private JButton uploadTempButton;
 
     // used as a dummy value
     private SHS shs = SHS.getInstance();
@@ -121,6 +131,13 @@ public class SimulationPanel extends JPanel {
             timeSpeed.setSpeed(speed*10);
         });
 
+        // upload csv file containing weather data
+        uploadTempButton = new JButton("Upload Outside Temperature");
+        uploadTempButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        uploadTempButton.setMaximumSize(new Dimension(250, 40));
+        uploadTempButton.addActionListener(e -> openFileChooser());
+
+
         timeSpeedLabel = new JLabel("Time Speed");
         timeSpeedLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         timeSpeedSlider.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -181,6 +198,70 @@ public class SimulationPanel extends JPanel {
         add(timeSpeedSlider);
         add(Box.createVerticalStrut(30));
         add(editLocationButton);
+        add(Box.createVerticalStrut(30));
+        add(uploadTempButton);
+    }
+
+    private void openFileChooser() {
+    JFileChooser fileChooser = new JFileChooser();
+    fileChooser.setDialogTitle("Select Temperature CSV File");
+    fileChooser.setAcceptAllFileFilterUsed(false);
+    FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV files", "csv");
+    fileChooser.addChoosableFileFilter(filter);
+
+    int result = fileChooser.showOpenDialog(this);
+    if (result == JFileChooser.APPROVE_OPTION) {
+        File selectedFile = fileChooser.getSelectedFile();
+        readTemperatureFile(selectedFile);
+        }
+    }
+
+    private void readTemperatureFile(File file) {
+        try {
+            List<String> lines = Files.readAllLines(file.toPath(), StandardCharsets.UTF_8);
+            LocalDateTime currentDateTime = LocalDateTime.now(); // Get the current local date and time
+            LocalDateTime closestDateTime = null;
+            double closestTemp = Double.NaN;
+
+            for (String line : lines) {
+                String[] parts = line.split(",");
+                if (parts.length >= 2) { // Ensure at least two columns are present
+                    String dateTimeStr = parts[1].trim(); // Index 1 for "datetime"
+                    String tempStr = parts[2].trim(); // Index 2 for "temp"
+
+                    // Check if the column names match "datetime" and "temp"
+                    if (parts[1].equalsIgnoreCase("datetime") && parts[2].equalsIgnoreCase("temp")) {
+                        continue; // Skip the header row
+                    }
+
+                    LocalDateTime dateTime = LocalDateTime.parse(dateTimeStr, DateTimeFormatter.ISO_DATE_TIME);
+                    double temp = Double.parseDouble(tempStr);
+
+                    // Check if this datetime is closer to the current local datetime
+                    if (closestDateTime == null || Math.abs(Duration.between(dateTime, currentDateTime).toMillis()) < Math.abs(Duration.between(closestDateTime, currentDateTime).toMillis())) {
+                        closestDateTime = dateTime;
+                        closestTemp = temp;
+                    }
+                }
+            }
+
+            if (closestDateTime != null) {
+                // Update DateTime.java with the selected datetime value
+                DateTime.setDateTime(closestDateTime);
+                // Update Temperature.java with the corresponding temp value
+                Temperature.setTemperature((int) closestTemp);
+
+                // Update the date and time labels on the GUI
+                updateDateTimeLabels();
+                updateOutsideTempLabel();
+
+                JOptionPane.showMessageDialog(this, "Temperature data updated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "No temperature data found in the file", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Failed to read the file", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public JLabel getUserLabel()

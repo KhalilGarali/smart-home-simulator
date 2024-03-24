@@ -15,7 +15,10 @@ import main.java.logic.commands.on.TurnHeatingOn;
 import main.java.logic.commands.on.TurnLightOn;
 import main.java.logic.commands.open.*;
 import main.java.logic.commands.close.*;
+import main.java.logic.layout.House;
 import main.java.logic.layout.Layout;
+import main.java.logic.observerPattern.Observable;
+import main.java.logic.observerPattern.Observer;
 import main.java.logic.users.*;
 import main.java.model.fixtures.Light;
 import main.java.model.fixtures.Temperature;
@@ -31,23 +34,22 @@ import java.util.Objects;
 
 import java.util.concurrent.TimeUnit;
 
-public class SHS {
+public class SHS implements Observable{
     SHH shh;
     SHC shc;
     SHP shp ;
     private static SHS shs;
     public CommandFactory cf;
     private List<Room> houseLayout;
-    private List<User> houseUsers;
+    private ArrayList<User> houseUsers;
     private List<Opening> houseOpenings;
     private List<Object> housefixtures;
-
-    // dummy attribute
     public User activeUser;
+    private House house;
+    public List<Observer> observers = new ArrayList();
 
     private SHS(){
         this.shc = SHC.getIntance();
-        //FIXME temp changes that might be permanent. (added the shc as arg)
         this.shh = SHH.getInstance(shc);
         this.shp = SHP.getInstance(shc);
         this.cf = new CommandFactory(shc);
@@ -55,8 +57,32 @@ public class SHS {
         this.houseUsers = new ArrayList<User>();
         this.houseOpenings = new ArrayList<Opening>();
         this.housefixtures = new ArrayList<Object>();
+        this.activeUser = null;
+        this.house = House.getInstance();
+        houseLayout = house.getRooms();
     }
 
+    public ArrayList<User> getHouseUsers(){
+        return this.houseUsers;
+    }
+    public User getActiveUser()
+    {
+        return this.activeUser;
+    }
+
+    public List<User> getHouseUser(){
+        return this.houseUsers;
+    }
+    
+    public Room getRoomByName(String name)
+    {
+        for (Room room: houseLayout)
+        {
+            if (room.getName().equals(name))
+                return room;
+        }
+        return null;
+    }
     public static SHS getInstance(){
         if(shs == null){
             shs = new SHS();
@@ -70,7 +96,14 @@ public class SHS {
             //father.enterRoom(kitchen)
         }
     }
-    
+
+    public void addHouseUser(User user){
+        this.houseUsers.add(user);
+    }
+
+    public void setActiveUser(User user){
+        this.activeUser = user;
+    }
     /**
      *  Make/Delete users: ////////////////////////////////////
      */
@@ -144,35 +177,6 @@ public class SHS {
         Room room = new Bathroom(roomName);
         houseLayout.add(room);
         return room;
-    }
-
-    //FIXME same here, the Layout class will handle the creation
-    /**
-     *  Make/Delete openings:  ////////////////////////////////////
-     */
-    public Opening makeWindow(String openingName){
-        Opening window = new Window(openingName);
-        houseOpenings.add(window);
-        return window;
-    }
-    public Opening makeDoor(String openingName){
-        Opening door = new Door(openingName);
-        houseOpenings.add(door);
-        return door;
-    }
-
-    /**
-     *  Make/Delete fixtures:  ////////////////////////////////////
-     */
-    public Light makeLight(String openingName){
-        Light light = new Light();
-        housefixtures.add(light);
-        return light;
-    }
-    public int makeTemp(String openingName){
-        int temperature = Temperature.getTemperature();
-        housefixtures.add(temperature);
-        return temperature;
     }
 
     /**
@@ -291,35 +295,20 @@ public class SHS {
     public void shcDoAction(User user, Command command, Room room){
         shc.userAction(user, command, room);
     }
-    /**
-     *  Make/Delete actions: ////////////////////////////////////
-     */
 
-    //FIXME moved to the user class for now!
-    // public void enterRoom(User user, Room room){
-    //     if(user.getRoom() != null){
-    //         System.out.println( "exiting " + user.getRoom().getName());
-    //         user.getRoom().removeUserFromRoom(user);
-    //         System.out.println(user + " is in this room now: " + room.getName());
-    //         user.enterRoom(room);
-    //     }
-    //     else{
-    //         System.out.println(user + " is in this room now: " + room.getName());
-    //         user.enterRoom(room);
-    //     }
-    // }
+    @Override
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+    @Override
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
 
-    //FIXME the wrapper function is not needed, we can use the shc. call directly
-    // public void doAction(User user, Command command, Room room){
-    //     shc.userAction(user, command, room);
-    // }
-
-    //FIXME the wrapper function is not needed, we can use the shh. call directly
-    // public void increaseTemperature(int temperature){
-    // }
+    @Override
+    public void notifyObserver() {
+        for (Observer observer : observers) {
+            observer.update(this);
+        }
+    }
 }
-
-// coordinate system (check wade3's branch)
-// date and time increment by hour
-// temperature make it change by every hour, by incrementing/decrementing with a small random number
-// make sure all tests are through the command pattern

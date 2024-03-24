@@ -1,5 +1,7 @@
 package main.java.logic.users;
 
+import main.java.model.rooms.Room;
+
 public class Guest extends User{
 
     public Guest(){
@@ -9,6 +11,10 @@ public class Guest extends User{
         super(name);
         this.name = name;
 
+        permissions.add(Permissions.LIGHT);
+    }
+    public Guest(String name, Room room){
+        super(name, room);
         permissions.add(Permissions.LIGHT);
     }
     @Override

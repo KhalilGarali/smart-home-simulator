@@ -1,16 +1,14 @@
 package main.java.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import main.java.logic.observerPattern.*;
 
 
 import javax.swing.BorderFactory;
@@ -22,12 +20,16 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
+import java.util.Iterator;
 
 import main.java.logic.dashboard.DateTime;
 import main.java.logic.modules.SHS;
@@ -41,99 +43,49 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 import main.java.gui.ModulePanelTabs.SHCPanel;
+import main.java.logic.layout.House;
+import main.java.logic.modules.SHS;
+import main.java.logic.users.*;
+import main.java.model.rooms.Room;
 import main.java.logic.users.*;
 import main.java.model.rooms.Room;
 
-public class ModulePanel extends JPanel {
+public class ModulePanel extends JPanel implements Observer{
+    
     private JTabbedPane tabbedPane;
-    private JButton editButton;
+    House house = House.getInstance();
     private SHS shs = SHS.getInstance();
+    
+    List<User> listOfUsers = shs.getHouseUser();
+    private JButton editButton;
 
+    JTextField usernameField;
+    JCheckBox windowsCheckBox, doorsCheckBox, lightsCheckBox, temperatureCheckBox;
+
+    
     public ModulePanel(JLabel usernameDisplay, JLabel locationDisplay) {
+        shs.addObserver(this);
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createTitledBorder("Modules"));
-        tabbedPane = new JTabbedPane();
 
-        // Create Panels Here
+        // Create SHC Here
         SHCPanel SHCPanel = new SHCPanel();
-        // Create SHC Panel
-        JPanel shcPanel = createShcPanel();
+        // Create SHS Panel
         JPanel shsPanel = createShsPanel(usernameDisplay, locationDisplay);
 
         // Module Tabs
+        tabbedPane = new JTabbedPane();
         tabbedPane.addTab("SHS", new JScrollPane(shsPanel));
         tabbedPane.addTab("SHC", new JScrollPane(SHCPanel));
         tabbedPane.addTab("SHP", new JLabel("SHP Content"));
         tabbedPane.addTab("SHH", new JLabel("SHH Content"));
-        // ... Add other tabs as needed
 
         add(tabbedPane, BorderLayout.CENTER);
     }
 
-      private JPanel createShcPanel() {
-        JPanel shcPanel = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.weightx = 1.0;
-        gbc.weighty = 1.0;
-
-        // Items Panel
-        JPanel itemsPanel = createItemsPanel();
-
-        // Open/Close Panel
-        JPanel openClosePanel = createOpenClosePanel();
-
-        // Add the items and open/close panels to the SHC panel
-        shcPanel.add(itemsPanel, gbc);
-        shcPanel.add(openClosePanel, gbc);
-
-        return shcPanel;
-    }
-
-    private JPanel createItemsPanel() {
-        JPanel itemsPanel = new JPanel();
-        itemsPanel.setLayout(new BoxLayout(itemsPanel, BoxLayout.Y_AXIS));
-        itemsPanel.setBorder(BorderFactory.createTitledBorder("Items"));
-
-        // Create and add buttons
-        JToggleButton windowsButton = new JToggleButton("Windows");
-        JToggleButton lightsButton = new JToggleButton("Lights");
-        JToggleButton doorsButton = new JToggleButton("Doors");
-
-        ButtonGroup itemsGroup = new ButtonGroup();
-        itemsGroup.add(windowsButton);
-        itemsGroup.add(lightsButton);
-        itemsGroup.add(doorsButton);
-
-        // resize buttons
-        resizeButton(windowsButton);
-        resizeButton(lightsButton);
-        resizeButton(doorsButton);
-
-        itemsPanel.add(windowsButton);
-        itemsPanel.add(lightsButton);
-        itemsPanel.add(doorsButton);
-
-        return itemsPanel;
-    }
-
-    private JPanel createOpenClosePanel() {
-        JPanel openClosePanel = new JPanel();
-        openClosePanel.setLayout(new BoxLayout(openClosePanel, BoxLayout.Y_AXIS));
-        openClosePanel.setBorder(BorderFactory.createTitledBorder("Open/Close"));
-        
-        // Create and add checkboxes
-        openClosePanel.add(new JCheckBox("Garage"));
-        openClosePanel.add(new JCheckBox("Living Room"));
-        openClosePanel.add(new JCheckBox("Backyard"));
-
-        return openClosePanel;
-    }
-
-    private void resizeButton(JToggleButton button) {
-        button.setMaximumSize(new Dimension(Integer.MAX_VALUE, button.getMinimumSize().height));
-    }
+    // private void resizeButton(JToggleButton button) {
+    //     button.setMaximumSize(new Dimension(Integer.MAX_VALUE, button.getMinimumSize().height));
+    // }
 
     private JPanel createShsPanel(JLabel usernameDisplay, JLabel locationDisplay){
         JPanel shsPanel = new JPanel(new GridBagLayout());
@@ -143,38 +95,36 @@ public class ModulePanel extends JPanel {
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.anchor = GridBagConstraints.NORTHWEST;
+        
+        JPanel newPanel = createNewUserPanel();
+        shsPanel.add(newPanel, gbc);
+        JPanel deletePanel = createDeletePanel();
+        shsPanel.add(deletePanel, gbc);
         JPanel editPanel = createEditPanel(usernameDisplay, locationDisplay);
         shsPanel.add(editPanel, gbc);
+
         return shsPanel;
     }
 
     private JPanel createEditPanel(JLabel usernameDisplay, JLabel locationDisplay){
-
-        //Hard coded user for testing purposes waiting to get Active user +++++++++++++++++++++++++++++++++++++++++
-        User testUser = new Parent("Test User");
-        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-        //TODO: Change testUser by Active User once it's implemented
-
-
         JPanel editPanel = new JPanel(new GridBagLayout());
-        editPanel.setBorder(BorderFactory.createTitledBorder("Edit User Profile"));
+        editPanel.setBorder(BorderFactory.createTitledBorder("Edit User Permissions"));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);//Add paddings
 
         JLabel usernameLabel = new JLabel ("Username: ");
-        JTextField usernameField = new JTextField(20);
-          usernameField.setText(shs.activeUser.getName());
+        usernameField = new JTextField(20);
+          usernameField.setText(shs.activeUser.toString());
 
 
         //Permission checkboxes
-        JCheckBox windowsCheckBox = new JCheckBox("Open/Close Windows");
+        windowsCheckBox = new JCheckBox("Open/Close Windows");
             windowsCheckBox.setSelected(shs.activeUser.getPermissions().contains(Permissions.WINDOW) ? true : false);
-        JCheckBox doorsCheckBox = new JCheckBox("Open/Close Doors");
+        doorsCheckBox = new JCheckBox("Open/Close Doors");
             doorsCheckBox.setSelected(shs.activeUser.getPermissions().contains(Permissions.DOOR) ? true : false);
-        JCheckBox lightsCheckBox = new JCheckBox("Turn on/off the lights");
+        lightsCheckBox = new JCheckBox("Turn on/off the lights");
             lightsCheckBox.setSelected(shs.activeUser.getPermissions().contains(Permissions.LIGHT) ? true : false);
-        JCheckBox temperatureCheckBox = new JCheckBox("Change House Temperature");
+        temperatureCheckBox = new JCheckBox("Change House Temperature");
             temperatureCheckBox.setSelected(shs.activeUser.getPermissions().contains(Permissions.TEMP) ? true : false);
 
         List<Permissions> tempPermissions = shs.activeUser.getPermissions();
@@ -240,7 +190,6 @@ public class ModulePanel extends JPanel {
 
                 shs.activeUser.setName(newUsername);
                 shs.activeUser.setPermissions(tempPermissions);
-                //TODO: Update the user in left panel
             }
         });
         editButton = new JButton("Edit Date and Time");
@@ -295,10 +244,235 @@ public class ModulePanel extends JPanel {
         return editPanel;
     }
 
+    private JPanel createDeletePanel(){
+        JPanel deletePanel = new JPanel(new GridBagLayout());
+        deletePanel.setBorder(BorderFactory.createTitledBorder("Delete User Profile"));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.insets = new Insets(5, 5, 5, 5);//Add paddings
+        
+        JButton deleteButton = new JButton ("Delete");
+        JButton updateButton = new JButton ("Update");
+        JLabel profileLabel = new JLabel ("Choose user profile to delete");
+
+        JMenuBar profileBar = new JMenuBar();
+        JMenu profileMenu = new JMenu("Profile");
+        profileMenu.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+        for (User user: listOfUsers)
+        {
+            JMenuItem profileItem = new JMenuItem(user.getClass().getSimpleName() + " " + user.getName());
+            profileItem.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e){
+                    profileMenu.setText(((JMenuItem) e.getSource()).getText());
+                }
+            });
+            profileMenu.add(profileItem);
+        }
+        profileBar.add(profileMenu);
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 0.5;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.fill = GridBagConstraints.BOTH;
+        deletePanel.add(profileLabel, gbc);
+
+        gbc.gridx = 1;
+        deletePanel.add(profileBar, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.anchor = GridBagConstraints.CENTER;
+        deletePanel.add(deleteButton, gbc);
+
+        //This button updates the list of users
+        gbc.gridx = 1;
+        deletePanel.add(updateButton, gbc);
+
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Update the JLabel in the other module
+                Iterator<User> iterator = listOfUsers.iterator();
+                while (iterator.hasNext()){
+                    User user = iterator.next();
+                    if (profileMenu.getText().equals(user.getClass().getSimpleName() + " " + user.getName())){
+                        user.exitRoom();
+                        iterator.remove();
+                    }
+                }
+                for (User user: listOfUsers){
+                    System.out.println(user.toString());
+                }
+                profileMenu.removeAll();
+                profileMenu.setText("Profile");
+                for (User user: listOfUsers)
+                {
+                    JMenuItem profileItem = new JMenuItem(user.getClass().getSimpleName() + " " + user.getName());
+                    profileItem.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e){
+                            profileMenu.setText(((JMenuItem) e.getSource()).getText());
+                        }
+                    });
+                    profileMenu.add(profileItem);
+                }
+                profileBar.revalidate();
+                profileBar.repaint();
+                
+            }
+        });
+
+        updateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Update the JLabel in the other module
+                profileMenu.removeAll();
+                profileMenu.setText("Profile");
+                for (User user: listOfUsers)
+                {
+                    JMenuItem profileItem = new JMenuItem(user.getClass().getSimpleName() + " " + user.getName());
+                    profileItem.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e){
+                            profileMenu.setText(((JMenuItem) e.getSource()).getText());
+                        }
+                    });
+                    profileMenu.add(profileItem);
+                }
+                profileBar.revalidate();
+                profileBar.repaint();
+            }
+        });
+
+        return deletePanel;
+    }
+
     private void resizePanel(JTextField textfield){
         textfield.setMaximumSize(new Dimension(Integer.MAX_VALUE, textfield.getPreferredSize().height));
     }
 
+    private JPanel createNewUserPanel()
+    {
+        JPanel newPanel = new JPanel(new GridBagLayout());
+        newPanel.setBorder(BorderFactory.createTitledBorder("Create New User Profile"));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.insets = new Insets(5, 5, 5, 5);//Add paddings
+
+        JLabel usernameLabel = new JLabel ("Username: ");
+        JLabel locationLabel = new JLabel ("Location: ");
+        JLabel usertypeLabel = new JLabel ("User Type: ");
+        
+        JTextField usernameField = new JTextField (20);
+
+        JMenuBar locationBar = new JMenuBar();
+        JMenu locationMenu = new JMenu("Location");
+        locationMenu.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+        for (Room room: house.getRooms())
+        {
+            JMenuItem locationItem = new JMenuItem(room.getName());
+            locationItem.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e){
+                    locationMenu.setText(((JMenuItem) e.getSource()).getText());
+                }
+            });
+            locationMenu.add(locationItem);
+        }
+        locationBar.add(locationMenu);
+
+        JMenuBar usertypeBar = new JMenuBar();
+        JMenu usertypeMenu = new JMenu("Usertype");
+        usertypeMenu.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+        List<String> usertypes = Arrays.asList("Admin", "Child", "FamilyMember", "Guest", "Parent", "Stranger");
+        for (String types: usertypes)
+        {
+            JMenuItem usertypeItem = new JMenuItem(types);
+            usertypeItem.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e){
+                    usertypeMenu.setText(((JMenuItem) e.getSource()).getText());
+                }
+            });
+            usertypeMenu.add(usertypeItem);
+        }
+        usertypeBar.add(usertypeMenu);
+        
+        JButton submitButton = new JButton ("Create");
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 0.5;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.fill = GridBagConstraints.BOTH;
+        newPanel.add(usernameLabel, gbc);
+
+        gbc.gridx = 1;
+        newPanel.add(usernameField, gbc);
+        
+        gbc.gridx = 0;
+        gbc.gridy++;
+        newPanel.add(locationLabel, gbc);
+        
+        gbc.gridx = 1;
+        newPanel.add(locationBar, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy++;
+        newPanel.add(usertypeLabel, gbc);
+        
+        gbc.gridx = 1;
+        newPanel.add(usertypeBar, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.anchor = GridBagConstraints.CENTER;
+        newPanel.add(submitButton, gbc);
+
+        submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Update the JLabel in the other module
+                String newUsername = usernameField.getText().trim();
+                String newUserType = usertypeMenu.getText().trim();
+                Room newRoom = shs.getRoomByName(locationMenu.getText());
+                User newUser;
+                switch (newUserType){
+                    case "Admin":
+                        newUser = new Admin(newUsername, newRoom);
+                        listOfUsers.add(newUser);
+                        JOptionPane.showMessageDialog(null, "Create user " + newUser.getClass().getSimpleName() + " " + newUser.getName() + " succeed.");
+                        break;
+                    case "Child": 
+                        newUser = new Child(newUsername, newRoom);
+                        listOfUsers.add(newUser);
+                        JOptionPane.showMessageDialog(null, "Create user " + newUser.getClass().getSimpleName() + " " + newUser.getName() + " succeed.");
+                        break;
+                    case "FamilyMember":
+                        newUser = new FamilyMember(newUsername, newRoom);
+                        listOfUsers.add(newUser);
+                        JOptionPane.showMessageDialog(null, "Create user " + newUser.getClass().getSimpleName() + " " + newUser.getName() + " succeed.");
+                        break;
+                    case "Guest":
+                        newUser = new Guest(newUsername, newRoom);
+                        listOfUsers.add(newUser);
+                        JOptionPane.showMessageDialog(null, "Create user " + newUser.getClass().getSimpleName() + " " + newUser.getName() + " succeed.");
+                        break;
+                    case "Stranger":
+                        newUser = new Stranger(newUsername, newRoom);
+                        listOfUsers.add(newUser);
+                        JOptionPane.showMessageDialog(null, "Create user " + newUser.getClass().getSimpleName() + " " + newUser.getName() + " succeed.");
+                        break;
+                    case "Parent":
+                        newUser = new Parent(newUsername, newRoom);
+                        listOfUsers.add(newUser);
+                        JOptionPane.showMessageDialog(null, "Create user " + newUser.getClass().getSimpleName() + " " + newUser.getName() + " succeed.");
+                        break;
+                    default:
+                        JOptionPane.showMessageDialog(null, "Create user failed. Please try again.");
+                }
+            }
+        });
+
+        return newPanel;
+    }
     // Method to handle editing simulation parameters
     private void editSimulationParameters() {
         // Create a dialog window
@@ -420,6 +594,17 @@ public class ModulePanel extends JPanel {
         }
     }
 
+    @Override
+    public void update(Observable o) {
+        SwingUtilities.invokeLater(() -> {
+            User activeUser = SHS.getInstance().getActiveUser();
+            usernameField.setText(activeUser.toString());
+            windowsCheckBox.setSelected(activeUser.getPermissions().contains(Permissions.WINDOW));
+            doorsCheckBox.setSelected(activeUser.getPermissions().contains(Permissions.DOOR));
+            lightsCheckBox.setSelected(activeUser.getPermissions().contains(Permissions.LIGHT));
+            temperatureCheckBox.setSelected(activeUser.getPermissions().contains(Permissions.TEMP));
+        });
+    }
 //    private JPanel createPermissionsPanel() {
 //
 //        //Hard coded user for testing purposes waiting to get Active user +++++++++++++++++++++++++++++++++++++++++

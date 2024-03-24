@@ -193,6 +193,7 @@ public class ModulePanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 // Update the JLabel in the other module
                 String newUsername = usernameField.getText();
+                usernameDisplay.setText(shs.activeUser.getClass().getSimpleName() + " " + newUsername);
 
                 //Check if WINDOW permission is selected
                 if (windowsCheckBox.isSelected()) {

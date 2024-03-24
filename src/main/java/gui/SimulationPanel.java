@@ -345,7 +345,8 @@ public class SimulationPanel extends JPanel {
                 for (User user : users) {
                     if (user.getName().equals(selectedUserName)) {
                         //FIXME
-                        shs.setActiveUser(user);
+                        // shs.setActiveUser(user);
+                        shs.activeUser.setName(selectedUserName);
                         System.out.println(shs.activeUser);
                         System.out.println(user);
                         userLabel.setText(selectedUserName);

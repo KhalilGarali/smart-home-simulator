@@ -55,4 +55,8 @@ public class DateTime {
     public static int getMonth() {
         return dateTime.getMonthValue();
     }
+
+    public static void setDateTime(LocalDateTime newDateTime) {
+        dateTime = newDateTime;
+    }
 }

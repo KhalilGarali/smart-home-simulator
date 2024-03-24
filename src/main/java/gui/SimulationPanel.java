@@ -1,6 +1,8 @@
 package main.java.gui;
 
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -215,14 +217,50 @@ public class SimulationPanel extends JPanel {
     }
 
     private void readTemperatureFile(File file) {
-    try {
-        List<String> lines = Files.readAllLines(file.toPath(), StandardCharsets.UTF_8);
-        // Here you would process these lines and update your simulation's temperature settings
-        // For simplicity, this example won't go into the details of parsing CSV data
-        
-        JOptionPane.showMessageDialog(this, "Temperature data uploaded successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-    } catch (IOException e) {
-        JOptionPane.showMessageDialog(this, "Failed to read the file", "Error", JOptionPane.ERROR_MESSAGE);
+        try {
+            List<String> lines = Files.readAllLines(file.toPath(), StandardCharsets.UTF_8);
+            LocalDateTime currentDateTime = LocalDateTime.now(); // Get the current local date and time
+            LocalDateTime closestDateTime = null;
+            double closestTemp = Double.NaN;
+
+            for (String line : lines) {
+                String[] parts = line.split(",");
+                if (parts.length >= 2) { // Ensure at least two columns are present
+                    String dateTimeStr = parts[1].trim(); // Index 1 for "datetime"
+                    String tempStr = parts[2].trim(); // Index 2 for "temp"
+
+                    // Check if the column names match "datetime" and "temp"
+                    if (parts[1].equalsIgnoreCase("datetime") && parts[2].equalsIgnoreCase("temp")) {
+                        continue; // Skip the header row
+                    }
+
+                    LocalDateTime dateTime = LocalDateTime.parse(dateTimeStr, DateTimeFormatter.ISO_DATE_TIME);
+                    double temp = Double.parseDouble(tempStr);
+
+                    // Check if this datetime is closer to the current local datetime
+                    if (closestDateTime == null || Math.abs(Duration.between(dateTime, currentDateTime).toMillis()) < Math.abs(Duration.between(closestDateTime, currentDateTime).toMillis())) {
+                        closestDateTime = dateTime;
+                        closestTemp = temp;
+                    }
+                }
+            }
+
+            if (closestDateTime != null) {
+                // Update DateTime.java with the selected datetime value
+                DateTime.setDateTime(closestDateTime);
+                // Update Temperature.java with the corresponding temp value
+                Temperature.setTemperature((int) closestTemp);
+
+                // Optionally, you can also update the date and time labels on the GUI
+                updateDateTimeLabels();
+                updateOutsideTempLabel();
+
+                JOptionPane.showMessageDialog(this, "Temperature data updated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "No temperature data found in the file", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Failed to read the file", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 

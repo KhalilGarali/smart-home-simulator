@@ -251,7 +251,7 @@ public class SimulationPanel extends JPanel {
                 // Update Temperature.java with the corresponding temp value
                 Temperature.setTemperature((int) closestTemp);
 
-                // Optionally, you can also update the date and time labels on the GUI
+                // Update the date and time labels on the GUI
                 updateDateTimeLabels();
                 updateOutsideTempLabel();
 

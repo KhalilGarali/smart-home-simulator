@@ -51,15 +51,15 @@ public class SimulationPanel extends JPanel {
 
     // used as a dummy value
     private SHS shs = SHS.getInstance();
-    // User activeUser = shs.activeUser;
-    // activeUser = new User("Active user");
+    private ArrayList<User> users = shs.getHouseUsers();
+
 
     public SimulationPanel() {
         // dummy variable
-        shs.activeUser = new Stranger("Youssef");
+        users.add(new Stranger("Example"));
         Room dummyRoom = rooms.get(5);
-        shs.activeUser.moveToRoom(dummyRoom);
-
+        users.get(0).moveToRoom(dummyRoom);
+        shs.activeUser = users.get(0);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createTitledBorder("Simulation"));
 
@@ -90,10 +90,10 @@ public class SimulationPanel extends JPanel {
         editButton.setMaximumSize(new Dimension(40, 40)); // Similar to the toggle, ensures the button size
         editButton.setIcon(new ImageIcon("src/main/resources/editIcon.png"));
         // Add an action listener for the edit button
-        // editButton.addActionListener(e -> {
-        // // Open a dialog or another frame to edit simulation parameters
-        // editSimulationParameters();
-        // });
+        editButton.addActionListener(e -> {
+        // Open a dialog or another frame to edit simulation parameters
+        handleProfileChange();
+        });
 
         // User and Location
         userLabel = new JLabel(shs.activeUser.toString());
@@ -390,6 +390,55 @@ public class SimulationPanel extends JPanel {
         moveDialog.setLocationRelativeTo(null); // Center the dialog on the screen
         moveDialog.setVisible(true);
     }
+
+    private void handleProfileChange(){
+        JDialog changeUserDialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), "Change Active User", true);
+        changeUserDialog.setLayout(new BorderLayout());
     
+        Vector<String> tempUsers = new Vector<>();
+        int selectedIndex = -1; // Default value for no selection
+        for (int i = 0; i < users.size(); i++) {
+            User user = users.get(i);
+            tempUsers.add(user.getName());
+            // Check if the current room matches the active user's room
+            if (user.getName().equals(shs.activeUser.getName())) {
+                selectedIndex = i; // Set the index as the selected index
+            }
+        }
     
+        JComboBox<String> availableUsersDropdown = new JComboBox<>(tempUsers);
+    
+        // Set the selected index to match the active user's room
+        if (selectedIndex != -1) {
+            availableUsersDropdown.setSelectedIndex(selectedIndex);
+        }
+    
+        // Add ActionListener to capture user selection
+        availableUsersDropdown.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JComboBox<String> comboBox = (JComboBox<String>) e.getSource();
+                String selectedUserName = (String) comboBox.getSelectedItem();
+                // Store the selected room name in the variable selection
+                selection = selectedUserName;
+    
+                // Iterate over the rooms ArrayList and compare the selected room name
+                for (User user : users) {
+                    if (user.getName().equals(selectedUserName)) {
+                        shs.setActiveUser(user);
+                        shs.notifyObserver();
+                        userLabel.setText(selectedUserName);
+                    }
+                }
+            }
+        });
+    
+        changeUserDialog.add(availableUsersDropdown, BorderLayout.CENTER);
+    
+        // Set dialog size and visibility
+        changeUserDialog.setSize(300, 150);
+        changeUserDialog.setLocationRelativeTo(null); // Center the dialog on the screen
+        changeUserDialog.setVisible(true);
+    }
+
 }

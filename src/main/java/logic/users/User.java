@@ -27,6 +27,7 @@ public abstract class User {
         permissions = new ArrayList<>();
         this.name = name;
         this.room = room;
+        room.addUserToRoom(this);
     }
 
 
@@ -89,7 +90,7 @@ public abstract class User {
     * - try to turn light off in the room is user was last to leave
     * - set the user's current room to null (incase they are away from the house)
     */ 
-    private void exitRoom(){
+    public void exitRoom(){
         System.out.println(this.name + " is exiting " + this.room.getName());
         this.room.removeUserFromRoom(this);
         this.room.turnLightOff();

@@ -8,6 +8,7 @@ import java.util.Random;
 
 public class DateTime {
     private static LocalDateTime dateTime;
+    private static int counter = 0;
 
     static {
         generateRandomDateTime();
@@ -30,6 +31,7 @@ public class DateTime {
 
     public static void incrementSecond() {
         dateTime = dateTime.plusSeconds(1);
+        counter++;
     }
 
     public static void setDate(int year, int month, int day) {
@@ -58,5 +60,9 @@ public class DateTime {
 
     public static void setDateTime(LocalDateTime newDateTime) {
         dateTime = newDateTime;
+    }
+
+    public static int getSeconds() {
+        return counter;
     }
 }

@@ -114,7 +114,7 @@ public class ModulePanel extends JPanel implements Observer{
 
         JLabel usernameLabel = new JLabel ("Username: ");
         usernameField = new JTextField(20);
-          usernameField.setText(shs.activeUser.toString());
+          usernameField.setText(shs.activeUser.getName());
 
 
         //Permission checkboxes
@@ -192,6 +192,7 @@ public class ModulePanel extends JPanel implements Observer{
                 shs.activeUser.setPermissions(tempPermissions);
             }
         });
+        
         editButton = new JButton("Edit Date and Time");
         editButton.addActionListener(new ActionListener() {
             @Override

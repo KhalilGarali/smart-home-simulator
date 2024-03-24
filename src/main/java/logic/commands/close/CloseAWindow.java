@@ -27,6 +27,7 @@ public class CloseAWindow extends Command{
         room.closeWindow(1);
         System.out.println(room);
         System.out.println("----------------------------------------------------------------------");
+        outpanel.appendText("Some text close ");
         return true;
     }
     @Override

@@ -10,7 +10,7 @@ import javax.swing.JTextArea;
 
 public class OutputPanel extends JPanel {
     private JTextArea outputConsole;
-
+    private static OutputPanel op;
     public OutputPanel() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createTitledBorder("Console Output"));
@@ -22,9 +22,16 @@ public class OutputPanel extends JPanel {
         add(scrollPane);
     }
 
-     // Provide a method to append text to the output console
-     public void appendText(String text) {
+    // Provide a method to append text to the output console
+    public void appendText(String text) {
         outputConsole.append(text);
+    }
+
+    public static OutputPanel getInstance(){
+        if (op == null){
+            op = new OutputPanel();
+        }
+        return op;
     }
 
 }

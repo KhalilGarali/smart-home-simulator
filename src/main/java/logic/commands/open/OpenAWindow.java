@@ -49,6 +49,7 @@ public class OpenAWindow extends Command{
         room.openWindow(windowNumber);
         System.out.println(room);
         System.out.println("----------------------------------------------------------------------");
+        outpanel.appendText("Some text open ");
         return true;
     }
 

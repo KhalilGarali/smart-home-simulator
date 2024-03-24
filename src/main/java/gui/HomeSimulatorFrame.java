@@ -30,7 +30,7 @@ public class HomeSimulatorFrame extends JFrame {
         add(ModulePanel, BorderLayout.CENTER);
 
         // Output Console
-        OutputPanel outputPanel = new OutputPanel();
+        OutputPanel outputPanel = OutputPanel.getInstance();
         add(outputPanel, BorderLayout.SOUTH);
         
     }

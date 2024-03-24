@@ -1,0 +1,43 @@
+Room: Kitchen
+Name: My Kitchen
+Window: Open
+Door: Closed
+Light: on
+
+Room: garage
+Name: My Garage
+Window: Open
+Name: BMW Garage
+Window: Closed
+Door: Closed
+Light: on
+
+Room: garage
+Name: BENZ Garage
+Window: Open
+Door: Open
+Light: off
+
+Room: Bedroom
+Name: Master Bedroom
+Window: Open
+Door: Open
+Light: on
+
+Room: bathroom
+Name: Master bathroom
+Window: Closed
+Door: Closed
+Light: off
+
+Room: LivingRoom
+Name: Master LivingRoom
+Window: Closed
+Door: Open
+Light: on
+
+Room: LivingRoom
+Name: Guest LivingRoom
+Window: Open
+Door: Closed
+Light: off

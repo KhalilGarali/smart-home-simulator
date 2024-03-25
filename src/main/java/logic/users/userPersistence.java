@@ -9,9 +9,9 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserPersistence {
+public class userPersistence {
 
-    public UserPersistence(String filePath, ArrayList<User> users) {
+    public userPersistence(String filePath, ArrayList<User> users) {
         fetchUsers(filePath, users);
     }
 

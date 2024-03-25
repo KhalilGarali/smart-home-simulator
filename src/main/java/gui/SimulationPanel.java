@@ -91,8 +91,8 @@ public class SimulationPanel extends JPanel {
         editButton.setIcon(new ImageIcon("src/main/resources/editIcon.png"));
         // Add an action listener for the edit button
         editButton.addActionListener(e -> {
-        // Open a dialog or another frame to edit simulation parameters
-        handleProfileChange();
+            // Open a dialog or another frame to edit simulation parameters
+            handleProfileChange();
         });
 
         // User and Location

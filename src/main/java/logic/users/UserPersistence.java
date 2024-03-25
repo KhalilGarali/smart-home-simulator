@@ -12,7 +12,6 @@ import java.util.List;
 
 public class UserPersistence {
 
-
     public UserPersistence(String filePath, ArrayList<User> users) {
         fetchUsers(filePath, users);
     }

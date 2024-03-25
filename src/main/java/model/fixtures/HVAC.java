@@ -20,4 +20,20 @@ public class HVAC {
     public void setCooling(boolean cooling) {
         this.cooling = cooling;
     }
+
+    public String heatingToString(){
+        if (heating){
+            return "Heating: ON";
+        } else {
+            return "Heating: OFF";
+        }
+    }
+
+    public String coolingToString(){
+        if (cooling){
+            return "Cooling: ON";
+        } else {
+            return "Cooling: OFF";
+        }
+    }
 }

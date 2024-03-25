@@ -1,5 +1,7 @@
 package main.java.logic.commands.off;
 
+import java.util.ArrayList;
+
 import main.java.logic.commands.Command;
 import main.java.logic.users.Permissions;
 import main.java.model.rooms.Room;
@@ -31,6 +33,7 @@ public class TurnLightOff extends Command {
         room.turnLightOff();
         System.out.println(room);
         System.out.println("----------------------------------------------------------------------");
+        outpanel.appendText(toConsole());
         return true;
     }
 
@@ -39,4 +42,13 @@ public class TurnLightOff extends Command {
         return "turn light off";
     }
 
+    @Override
+    public ArrayList<String> toConsole(){
+        ArrayList<String> text = new ArrayList<>();
+        text.add("Target: " + room.getClass().getSimpleName() + " light");
+        text.add("Event Type: Turn Off");
+        text.add("Event Description: Turn Light Off");
+        text.add(room.getLight().lightToSTring());
+        return text;
+    }
 }

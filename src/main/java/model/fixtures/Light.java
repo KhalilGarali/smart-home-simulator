@@ -24,4 +24,23 @@ public class Light {
         this.lightON = true;
     }
 
+    public String lightToSTring(){
+        if (lightON){
+            return "Light: ON";
+        }
+        else{
+            return "Light: OFF";
+        }
+    }
+
+    public String autoLightToString(){
+
+        if (AutoLightON){
+            return "Auto Light: ON";
+        }
+        else {
+            return "Auto Light: OFF";
+        }
+    }
+
 }

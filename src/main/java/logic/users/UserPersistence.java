@@ -77,8 +77,11 @@ public class UserPersistence {
                 users.add(currentUser); // Adds the last user
 
             }
+            JOptionPane.showMessageDialog(null, "Users fetched!");
+
         } catch (Exception e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Users cannot be fetched");
         }
     }
 

@@ -4,10 +4,19 @@ import javax.swing.*;
 import javax.swing.plaf.metal.MetalToggleButtonUI;
 
 import main.java.logic.layout.House;
+import main.java.logic.users.Parent;
+import main.java.logic.users.Permissions;
+import main.java.logic.users.User;
+import main.java.model.rooms.Kitchen;
 import main.java.model.rooms.Room;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.security.Permission;
+import java.util.ArrayList;
+import java.util.List;
+
+import static main.java.logic.modules.SHS.shs;
 
 public class SHHPanel extends JPanel {
     House house = House.getInstance();
@@ -21,6 +30,8 @@ public class SHHPanel extends JPanel {
     private JComboBox<String> zoneSelector;
     private JComboBox<String> roomSelector;
 
+    List<User> listOfUsers = shs.getHouseUser();
+
     public SHHPanel() {
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -29,6 +40,9 @@ public class SHHPanel extends JPanel {
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
 
+        //Active User Panel
+        JPanel userPanel = createUserPanel();
+
         // Zones Panel
         JPanel zonesPanel = createZonesPanel();
 
@@ -36,9 +50,55 @@ public class SHHPanel extends JPanel {
         JPanel roomsPanel = createRoomsPanel();
  
         // Add the items and open/close panels to the SHC panel
+        add(userPanel, gbc);
         add(zonesPanel, gbc);
         add(roomsPanel, gbc);
 
+    }
+
+    private JPanel createUserPanel() {
+
+        User activeUser = new Parent("John Doe", new Kitchen("kitchen Room"));
+
+        activeUser.setPermissions(List.of(Permissions.LIGHT, Permissions.WINDOW, Permissions.TEMP));
+
+        JPanel userPanel = new JPanel();
+        userPanel.setLayout(new BoxLayout(userPanel, BoxLayout.Y_AXIS));
+        userPanel.setBorder(BorderFactory.createTitledBorder("Profile Permissions"));
+
+        JLabel userNameLabel = new JLabel("Active User:   " + activeUser.getName());
+        Font boldFont = new Font(userNameLabel.getFont().getName(), Font.BOLD, userNameLabel.getFont().getSize());
+        userNameLabel.setFont(boldFont);
+
+        // Create userLocationLabel with bold font
+        JLabel userLocationLabel = new JLabel("Location:       " + activeUser.getRoom().getName());
+        userLocationLabel.setFont(boldFont);
+
+        userPanel.add(userNameLabel);
+        userPanel.add(userLocationLabel);
+
+
+
+        if(activeUser.getPermissions().isEmpty()){
+            JLabel noPermissionsLabel = new JLabel("No Permissions");
+            userPanel.add(noPermissionsLabel);
+        } else {
+            //TODO: figure out how to display the permissions
+            JLabel permissionLabel = new JLabel("Permissions:");
+            userPanel.add(permissionLabel);
+            StringBuilder permissionsText = new StringBuilder();
+
+            for (Permissions permission : activeUser.getPermissions()) {
+                permissionsText.append(permission.toString()).append("<br>");
+            }
+
+            permissionLabel.setText("<html>" + permissionsText.toString() + "</html>");
+            userPanel.add(permissionLabel);
+        }
+
+
+
+        return userPanel;
     }
 
     private JPanel createZonesPanel() {

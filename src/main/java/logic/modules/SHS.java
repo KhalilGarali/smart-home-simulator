@@ -38,7 +38,7 @@ public class SHS implements Observable{
     SHH shh;
     SHC shc;
     SHP shp ;
-    private static SHS shs;
+    public static SHS shs;
     public CommandFactory cf;
     private List<Room> houseLayout;
     private ArrayList<User> houseUsers;

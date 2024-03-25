@@ -1,5 +1,7 @@
 package main.java.logic.commands.open;
 
+import java.util.ArrayList;
+
 import main.java.logic.commands.Command;
 import main.java.model.rooms.Room;
 
@@ -49,12 +51,22 @@ public class OpenAWindow extends Command{
         room.openWindow(windowNumber);
         System.out.println(room);
         System.out.println("----------------------------------------------------------------------");
-        outpanel.appendText("Some text open ");
+        outpanel.appendText(toConsole());
         return true;
     }
 
     @Override
     public String toString(){
         return "open a window";
+    }
+
+    @Override
+    public ArrayList<String> toConsole(){
+        ArrayList<String> text = new ArrayList<>();
+        text.add("Target: " + room.getClass().getSimpleName() + " window" + windowNumber);
+        text.add("Event Type: Open");
+        text.add("Event Description: Open Window");
+        text.add("window" + windowNumber + " " + room.getWindow(windowNumber).toString());
+        return text;
     }
 }

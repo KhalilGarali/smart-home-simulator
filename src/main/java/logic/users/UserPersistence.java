@@ -11,20 +11,25 @@ import java.util.List;
 
 public class UserPersistence {
 
+
     public UserPersistence(String filePath, ArrayList<User> users) {
         fetchUsers(filePath, users);
     }
 
     //Use permissions.add(Permissions.WINDOW) to add a permission to a user (for eg)
 
-    private void fetchUsers(String filePath, ArrayList<User> users) {
+    public static void fetchUsers(String filePath, ArrayList<User> users) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line, name;
             User currentUser = null;
-            List<Permissions> permissions = null;
+            List<Permissions> permissions = new ArrayList<>();
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("User:")) {
                     if (currentUser != null) {
+
+                        currentUser.setPermissions(List.copyOf(permissions));
+                        permissions.clear();
+
                         users.add(currentUser);
                     }
                     if (line.substring(6).trim().equalsIgnoreCase("parent")) {
@@ -43,32 +48,40 @@ public class UserPersistence {
                         name = line.substring(6);
                         currentUser.setName(name);
                     } else if (line.startsWith("Window Permission:")) {
-                        if (line.substring(19).trim().equalsIgnoreCase("yes"))
+                        if (line.substring(19).trim().equalsIgnoreCase("true")) {
                             permissions.add(Permissions.WINDOW);
+                        }
 
                     } else if (line.startsWith("Light Permission:")) {
-                        if (line.substring(19).trim().equalsIgnoreCase("yes"))
+                        if (line.substring(18).trim().equalsIgnoreCase("true")) {
                             permissions.add(Permissions.LIGHT);
+                        }
                     } else if (line.startsWith("Tempature Permission:")) {
-                        if (line.substring(19).trim().equalsIgnoreCase("yes"))
+                        if (line.substring(22).trim().equalsIgnoreCase("true")) {
                             permissions.add(Permissions.TEMP);
+                        }
                     } else if (line.startsWith("Door Permission:")) {
-                        if (line.substring(19).trim().equalsIgnoreCase("yes"))
+                        if (line.substring(17).trim().equalsIgnoreCase("true")) {
                             permissions.add(Permissions.DOOR);
+                        }
                     }
-                    currentUser.setPermissions(permissions);
                 }
             }
 
             if (currentUser != null) {
+
+                currentUser.setPermissions(List.copyOf(permissions));
+                permissions.clear();
+
                 users.add(currentUser); // Adds the last user
+
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void saveUsers(String filePath, ArrayList<User> users) {
+    public void saveUsers(String filePath, ArrayList<User> users) {
 
         try {
             FileWriter fw = new FileWriter(filePath);

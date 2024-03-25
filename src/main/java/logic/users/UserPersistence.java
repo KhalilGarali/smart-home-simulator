@@ -5,6 +5,7 @@ import main.java.model.openings.Door;
 import main.java.model.openings.Window;
 import main.java.model.rooms.*;
 
+import javax.swing.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -81,10 +82,16 @@ public class UserPersistence {
         }
     }
 
-    public void saveUsers(String filePath, ArrayList<User> users) {
+    public static void saveUsers(String filePath, ArrayList<User> users, String message) {
 
         try {
-            FileWriter fw = new FileWriter(filePath);
+            File file = new File(filePath);
+
+            // Create a new file everytime to save versions of different users
+                file.createNewFile();
+
+
+            FileWriter fw = new FileWriter(file.getAbsoluteFile());
             BufferedWriter writer = new BufferedWriter(fw);
 
             for (User user : users) {
@@ -108,7 +115,7 @@ public class UserPersistence {
                 writer.newLine();
                 writer.write("Tempature Permission: " + user.getPermissions().contains(Permissions.TEMP));
                 writer.newLine();
-                writer.write("Door Permission: " + user.getPermissions().contains(Permissions.DOOR));
+                writer.write("Door Permission: " + user.getPermissions().contains(Permissions.DOOR) + "\n");
 
                 writer.newLine();
                 writer.write("");
@@ -116,11 +123,11 @@ public class UserPersistence {
 
             writer.close();
 
-
-            System.out.println("Users saved to file");
+            JOptionPane.showMessageDialog(null, "Users saved!");
 
         } catch (Exception e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Users cannot be saved");
 
         }
 

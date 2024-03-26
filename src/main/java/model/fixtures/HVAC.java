@@ -1,39 +1,99 @@
 package main.java.model.fixtures;
 
-public class HVAC {
+import main.java.logic.dashboard.DateTime;
+import main.java.logic.observerPattern.Observable;
+import main.java.logic.observerPattern.Observer;
+import main.java.model.rooms.Room;
+import main.java.model.rooms.zones.Zone;
 
-    private boolean heating = false;
-    private boolean cooling = false;
+public class HVAC implements Observer{
 
-    public boolean isHeating() {
-        return heating;
+    private Room room;
+    private Boolean hasPower = true;
+    private Boolean heatingOn = false;
+    private Boolean coolingOn = false;
+    private int currentRoomTemp = 25;
+    private int desiredRoomTemp; 
+
+    public HVAC(Room room) {
+        this.room = room;
+        this.desiredRoomTemp = room.getZone().getZoneTemperature();
+    }
+    public Room getRoom() {
+        return room;
+    }  
+
+    public Boolean getHasPower() {
+        return hasPower;
     }
 
-    public void setHeating(boolean heating) {
-        this.heating = heating;
+    public void setHasPower(Boolean power) {
+        this.hasPower = power;
     }
 
-    public boolean isCooling() {
-        return cooling;
+    public Boolean getHeatingOn() {
+        return heatingOn;
     }
 
-    public void setCooling(boolean cooling) {
-        this.cooling = cooling;
+    public void setHeatingOn(Boolean heating) {
+        this.heatingOn = heating;
     }
 
-    public String heatingToString(){
-        if (heating){
-            return "Heating: ON";
+    public Boolean getCoolingOn() {
+        return coolingOn;
+    }
+
+    public void setCoolingOn(Boolean cooling) {
+        this.coolingOn = cooling;
+    }
+
+    // TODO this is what's to be added in the udpate function for HVAC
+    public void reachDesiredTemp() {
+        if(!this.hasPower){
+            this.hasPower = true;
+        }
+        this.controlTemperature();
+    }
+
+    public void controlTemperature() {
+        //TODO check the 0.25 for maintaining the temperature
+        if(this.currentRoomTemp < this.desiredRoomTemp){
+            this.raiseTemp();
+        } else if(this.currentRoomTemp > this.desiredRoomTemp){
+            this.lowerTemp();
         } else {
-            return "Heating: OFF";
+            this.heatingOn = false;
+            this.coolingOn = false;
         }
     }
 
-    public String coolingToString(){
-        if (cooling){
-            return "Cooling: ON";
-        } else {
-            return "Cooling: OFF";
+    public void raiseTemp(){
+        this.coolingOn = false;
+        this.heatingOn = true;
+        // arithmetically increase the temperature
+
+    }
+
+    public void lowerTemp(){
+        this.heatingOn = false;
+        this.coolingOn = true;
+        // arithmetically decrease the temperature
+        this.currentRoomTemp -= 0.1;
+
+    }
+    @Override
+    public void update(Observable o) {
+        if (o instanceof Zone){
+            Zone zone = (Zone) o;
+            System.out.println(room.getClass());
+            System.out.println("before observer change " + this.desiredRoomTemp);
+            this.desiredRoomTemp = zone.getZoneTemperature();
+            System.out.println("after observer change " + this.desiredRoomTemp);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "HVAC [room=" + this.getRoom().getName() + "]";
     }
 }

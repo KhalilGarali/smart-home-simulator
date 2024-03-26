@@ -48,7 +48,7 @@ public class TurnCoolingOff extends Command {
         text.add("Target: " + room.getClass().getSimpleName() + " Cooling");
         text.add("Event Type: Turn Off");
         text.add("Event Description: Turn Cooling Off");
-        text.add(room.getHvac().coolingToString());
+        // text.add(room.getHvac().coolingToString());
         return text;
     }
 }

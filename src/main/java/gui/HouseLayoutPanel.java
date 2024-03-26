@@ -30,7 +30,7 @@ public class HouseLayoutPanel extends JPanel {
         HeaterIcon = new ImageIcon("src/main/resources/houseLayoutIcons/HeaterOnIcon.png");
         redColor = Color.RED;
         this.rowHeight = 150 + 10; // Assuming room height of 150 and 10 units of spacing
-        checkRoomInfo();
+        // checkRoomInfo();
         updatePanelSize();
     }
 

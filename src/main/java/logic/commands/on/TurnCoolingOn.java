@@ -49,7 +49,7 @@ public class TurnCoolingOn extends Command {
         text.add("Target: " + room.getClass().getSimpleName() + " Cooling");
         text.add("Event Type: Turn On");
         text.add("Event Description: Turn Cooling On");
-        text.add(room.getHvac().coolingToString());
+        // text.add(room.getHvac().coolingToString());
         return text;
     }
 

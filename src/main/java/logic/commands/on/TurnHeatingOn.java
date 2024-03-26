@@ -49,7 +49,7 @@ public class TurnHeatingOn extends Command {
         text.add("Target: " + room.getClass().getSimpleName() + " Heating");
         text.add("Event Type: Turn On");
         text.add("Event Description: Turn Heating On");
-        text.add(room.getHvac().heatingToString());
+        // text.add(room.getHvac().heatingToString());
         return text;
     }
 }

@@ -48,7 +48,7 @@ public class TurnHeatingOff extends Command {
         text.add("Target: " + room.getClass().getSimpleName() + " Heating");
         text.add("Event Type: Turn Off");
         text.add("Event Description: Turn Heating Off");
-        text.add(room.getHvac().heatingToString());
+        // text.add(room.getHvac().heatingToString());
         return text;
     }
 }

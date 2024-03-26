@@ -32,6 +32,7 @@ public class DateTime {
     public static void incrementSecond() {
         dateTime = dateTime.plusSeconds(1);
         counter++;
+        // notifyObervers;
     }
 
     public static void setDate(int year, int month, int day) {
@@ -63,6 +64,10 @@ public class DateTime {
     }
 
     public static int getSeconds() {
+        return counter;
+    }
+
+    public static int getCounter(){
         return counter;
     }
 }

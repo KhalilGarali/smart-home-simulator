@@ -143,7 +143,6 @@ public class SHCPanel extends JPanel {
         return null; // Room not found
     }
 
-
     private JPanel createOpenClosePanel() {
         JPanel openClosePanel = new JPanel();
         openClosePanel.setLayout(new BoxLayout(openClosePanel, BoxLayout.Y_AXIS));

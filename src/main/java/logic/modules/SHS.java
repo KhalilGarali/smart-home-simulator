@@ -62,6 +62,10 @@ public class SHS implements Observable{
         houseLayout = house.getRooms();
     }
 
+    public ArrayList<Room> getHouseLayout(){
+        return (ArrayList<Room>) this.houseLayout;
+    }
+    
     public ArrayList<User> getHouseUsers(){
         return this.houseUsers;
     }
@@ -188,46 +192,25 @@ public class SHS implements Observable{
         shc.addCommand(command);
         return command;
     }
-    public OpenAllWindows makeOpenAllWindows(Room room){
-        OpenAllWindows command = new OpenAllWindows(room);
-        shc.addCommand(command);
-        return command;
-    }
+
     public OpenADoor makeOpenADoor(Room room, int number){
         OpenADoor command = new OpenADoor(room, number);
         shc.addCommand(command);
         return command;
     }
-    public OpenAllDoors makeOpenAllDoors(Room room){
-        OpenAllDoors command = new OpenAllDoors(room);
-        shc.addCommand(command);
-        return command;
-    }
-    public OpenAllOpenings makeOpenAllOpenings(Room room){
-        OpenAllOpenings command = new OpenAllOpenings(room);
-        shc.addCommand(command);
-        return command;
-    }
+
     public CloseAWindow makeCloseAWindow(Room room, int number){
         CloseAWindow command = new CloseAWindow(room, number);
         shc.addCommand(command);
         return command;
     }
-    public CloseAllWindows makeCloseAllWindows(Room room){
-        CloseAllWindows command = new CloseAllWindows(room);
-        shc.addCommand(command);
-        return command;
-    }
+
     public CloseADoor makeCloseADoor(Room room, int number){
         CloseADoor command = new CloseADoor(room, number);
         shc.addCommand(command);
         return command;
     }
-    public CloseAllDoors makeCloseAllDoors(Room room){
-        CloseAllDoors command = new CloseAllDoors(room);
-        shc.addCommand(command);
-        return command;
-    }
+
     public CloseAllOpenings makeCloseAllOpenings(Room room){
         CloseAllOpenings command = new CloseAllOpenings(room);
         shc.addCommand(command);
@@ -306,7 +289,7 @@ public class SHS implements Observable{
     }
 
     @Override
-    public void notifyObserver() {
+    public void notifyObservers() {
         for (Observer observer : observers) {
             observer.update(this);
         }

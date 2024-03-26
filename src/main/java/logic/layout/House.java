@@ -11,18 +11,18 @@ public class House {
     ArrayList<Room> rooms = new ArrayList<>();
 
     private House(){
-        houseLayout = new Layout("src/main/java/logic/layout/houseLayoutFile.txt");
-        ArrayList<Room> fileRooms = (ArrayList<Room>) houseLayout.getRooms();
-        for (Room room : fileRooms) {
-            addRoom(room);
-        }
+        // houseLayout = new Layout(filepath);
+        // ArrayList<Room> fileRooms = (ArrayList<Room>) houseLayout.getRooms();
+        // for (Room room : fileRooms) {
+        //     addRoom(room);
+        // }
     }
 
     private void addRoom(Room room){
         rooms.add(room);
     }
 
-    public static House getInstance(){
+    public static synchronized House getInstance(){
         if(house == null){
             house = new House();
         }
@@ -31,5 +31,16 @@ public class House {
 
     public ArrayList<Room> getRooms(){
         return this.rooms;
+    }
+
+    public void loadLayoutFromFile(String filePath) {
+        rooms.clear(); // Clear the current rooms list
+        houseLayout = new Layout(filePath);
+        ArrayList<Room> fileRooms = (ArrayList<Room>) houseLayout.getRooms();
+        for (Room room : fileRooms) {
+            addRoom(room);
+        }
+
+        // Additional actions after loading the rooms (like updating observers)
     }
 }

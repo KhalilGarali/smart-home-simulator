@@ -261,17 +261,17 @@ public class SHS implements Observable{
         shc.addCommand(command);
         return command;
     }
-    public void shhDoAction(Command command, Room room){
-        if(command instanceof TurnHeatingOff||
-                command instanceof TurnHeatingOn ||
-                command instanceof TurnCoolingOn ||
-                command instanceof TurnCoolingOff) {
-            shh.regulateTemperature(room);
-        } else {
-            System.out.println("This command is for SHC");
-            shh.doAction(command, room);
-        }
-    }
+    // public void shhDoAction(Command command, Room room){
+    //     if(command instanceof TurnHeatingOff||
+    //             command instanceof TurnHeatingOn ||
+    //             command instanceof TurnCoolingOn ||
+    //             command instanceof TurnCoolingOff) {
+    //         shh.regulateTemperature(room);
+    //     } else {
+    //         System.out.println("This command is for SHC");
+    //         shh.doAction(command, room);
+    //     }
+    // }
     public void shpDoAction(Command command, Room room){
         shp.doAction(command, room);
     }

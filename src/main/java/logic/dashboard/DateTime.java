@@ -16,7 +16,7 @@ public class DateTime implements Observable{
     private static LocalDateTime dateTime;
     private static int counter = 0;
     private static DateTime instance;
-    private int totalMinutesIncremented = 0;
+    private int totalSecondsElapsed = 0;
 
     private ArrayList<Observer> observers = new ArrayList<>();
 
@@ -47,14 +47,12 @@ public class DateTime implements Observable{
     public void incrementTime(int hours, int minutes, int seconds) {
         dateTime = dateTime.plusHours(hours).plusMinutes(minutes).plusSeconds(seconds);
         // totalHoursIncremented += dateTime.getMinute();
-        if(dateTime.getSecond() == 0) {
-            totalMinutesIncremented++;
+        totalSecondsElapsed++;
             this.notifyObservers();
-        }
     }
 
-    public int getTotalMinutesIncremented() {
-        return totalMinutesIncremented;
+    public int getTotalSecondsElapsed() {
+        return totalSecondsElapsed;
     }
     public void incrementSecond() {
         dateTime = dateTime.plusSeconds(1);

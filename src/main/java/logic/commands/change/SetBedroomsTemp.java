@@ -25,7 +25,7 @@ public class SetBedroomsTemp extends Command{
     }
 
     public Boolean execute(){
-        room.setDesiredTemperature(desiredTemp);
+        // room.setDesiredTemperature(desiredTemp);
         return true;
     }
 

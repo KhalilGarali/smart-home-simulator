@@ -27,7 +27,6 @@ public abstract class Room implements Observable, Observer{
     private Door door1;
     private Light light;
     private int currentTemperature = 25;
-    private int desiredTemp;
     private int lightSensor;
     private HVAC hvac;
     protected String name;
@@ -102,6 +101,10 @@ public abstract class Room implements Observable, Observer{
         return window1;
     }
 
+    public double getTemperature(){
+        return this.hvac.getCurrentRoomTemp();
+    }
+    
     public Door getDoor(int doorNumber){
         if (doorNumber==1){
             return door1;
@@ -122,8 +125,8 @@ public abstract class Room implements Observable, Observer{
     public int getCurrentTemperature() {
         return currentTemperature;
     }
-    public int getDesiredTemp() {
-        return desiredTemp;
+    public double getDesiredTemp() {
+        return this.hvac.getDesiredRoomTemp();
     }
     public int getLightSensor() {
         return lightSensor;
@@ -200,33 +203,41 @@ public abstract class Room implements Observable, Observer{
         setCurrentTemperature(temperature);
         notifyObservers();
     }
-    public void setDesiredTemperature(int temperature){
-        System.out.println("setting desired temperature to: " + temperature);
-        desiredTemp = temperature;
-        notifyObservers();
-    }
-    public void turnHeatingOn() {
-        turnCoolingOff();
-        System.out.println("Turning On Heating : ");
-        // hvac.setHeating(true);
-        setTemperature(this.desiredTemp);
-        System.out.println("temperature is now: " + getCurrentTemperature() );
-        //set the temp object to something higher over time
-        notifyObservers();
-    }
-    public void turnHeatingOff(){
-        System.out.println("Turning Off Heating : ");
-        // hvac.setHeating(false);
-        notifyObservers();
-    }
-    public void turnCoolingOn(){
-        turnCoolingOff();
-        System.out.println("Turning On Cooling : ");
-        // hvac.setCooling(true);
-        setTemperature(this.desiredTemp);
-        System.out.println("temperature is now: " + getCurrentTemperature() );
-        notifyObservers();
-    }
+    //TODO worry about this when the user set the temperature
+    // public void setDesiredTemperature(int temperature){
+    //     System.out.println("setting desired temperature to: " + temperature);
+    //     desiredTemp = temperature;
+    //     notifyObservers();
+    // }
+    
+    //TODO worry about this when the user set the temperature
+    // public void turnHeatingOn() {
+    //     turnCoolingOff();
+    //     System.out.println("Turning On Heating : ");
+    //     // hvac.setHeating(true);
+    //     setTemperature(this.desiredTemp);
+    //     System.out.println("temperature is now: " + getCurrentTemperature() );
+    //     //set the temp object to something higher over time
+    //     notifyObservers();
+    // }
+    
+    //TODO worry about this when the user set the temperature
+    // public void turnHeatingOff(){
+    //     System.out.println("Turning Off Heating : ");
+    //     hvac.setHeating(false);
+    //     notifyObservers();
+    // }
+
+    //TODO worry about this when the user set the temperature
+    // public void turnCoolingOn(){
+    //     turnCoolingOff();
+    //     System.out.println("Turning On Cooling : ");
+    //     // hvac.setCooling(true);
+    //     setTemperature(this.desiredTemp);
+    //     System.out.println("temperature is now: " + getCurrentTemperature() );
+    //     notifyObservers();
+    // }
+
     public void turnCoolingOff(){
         System.out.println("Turning Off Cooling : ");
         // hvac.setCooling(false);

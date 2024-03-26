@@ -21,7 +21,7 @@ public class main {
         {
             System.out.println(room.getName());
         }
-        shs.getHouseLayout().get(6).getZone().setZoneTemperature(20);
+        shs.getHouseLayout().get(1).getZone().setZoneTemperature(30);
     }
     
 }

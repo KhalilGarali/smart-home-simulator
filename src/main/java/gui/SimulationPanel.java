@@ -132,7 +132,7 @@ public class SimulationPanel extends JPanel {
         timeSpeed = new TimeSpeed();
         timeSpeedSlider.addChangeListener(e -> {
             int speed = timeSpeedSlider.getValue();
-            timeSpeed.setSpeed(speed*10);
+            timeSpeed.setSpeed(speed*2);
         });
 
         // upload csv file containing weather data

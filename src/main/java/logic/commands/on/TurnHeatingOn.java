@@ -31,7 +31,7 @@ public class TurnHeatingOn extends Command {
         System.out.println(room);
         System.out.print("command done: ");
         room.turnCoolingOff();
-        room.turnHeatingOn();
+        // room.turnHeatingOn();
         System.out.println(room);
         System.out.println("----------------------------------------------------------------------");
         outpanel.appendText(toConsole());

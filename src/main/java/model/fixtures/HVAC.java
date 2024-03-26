@@ -12,14 +12,15 @@ public class HVAC implements Observer{
     private Boolean hasPower = true;
     private Boolean heatingOn = false;
     private Boolean coolingOn = false;
-    private int currentRoomTemp = 25;
-    private int desiredRoomTemp;
-    private int seconds = 0;
+    private double currentRoomTemp = 25;
+    private double desiredRoomTemp;
+    private double seconds = 0;
 
     private DateTime dateTime = DateTime.getInstance();
 
     public HVAC(Room room) {
         this.room = room;
+        this.currentRoomTemp = room.getZone().getZoneTemperature();
         this.desiredRoomTemp = room.getZone().getZoneTemperature();
         dateTime.addObserver(this);
     }
@@ -31,6 +32,12 @@ public class HVAC implements Observer{
         return hasPower;
     }
 
+    public double getCurrentRoomTemp() {
+        return currentRoomTemp;
+    }
+    public double getDesiredRoomTemp() {
+        return desiredRoomTemp;
+    }
     public void setHasPower(Boolean power) {
         this.hasPower = power;
     }
@@ -51,7 +58,6 @@ public class HVAC implements Observer{
         this.coolingOn = cooling;
     }
 
-    // TODO this is what's to be added in the udpate function for HVAC
     public void reachDesiredTemp() {
         if(!this.hasPower){
             this.hasPower = true;
@@ -76,7 +82,8 @@ public class HVAC implements Observer{
         this.heatingOn = true;
         // arithmetically increase the temperature
         this.currentRoomTemp += 0.1;
-
+        System.out.println("Current in "+this.room.getName() + " is "+this.currentRoomTemp);
+        System.err.println("Desired in "+this.room.getName() + " is "+this.desiredRoomTemp);
     }
 
     public void lowerTemp(){
@@ -84,7 +91,8 @@ public class HVAC implements Observer{
         this.coolingOn = true;
         // arithmetically decrease the temperature
         this.currentRoomTemp -= 0.1;
-
+        System.out.println("Current in "+this.room.getName() + " is "+ this.currentRoomTemp);
+        System.err.println("Desired in "+this.room.getName() + " is "+this.desiredRoomTemp);
     }
     @Override
     public void update(Observable o) {
@@ -97,8 +105,9 @@ public class HVAC implements Observer{
         }
         if(o instanceof DateTime){
             DateTime dateTime = (DateTime) o;
-            this.seconds = dateTime.getTotalMinutesIncremented();
-            System.out.println("hour: " + this.seconds);
+            this.seconds = dateTime.getTotalSecondsElapsed();
+            System.out.println("seconds elapsed: " + this.seconds);
+            reachDesiredTemp();
         }
     }
 

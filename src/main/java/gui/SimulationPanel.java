@@ -35,6 +35,8 @@ import main.java.logic.users.*;
 import main.java.logic.modules.SHS;
 import main.java.model.rooms.*;
 
+import static main.java.logic.users.UserPersistence.saveUsers;
+
 public class SimulationPanel extends JPanel {
     private JToggleButton simulationToggle;
     private JLabel locationLabel, timeSpeedLabel, userLabel, outsideTempLabel, dateLabel, timeLabel;
@@ -48,6 +50,7 @@ public class SimulationPanel extends JPanel {
     private JButton editLocationButton;
     private String selection;
     private JButton uploadTempButton;
+    private JButton saveUsersButton;
 
     // used as a dummy value
     private SHS shs = SHS.getInstance();
@@ -91,8 +94,8 @@ public class SimulationPanel extends JPanel {
         editButton.setIcon(new ImageIcon("src/main/resources/editIcon.png"));
         // Add an action listener for the edit button
         editButton.addActionListener(e -> {
-        // Open a dialog or another frame to edit simulation parameters
-        handleProfileChange();
+            // Open a dialog or another frame to edit simulation parameters
+            handleProfileChange();
         });
 
         // User and Location
@@ -137,6 +140,13 @@ public class SimulationPanel extends JPanel {
         uploadTempButton.setMaximumSize(new Dimension(250, 40));
         uploadTempButton.addActionListener(e -> openFileChooser());
 
+        saveUsersButton = new JButton("Save Users to File");
+        saveUsersButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        saveUsersButton.setMaximumSize(new Dimension(250, 40));
+        saveUsersButton.addActionListener(e -> {
+            openDirectoryChooser();
+        });
+
 
         timeSpeedLabel = new JLabel("Time Speed");
         timeSpeedLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -175,6 +185,22 @@ public class SimulationPanel extends JPanel {
         }, 0, 1000); // Update every second
     }
 
+    private void openDirectoryChooser() {
+        LocalDateTime currentDateTime = LocalDateTime.now(); // Get the current local date and time
+        String message = null;
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Chose where to save Users");
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        int userSelection = fileChooser.showDialog(this, "Choose");
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File selectedFolder = fileChooser.getSelectedFile();
+            System.out.println("Save users to: " + selectedFolder.getAbsolutePath()+"/users-"+currentDateTime+".txt");
+             saveUsers(selectedFolder.getAbsolutePath()+"/users-"+currentDateTime+".txt", users, message);
+        }
+    }
+
+
     private void addComponents() {
         add(Box.createRigidArea(new Dimension(0, 10)));
         add(simulationToggle);
@@ -196,10 +222,12 @@ public class SimulationPanel extends JPanel {
         add(timeSpeedLabel);
         add(Box.createVerticalStrut(10));
         add(timeSpeedSlider);
-        add(Box.createVerticalStrut(30));
+        add(Box.createVerticalStrut(20));
         add(editLocationButton);
         add(Box.createVerticalStrut(30));
         add(uploadTempButton);
+        add(Box.createVerticalStrut(10));
+        add(saveUsersButton);
     }
 
     private void openFileChooser() {

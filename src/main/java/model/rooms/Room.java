@@ -98,11 +98,21 @@ public abstract class Room implements Observable{
         currentTemperature = temperature;
     }
 
+    public HVAC getHvac(){
+        return this.hvac;
+    }
     public Window getWindow(int windowNumber){
         if (windowNumber==1){
             return window1;
         }
         return window2;
+    }
+
+    public Door getDoor(int doorNumber){
+        if (doorNumber==1){
+            return door1;
+        }
+        return door2;
     }
 
     public void setLight(Light light){

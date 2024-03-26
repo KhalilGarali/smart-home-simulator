@@ -1,5 +1,7 @@
 package main.java.logic.commands.close;
 
+import java.util.ArrayList;
+
 import main.java.logic.commands.Command;
 import main.java.logic.users.Permissions;
 import main.java.model.rooms.Room;
@@ -27,10 +29,21 @@ public class CloseAWindow extends Command{
         room.closeWindow(1);
         System.out.println(room);
         System.out.println("----------------------------------------------------------------------");
+        outpanel.appendText(toConsole());
         return true;
     }
     @Override
     public String toString(){
         return "open a door";
+    }
+    
+    @Override
+    public ArrayList<String> toConsole(){
+        ArrayList<String> text = new ArrayList<>();
+        text.add("Target: " + room.getClass().getSimpleName() + " window" + windowNumber);
+        text.add("Event Type: Close");
+        text.add("Event Description: Close Window");
+        text.add("window" + windowNumber + " " + room.getWindow(windowNumber).toString());
+        return text;
     }
 }

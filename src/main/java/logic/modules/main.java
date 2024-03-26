@@ -11,8 +11,8 @@ public class main {
         SwingUtilities.invokeLater(() -> {
             HomeSimulatorFrame frame = new HomeSimulatorFrame();
             LogInFrame logInF = new LogInFrame(frame);
-            //logInF.setVisible(true);
-            frame.setVisible(true);
+            logInF.setVisible(true);
+            frame.setVisible(false);
         });
     }
     

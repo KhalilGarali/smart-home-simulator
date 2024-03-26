@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
 
 public class SHHPanel extends JPanel {
     House house = House.getInstance();
-    private JToggleButton zoneAButton, zoneBButton, room;
+    private JToggleButton zoneAButton, zoneBButton, zoneCButton, zoneDButton;
     private String selectedToggle; // This will store the command of the last toggled button
     private JLabel temperatureLabel;
     private JTextField temperatureField;
@@ -50,13 +50,19 @@ public class SHHPanel extends JPanel {
         JPanel zoneButtonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         zoneAButton = new JToggleButton("Zone A");
         zoneBButton = new JToggleButton("Zone B");
+        zoneCButton = new JToggleButton("Zone C");
+        zoneDButton = new JToggleButton("Zone D");
 
         ButtonGroup zonesGroup = new ButtonGroup();
         zonesGroup.add(zoneAButton);
         zonesGroup.add(zoneBButton);
+        zonesGroup.add(zoneCButton);
+        zonesGroup.add(zoneDButton);
 
         zoneButtonsPanel.add(zoneAButton);
         zoneButtonsPanel.add(zoneBButton);
+        zoneButtonsPanel.add(zoneCButton);
+        zoneButtonsPanel.add(zoneDButton);
 
 
         // Panel for temperature setting
@@ -97,6 +103,8 @@ public class SHHPanel extends JPanel {
         // Add the same listener to all toggle buttons
         zoneAButton.addActionListener(toggleListener);
         zoneBButton.addActionListener(toggleListener);
+        zoneCButton.addActionListener(toggleListener);
+        zoneDButton.addActionListener(toggleListener);
 
         // Add action listener for the submit button
         submitButton.addActionListener(e -> {

@@ -13,11 +13,15 @@ public class HVAC implements Observer{
     private Boolean heatingOn = false;
     private Boolean coolingOn = false;
     private int currentRoomTemp = 25;
-    private int desiredRoomTemp; 
+    private int desiredRoomTemp;
+    private int seconds = 0;
+
+    private DateTime dateTime = DateTime.getInstance();
 
     public HVAC(Room room) {
         this.room = room;
         this.desiredRoomTemp = room.getZone().getZoneTemperature();
+        dateTime.addObserver(this);
     }
     public Room getRoom() {
         return room;
@@ -71,6 +75,7 @@ public class HVAC implements Observer{
         this.coolingOn = false;
         this.heatingOn = true;
         // arithmetically increase the temperature
+        this.currentRoomTemp += 0.1;
 
     }
 
@@ -89,6 +94,11 @@ public class HVAC implements Observer{
             System.out.println("before observer change " + this.desiredRoomTemp);
             this.desiredRoomTemp = zone.getZoneTemperature();
             System.out.println("after observer change " + this.desiredRoomTemp);
+        }
+        if(o instanceof DateTime){
+            DateTime dateTime = (DateTime) o;
+            this.seconds = dateTime.getTotalMinutesIncremented();
+            System.out.println("hour: " + this.seconds);
         }
     }
 

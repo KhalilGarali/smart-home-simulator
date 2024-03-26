@@ -63,7 +63,7 @@ public class OutputPanel extends JPanel {
             writeText(txt);
         }
         // This can be subject to change if event is triggered not through GUI
-        writeText("Event triggered by user " + shs.activeUser.getName());
+        writeText("Event triggered by user " + shs.activeUser.getClass().getSimpleName() + " " + shs.activeUser.getName());
         writeText("**************************************************************");
     }
 

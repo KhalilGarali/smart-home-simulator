@@ -56,7 +56,8 @@ public class ModulePanel extends JPanel implements Observer{
     JTextField usernameField;
     JCheckBox windowsCheckBox, doorsCheckBox, lightsCheckBox, temperatureCheckBox;
 
-    
+    private static OutputPanel outpanel = OutputPanel.getInstance();
+
     public ModulePanel(JLabel usernameDisplay, JLabel locationDisplay) {
         shs.addObserver(this);
         setLayout(new BorderLayout());
@@ -142,13 +143,19 @@ public class ModulePanel extends JPanel implements Observer{
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Update the JLabel in the other module
+                ArrayList<String> text = new ArrayList<>();
+                text.add("Target: User Permission and Username");
+                text.add("Event type: Change");
+                text.add("Event Description: Change User Permission and Username");
                 String newUsername = usernameField.getText();
                 usernameDisplay.setText(shs.activeUser.getClass().getSimpleName() + " " + newUsername);
-
+                text.add("Current Username: "  + newUsername);
+                text.add("New Permission: ");
                 //Check if WINDOW permission is selected
                 if (windowsCheckBox.isSelected()) {
                     if(!shs.activeUser.getPermissions().contains(Permissions.WINDOW)){
                         tempPermissions.add(Permissions.WINDOW);
+                        text.add(Permissions.WINDOW.name());
                     }
                 } else {
                     if(shs.activeUser.getPermissions().contains(Permissions.WINDOW)){
@@ -160,6 +167,7 @@ public class ModulePanel extends JPanel implements Observer{
                 if (lightsCheckBox.isSelected()) {
                     if(!shs.activeUser.getPermissions().contains(Permissions.LIGHT)){
                         tempPermissions.add(Permissions.LIGHT);
+                        text.add(Permissions.LIGHT.name());
                     }
                 } else {
                     if(shs.activeUser.getPermissions().contains(Permissions.LIGHT)){
@@ -171,6 +179,7 @@ public class ModulePanel extends JPanel implements Observer{
                 if (doorsCheckBox.isSelected()) {
                     if(!shs.activeUser.getPermissions().contains(Permissions.DOOR)) {
                         tempPermissions.add(Permissions.DOOR);
+                        text.add(Permissions.DOOR.name());
                     }
                 } else {
                     if(shs.activeUser.getPermissions().contains(Permissions.DOOR)){
@@ -181,6 +190,7 @@ public class ModulePanel extends JPanel implements Observer{
                 if (temperatureCheckBox.isSelected()) {
                     if(!shs.activeUser.getPermissions().contains(Permissions.TEMP)) {
                         tempPermissions.add(Permissions.TEMP);
+                        text.add(Permissions.TEMP.name());
                     }
                 } else {
                     if(shs.activeUser.getPermissions().contains(Permissions.TEMP)){
@@ -190,6 +200,7 @@ public class ModulePanel extends JPanel implements Observer{
 
                 shs.activeUser.setName(newUsername);
                 shs.activeUser.setPermissions(tempPermissions);
+                outpanel.appendText(text);
             }
         });
         
@@ -302,6 +313,12 @@ public class ModulePanel extends JPanel implements Observer{
                 while (iterator.hasNext()){
                     User user = iterator.next();
                     if (profileMenu.getText().equals(user.getClass().getSimpleName() + " " + user.getName())){
+                        ArrayList<String> text = new ArrayList<>();
+                        text.add("Target: User");
+                        text.add("Event type: Delete");
+                        text.add("Event Description: Delete User from User List");
+                        text.add("Deleted user: " + user.getClass().getSimpleName() + " " + user.getName() + " from " + user.getClass().getSimpleName());
+                        outpanel.appendText(text);
                         user.exitRoom();
                         iterator.remove();
                     }
@@ -333,9 +350,15 @@ public class ModulePanel extends JPanel implements Observer{
                 // Update the JLabel in the other module
                 profileMenu.removeAll();
                 profileMenu.setText("Profile");
+                ArrayList<String> text = new ArrayList<>();
+                text.add("Target: SHS GUI");
+                text.add("Event type: Update");
+                text.add("Event Description: Update List of Useres");
+                text.add("List of users: ");
                 for (User user: listOfUsers)
                 {
                     JMenuItem profileItem = new JMenuItem(user.getClass().getSimpleName() + " " + user.getName());
+                    text.add(user.getClass().getSimpleName() + " " + user.getName() + " in " + user.getRoom().getClass().getSimpleName());
                     profileItem.addActionListener(new ActionListener() {
                         public void actionPerformed(ActionEvent e){
                             profileMenu.setText(((JMenuItem) e.getSource()).getText());
@@ -343,6 +366,7 @@ public class ModulePanel extends JPanel implements Observer{
                     });
                     profileMenu.add(profileItem);
                 }
+                outpanel.appendText(text);
                 profileBar.revalidate();
                 profileBar.repaint();
             }
@@ -487,6 +511,12 @@ public class ModulePanel extends JPanel implements Observer{
                     default:
                         JOptionPane.showMessageDialog(null, "Create user failed. Please try again.");
                 }
+                ArrayList<String> text = new ArrayList<>();
+                text.add("Target: List of User");
+                text.add("Event type: Add");
+                text.add("Event Description: Add New User Profile");
+                text.add("Added New User: " + newUserType + " " + newUsername + " in " + newRoom.getClass().getSimpleName());
+                outpanel.appendText(text);
             }
         });
 
@@ -557,11 +587,20 @@ public class ModulePanel extends JPanel implements Observer{
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                ArrayList<String> text = new ArrayList<>();
+                text.add("Target: Date and Time");
+                text.add("Event type: Change");
+                text.add("Event Description: Change Date and Time");
+                text.add("New Date and Time: ");
+                outpanel.appendText(text);
                 try {
                     // Parse the entered values to integers
                     int year = Integer.parseInt(dateEditField1.getText());
                     int month = Integer.parseInt(dateEditField2.getText());
                     int day = Integer.parseInt(dateEditField3.getText());
+                    text.add("Year: " + Integer.toString(year));
+                    text.add("Month: " + Integer.toString(month));
+                    text.add("Day: " + Integer.toString(day));
 
                     if (month == 5  || month == 6 || month == 8 || month == 9) {
                         Temperature.setTemperature(25);
@@ -580,6 +619,9 @@ public class ModulePanel extends JPanel implements Observer{
                         int hour = Integer.parseInt(timeEditField1.getText());
                         int minute = Integer.parseInt(timeEditField2.getText());
                         int second = Integer.parseInt(timeEditField3.getText());
+                        text.add("Hour: " + Integer.toString(hour));
+                        text.add("Minute: " + Integer.toString(minute));
+                        text.add("Second: " + Integer.toString(second));
     
                         // Update date and time labels with user input
                         DateTime.setDate(year, month, day);
@@ -633,7 +675,7 @@ public class ModulePanel extends JPanel implements Observer{
     public void update(Observable o) {
         SwingUtilities.invokeLater(() -> {
             User activeUser = SHS.getInstance().getActiveUser();
-            usernameField.setText(activeUser.toString());
+            usernameField.setText(activeUser.getName());
             windowsCheckBox.setSelected(activeUser.getPermissions().contains(Permissions.WINDOW));
             doorsCheckBox.setSelected(activeUser.getPermissions().contains(Permissions.DOOR));
             lightsCheckBox.setSelected(activeUser.getPermissions().contains(Permissions.LIGHT));

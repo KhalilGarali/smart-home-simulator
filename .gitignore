@@ -69,3 +69,4 @@ nbdist/
 .nb-gradle/
 
 .DS_Store
+consoleLog.txt

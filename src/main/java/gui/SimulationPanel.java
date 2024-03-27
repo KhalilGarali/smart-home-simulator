@@ -57,6 +57,9 @@ public class SimulationPanel extends JPanel {
     private SHS shs = SHS.getInstance();
     private ArrayList<User> users = shs.getHouseUsers();
 
+    // Add link to outputPanel to print information
+    private static OutputPanel outpanel = OutputPanel.getInstance();
+
 
     public SimulationPanel() {
         // dummy variable
@@ -133,6 +136,15 @@ public class SimulationPanel extends JPanel {
         timeSpeedSlider.addChangeListener(e -> {
             int speed = timeSpeedSlider.getValue();
             timeSpeed.setSpeed(speed*2);
+            // This writes to file too often
+            // TODO: Limit the amount of times this writes to file
+            ArrayList<String> text = new ArrayList<>();
+            text.add("Target: Speed Slider");
+            text.add("Event type: Change");
+            text.add("Event Description: Adjust Speed Slider");
+            text.add("Current time speed: " + timeSpeed.getSpeed());
+            outpanel.appendText(text);
+            
         });
 
         // upload csv file containing weather data
@@ -232,16 +244,22 @@ public class SimulationPanel extends JPanel {
     }
 
     private void openFileChooser() {
-    JFileChooser fileChooser = new JFileChooser();
-    fileChooser.setDialogTitle("Select Temperature CSV File");
-    fileChooser.setAcceptAllFileFilterUsed(false);
-    FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV files", "csv");
-    fileChooser.addChoosableFileFilter(filter);
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Select Temperature CSV File");
+        fileChooser.setAcceptAllFileFilterUsed(false);
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV files", "csv");
+        fileChooser.addChoosableFileFilter(filter);
 
-    int result = fileChooser.showOpenDialog(this);
-    if (result == JFileChooser.APPROVE_OPTION) {
-        File selectedFile = fileChooser.getSelectedFile();
-        readTemperatureFile(selectedFile);
+        int result = fileChooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            readTemperatureFile(selectedFile);
+            ArrayList<String> text = new ArrayList<>();
+            text.add("Target: Temperature");
+            text.add("Event type: Upload");
+            text.add("Event Description: Upload Outside Temperature through Temperature CSV File");
+            text.add("Current temperature file: " + selectedFile.getName());
+            outpanel.appendText(text);
         }
     }
 
@@ -409,6 +427,12 @@ public class SimulationPanel extends JPanel {
                         // System.out.println("Selected Room: " + room.getName());
                         shs.activeUser.moveToRoom(room);
                         locationLabel.setText("Location: " + selectedRoomName);
+                        ArrayList<String> text = new ArrayList<>();
+                        text.add("Target: Active User");
+                        text.add("Event type: Change");
+                        text.add("Event Description: Change Active User Location");
+                        text.add("Active User Current Location: " + selectedRoomName);
+                        outpanel.appendText(text);
                     }
                 }
             }
@@ -458,7 +482,14 @@ public class SimulationPanel extends JPanel {
                     if (user.getName().equals(selectedUserName)) {
                         shs.setActiveUser(user);
                         shs.notifyObservers();
-                        userLabel.setText(selectedUserName);
+                        userLabel.setText(user.getClass().getSimpleName() + " " + user.getName());
+                        locationLabel.setText("Location: " + user.getRoom().getClass().getSimpleName());
+                        ArrayList<String> text = new ArrayList<>();
+                        text.add("Target: Active User");
+                        text.add("Event type: Change");
+                        text.add("Event Description: Change Active User");
+                        text.add("Current active user: " + shs.activeUser.getClass().getSimpleName() + " " + shs.activeUser.getName() + " in " + shs.activeUser.getRoom().getClass().getSimpleName());
+                        outpanel.appendText(text);
                     }
                 }
             }
@@ -470,6 +501,7 @@ public class SimulationPanel extends JPanel {
         changeUserDialog.setSize(300, 150);
         changeUserDialog.setLocationRelativeTo(null); // Center the dialog on the screen
         changeUserDialog.setVisible(true);
+
     }
 
 }

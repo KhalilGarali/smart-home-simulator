@@ -6,7 +6,9 @@ import main.java.logic.observerPattern.Observer;
 import main.java.model.rooms.Room;
 import main.java.model.rooms.zones.Zone;
 
-public class HVAC implements Observer{
+import java.util.ArrayList;
+
+public class HVAC implements Observer, Observable{
 
     private Room room;
     private Boolean hasPower = true;
@@ -15,7 +17,7 @@ public class HVAC implements Observer{
     private double currentRoomTemp = 25;
     private double desiredRoomTemp;
     private double seconds = 0;
-
+    private ArrayList<Observer> observers= new ArrayList<>();
     private DateTime dateTime = DateTime.getInstance();
 
     public HVAC(Room room) {
@@ -63,6 +65,7 @@ public class HVAC implements Observer{
             this.hasPower = true;
         }
         this.controlTemperature();
+        notifyObservers();
     }
 
     public void controlTemperature() {
@@ -114,5 +117,22 @@ public class HVAC implements Observer{
     @Override
     public String toString() {
         return "HVAC [room=" + this.getRoom().getName() + "]";
+    }
+
+    @Override
+    public void notifyObservers() {
+        // this notifies the HouseLayoutPanel everytime temperature changes.
+        for(Observer observer: observers){
+            observer.update(this);
+        }
+    }
+    @Override
+    public void addObserver(Observer o) {
+        observers.add(o);
+    }
+
+    @Override
+    public void removeObserver(Observer o) {
+        observers.remove(o);
     }
 }

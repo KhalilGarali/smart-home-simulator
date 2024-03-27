@@ -2,17 +2,23 @@ package main.java.gui;
 
 import main.java.logic.layout.House;
 import main.java.logic.layout.Layout;
+import main.java.logic.modules.SHS;
+import main.java.logic.observerPattern.Observable;
+import main.java.logic.observerPattern.Observer;
 import main.java.model.rooms.Room;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import javax.swing.*;
 
-public class HouseLayoutPanel extends JPanel {
+public class HouseLayoutPanel extends JPanel implements Observer {
     private ImageIcon windowOpenIcon, windowClosedIcon, doorOpenIcon, doorClosedIcon,
     lightOnIcon, lightOffIcon, userIcon, ACIcon, HeaterIcon;
     private String tempInfo, userCountInfo, zoneInfo;
     private int rowHeight;
     private Color redColor;
+    private SHS shs;
+
+    private double temperature;
     Layout extractLayout;
     House house = House.getInstance();
 
@@ -32,6 +38,11 @@ public class HouseLayoutPanel extends JPanel {
         this.rowHeight = 150 + 10; // Assuming room height of 150 and 10 units of spacing
         // checkRoomInfo();
         updatePanelSize();
+        shs = SHS.getInstance();
+        shs.addObserver(this);
+        for(Room room: shs.getHouseLayout()){
+            room.getHvac().addObserver(this);
+        }
     }
 
     private ImageIcon changeIconColor(ImageIcon icon, Color color) {
@@ -141,8 +152,8 @@ public class HouseLayoutPanel extends JPanel {
             // Draw the temperature and number of users to the right of the room box
             int infoX = iconX + 120; // Set a margin of 10 pixels from the room box
             int infoY = y + 30; // Align with the top of the room box
-
-            tempInfo = "Temperature: " + room.getCurrentTemperature();
+            temperature = room.getCurrentTemperature();
+            tempInfo = "Temperature: " + String.format("%.1f",temperature);
             userCountInfo = "Nb. Of Users: " + room.getUserFromRoom().size();
             zoneInfo = "Zone: A"; 
 
@@ -167,5 +178,13 @@ public class HouseLayoutPanel extends JPanel {
             roomCounter++; // Increment room counter
         }
         updatePanelSize();
+    }
+
+    @Override
+    public void update(Observable o) {
+        for (Room room : shs.getHouseLayout()) {
+            temperature = room.getCurrentTemperature();
+        }
+        repaint();
     }
 }

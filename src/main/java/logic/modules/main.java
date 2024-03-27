@@ -10,18 +10,10 @@ public class main {
     // this won't be the main function anymore, it will be the client.
     public static void main(String[] args){
         SwingUtilities.invokeLater(() -> {
-            HomeSimulatorFrame frame = new HomeSimulatorFrame();
-            LogInFrame logInF = new LogInFrame(frame);
+            LogInFrame logInF = new LogInFrame();
             logInF.setVisible(true);
-            frame.setVisible(false);
         });
 
-        SHS shs = SHS.getInstance();
-        for (Room room: shs.getHouseLayout())
-        {
-            System.out.println(room.getName());
-        }
-        // shs.getHouseLayout().get(1).getZone().setZoneTemperature(30);
     }
     
 }

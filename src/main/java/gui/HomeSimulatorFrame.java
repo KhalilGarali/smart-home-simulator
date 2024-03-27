@@ -9,7 +9,7 @@ public class HomeSimulatorFrame extends JFrame {
 
     public HomeSimulatorFrame() {
         setTitle("Smart Home Simulator");
-        setSize(1400, 800);
+        setSize(1500, 800);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 

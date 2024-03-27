@@ -12,8 +12,13 @@ public class House {
     ArrayList<Room> rooms = new ArrayList<>();
     ArrayList<Zone> zones = new ArrayList<>();
 
-    private House(){
-        houseLayout = new Layout("src/main/java/logic/layout/houseLayoutFile.txt");
+    private House(){   
+        
+    }
+
+    public void loadLayoutFromFile(String filePath) {
+        rooms.clear(); // Clear the current rooms list
+        houseLayout = new Layout(filePath);
         ArrayList<Room> fileRooms = (ArrayList<Room>) houseLayout.getRooms();
         ArrayList<Zone> fileZones = (ArrayList<Zone>) houseLayout.getZones();
         for (Room room : fileRooms) {
@@ -32,7 +37,7 @@ public class House {
         zones.add(zone);
     }
 
-    public static House getInstance(){
+    public static synchronized House getInstance(){
         if(house == null){
             house = new House();
         }

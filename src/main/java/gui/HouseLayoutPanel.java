@@ -6,6 +6,11 @@ import main.java.logic.modules.SHS;
 import main.java.logic.observerPattern.Observable;
 import main.java.logic.observerPattern.Observer;
 import main.java.model.rooms.Room;
+import main.java.model.rooms.zones.BathroomsZone;
+import main.java.model.rooms.zones.BedroomsZone;
+import main.java.model.rooms.zones.CommonZone;
+import main.java.model.rooms.zones.GatewayZone;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import javax.swing.*;
@@ -155,7 +160,19 @@ public class HouseLayoutPanel extends JPanel implements Observer {
             temperature = room.getCurrentTemperature();
             tempInfo = "Temperature: " + String.format("%.1f",temperature);
             userCountInfo = "Nb. Of Users: " + room.getUserFromRoom().size();
-            zoneInfo = "Zone: A"; 
+            if(room.getZone() instanceof CommonZone){
+                zoneInfo = "Common Zone"; 
+            }
+            else if(room.getZone() instanceof BedroomsZone){
+                zoneInfo = "Bedroom Zone"; 
+            }
+            else if(room.getZone() instanceof BathroomsZone){
+                zoneInfo = "Bathroom Zone"; 
+            }
+            else if(room.getZone() instanceof GatewayZone){
+                zoneInfo = "Gateway Zone"; 
+            }
+            
 
             g.drawString(tempInfo, infoX, infoY);
             infoY += 15; // Add some vertical space between lines

@@ -12,8 +12,8 @@ public class main {
         SwingUtilities.invokeLater(() -> {
             HomeSimulatorFrame frame = new HomeSimulatorFrame();
             LogInFrame logInF = new LogInFrame(frame);
-            //logInF.setVisible(true);
-            frame.setVisible(true);
+            logInF.setVisible(true);
+            frame.setVisible(false);
         });
 
         SHS shs = SHS.getInstance();
@@ -21,7 +21,7 @@ public class main {
         {
             System.out.println(room.getName());
         }
-        shs.getHouseLayout().get(1).getZone().setZoneTemperature(30);
+        // shs.getHouseLayout().get(1).getZone().setZoneTemperature(30);
     }
     
 }

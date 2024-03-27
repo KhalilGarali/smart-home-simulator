@@ -675,7 +675,7 @@ public class ModulePanel extends JPanel implements Observer{
     public void update(Observable o) {
         SwingUtilities.invokeLater(() -> {
             User activeUser = SHS.getInstance().getActiveUser();
-            usernameField.setText(activeUser.toString());
+            usernameField.setText(activeUser.getName());
             windowsCheckBox.setSelected(activeUser.getPermissions().contains(Permissions.WINDOW));
             doorsCheckBox.setSelected(activeUser.getPermissions().contains(Permissions.DOOR));
             lightsCheckBox.setSelected(activeUser.getPermissions().contains(Permissions.LIGHT));

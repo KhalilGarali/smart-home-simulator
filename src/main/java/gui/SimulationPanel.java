@@ -483,6 +483,7 @@ public class SimulationPanel extends JPanel {
                         shs.setActiveUser(user);
                         shs.notifyObservers();
                         userLabel.setText(user.getClass().getSimpleName() + " " + user.getName());
+                        locationLabel.setText("Location: " + user.getRoom().getClass().getSimpleName());
                         ArrayList<String> text = new ArrayList<>();
                         text.add("Target: Active User");
                         text.add("Event type: Change");

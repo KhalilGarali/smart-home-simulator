@@ -3,6 +3,7 @@ package main.java.gui.ModulePanelTabs;
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalToggleButtonUI;
 
+import main.java.gui.OutputPanel;
 import main.java.logic.commands.Command;
 import main.java.logic.layout.House;
 import main.java.logic.modules.SHC;
@@ -48,6 +49,8 @@ public class SHHPanel extends JPanel implements Observer {
 
     SHC shc = SHC.getIntance();
     private SHH shh = SHH.getInstance(shc);
+
+    private static OutputPanel outpanel = OutputPanel.getInstance();
 
     public SHHPanel() {
         shs.addObserver(this);
@@ -223,6 +226,12 @@ public class SHHPanel extends JPanel implements Observer {
                 gatewayZone.setZoneTemperature(temperature);
                 break;
         }
+        ArrayList<String> text = new ArrayList<>();
+        text.add("Target: Change Zone Temperature");
+        text.add("Event type: Change");
+        text.add("Event Description: Change Zone Temperature");
+        text.add("Changing temperature of zone: " + zoneName + " to " + temperature + " degress");
+        outpanel.appendText(text);
     }
 
     private JPanel createRoomsPanel() {
@@ -269,6 +278,12 @@ public class SHHPanel extends JPanel implements Observer {
                         JOptionPane.showMessageDialog(dialog, "You do not have permission to change " + room.getName() + " temperature.");
                     } else {
                         room.setDesiredTemperature(newTemperature);
+                        ArrayList<String> text = new ArrayList<>();
+                        text.add("Target: Change Room Temperature");
+                        text.add("Event type: Change");
+                        text.add("Event Description: Change Room Temperature");
+                        text.add("Change temperature of room: " + room.getClass().getSimpleName() + " to " + newTemperature + " degress");
+                        outpanel.appendText(text);
                         System.out.println("Setting temperature for " + room.getName() + " to " + newTemperature + "°C (OVERRIDDEN)");
                         dialog.dispose(); // Close the dialog after setting the temperature
                         JOptionPane.showMessageDialog(dialog, room.getName() + " is being set to " + newTemperature + "°C");

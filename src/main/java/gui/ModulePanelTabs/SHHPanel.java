@@ -16,6 +16,10 @@ import main.java.logic.users.Stranger;
 import main.java.logic.users.User;
 import main.java.model.rooms.Kitchen;
 import main.java.model.rooms.Room;
+import main.java.model.rooms.zones.BathroomsZone;
+import main.java.model.rooms.zones.BedroomsZone;
+import main.java.model.rooms.zones.CommonZone;
+import main.java.model.rooms.zones.GatewayZone;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -27,7 +31,7 @@ import static main.java.logic.modules.SHS.shs;
 
 public class SHHPanel extends JPanel implements Observer {
     House house = House.getInstance();
-    private JToggleButton zoneAButton, zoneBButton, room;
+    private JToggleButton commonAreaButton, bedroomZoneButton, bathroomZoneButton, gatewayZoneButton;
     private String selectedToggle; // This will store the command of the last toggled button
     private JLabel temperatureLabel;
     private JTextField temperatureField;
@@ -124,15 +128,21 @@ public class SHHPanel extends JPanel implements Observer {
 
         // Panel for Zone buttons
         JPanel zoneButtonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        zoneAButton = new JToggleButton("Zone A");
-        zoneBButton = new JToggleButton("Zone B");
+        commonAreaButton = new JToggleButton("Common Areas Zone");
+        bedroomZoneButton = new JToggleButton("Bedroom Zone");
+        bathroomZoneButton = new JToggleButton("Bathroom Zone");
+        gatewayZoneButton = new JToggleButton("Gateway Zone");
 
         ButtonGroup zonesGroup = new ButtonGroup();
-        zonesGroup.add(zoneAButton);
-        zonesGroup.add(zoneBButton);
+        zonesGroup.add(commonAreaButton);
+        zonesGroup.add(bedroomZoneButton);
+        zonesGroup.add(bathroomZoneButton);
+        zonesGroup.add(gatewayZoneButton);
 
-        zoneButtonsPanel.add(zoneAButton);
-        zoneButtonsPanel.add(zoneBButton);
+        zoneButtonsPanel.add(commonAreaButton);
+        zoneButtonsPanel.add(bedroomZoneButton);
+        zoneButtonsPanel.add(bathroomZoneButton);
+        zoneButtonsPanel.add(gatewayZoneButton);
 
 
         // Panel for temperature setting
@@ -160,8 +170,6 @@ public class SHHPanel extends JPanel implements Observer {
                     button.setSelected(false);
                     selectedToggle = null;
                 } else {
-                    // A different button was selected
-                    // resetCheckedBoxes();
                     selectedToggle = button.getActionCommand();
                 }
             } else {
@@ -171,8 +179,10 @@ public class SHHPanel extends JPanel implements Observer {
         };
     
         // Add the same listener to all toggle buttons
-        zoneAButton.addActionListener(toggleListener);
-        zoneBButton.addActionListener(toggleListener);
+        commonAreaButton.addActionListener(toggleListener);
+        bedroomZoneButton.addActionListener(toggleListener);
+        bathroomZoneButton.addActionListener(toggleListener);
+        gatewayZoneButton.addActionListener(toggleListener);
 
         // Add action listener for the submit button
         submitButton.addActionListener(e -> {
@@ -183,11 +193,8 @@ public class SHHPanel extends JPanel implements Observer {
 
             else if (selectedToggle != null) {
                 String temperature = temperatureField.getText();
-                Room kitchen = new Kitchen("kitchen Room");
-                //TODO:Actually change temperature for all rooms in TOGGLED ZONE (gotta figure out how to store rooms in Zones)
-//                aCommand = shs.cf.createCommand("ChangeTemperature", kitchen, 1);
-//                shc.userAction(shs.activeUser, aCommand, kitchen);
-
+                int temp = Integer.parseInt(temperature);
+                setZoneTemperature(selectedToggle, temp);
                 System.out.println("Setting temperature for " + selectedToggle + " to " + temperature + "°C");
             } else {
                 JOptionPane.showMessageDialog(zonesPanel, "Please select a zone first.");
@@ -195,6 +202,27 @@ public class SHHPanel extends JPanel implements Observer {
         });
 
         return zonesPanel;
+    }
+
+    private void setZoneTemperature(String zoneName, int temperature){
+        switch(zoneName){
+            case "Common Areas Zone":
+                CommonZone commonZone = CommonZone.getInstance();
+                commonZone.setZoneTemperature(temperature);
+                break;
+            case "Bedroom Zone":
+                BedroomsZone bedroomZone = BedroomsZone.getInstance();
+                bedroomZone.setZoneTemperature(temperature);
+                break;
+            case "Bathroom Zone":
+                BathroomsZone bathroomZone = BathroomsZone.getInstance();
+                bathroomZone.setZoneTemperature(temperature);
+                break;
+            case "Gateway Zone":
+                GatewayZone gatewayZone = GatewayZone.getInstance();
+                gatewayZone.setZoneTemperature(temperature);
+                break;
+        }
     }
 
     private JPanel createRoomsPanel() {

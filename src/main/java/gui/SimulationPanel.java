@@ -312,10 +312,6 @@ public class SimulationPanel extends JPanel {
             int increment = timeSpeed.calculateIncrement();
             currentDateTime.incrementTime(0, 0, increment);
 
-            // Increment total hours every 60 seconds
-//            if (DateTime.getSeconds() % 60 == 0) {
-//                totalHoursIncremented++;
-//            }
 
             // Get the current time after incrementing
             LocalTime afterTime = DateTime.getTime();

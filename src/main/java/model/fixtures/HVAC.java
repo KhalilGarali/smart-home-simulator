@@ -40,6 +40,10 @@ public class HVAC implements Observer, Observable{
     public double getDesiredRoomTemp() {
         return desiredRoomTemp;
     }
+    public double setDesiredRoomTemp(double desiredRoomTemp) {
+        return this.desiredRoomTemp = desiredRoomTemp;
+
+    }
     public void setHasPower(Boolean power) {
         this.hasPower = power;
     }

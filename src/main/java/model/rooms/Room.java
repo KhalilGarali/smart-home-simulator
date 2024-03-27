@@ -104,6 +104,10 @@ public abstract class Room implements Observable, Observer{
     public double getTemperature(){
         return this.hvac.getCurrentRoomTemp();
     }
+
+    public double setDesiredTemperature(double temperature){
+        return this.hvac.setDesiredRoomTemp(temperature);
+    }
     
     public Door getDoor(int doorNumber){
         if (doorNumber==1){

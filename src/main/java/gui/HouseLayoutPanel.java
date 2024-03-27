@@ -154,21 +154,19 @@ public class HouseLayoutPanel extends JPanel {
 
             iconX += userIcon.getIconWidth() + 100; // Move to the right for the next icon
 
-            if(room.getDesiredTemp()!=0){
-                if(room.getDesiredTemp()<room.getCurrentTemperature()){
-                    System.out.println(room.getDesiredTemp());
-                    room.turnCoolingOn();
-                    ACIcon.paintIcon(this, g, iconX, iconY);
+            // if(room.getDesiredTemp()!=0){
+            //     if(room.getDesiredTemp()<room.getCurrentTemperature()){
+            //         System.out.println(room.getDesiredTemp());
+            //         room.turnCoolingOn();
+            //         ACIcon.paintIcon(this, g, iconX, iconY);
 
-                }
-                else {
-                HeaterIcon.paintIcon(this, g, iconX, iconY);
-                }
-            }
+            //     }
+            //     else {
+            //     HeaterIcon.paintIcon(this, g, iconX, iconY);
+            //     }
+            // }
             
             
-
-
             x += roomWidth + 10; // Increment x position for the next room
             roomCounter++; // Increment room counter
         }

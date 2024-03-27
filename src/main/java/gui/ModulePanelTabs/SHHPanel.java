@@ -251,7 +251,7 @@ public class SHHPanel extends JPanel implements Observer {
     private void showRoomDialog(Room room) {
         // The current temperature and zone would be retrieved from the 'room' object
         String currentTemp = String.valueOf(room.getCurrentTemperature());
-        String zone = "A"; // Assuming Room has a method getZoneName() or similar
+        String zone = room.getZone().getClass().getSimpleName(); // Assuming Room has a method getZoneName() or similar
     
         // Create and set up the dialog
         JDialog dialog = new JDialog();

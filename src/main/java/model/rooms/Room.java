@@ -122,8 +122,8 @@ public abstract class Room implements Observable, Observer{
     public Light getLight() {
         return light;
     }
-    public int getCurrentTemperature() {
-        return currentTemperature;
+    public double getCurrentTemperature() {
+        return this.getHvac().getCurrentRoomTemp();
     }
     public double getDesiredTemp() {
         return this.hvac.getDesiredRoomTemp();

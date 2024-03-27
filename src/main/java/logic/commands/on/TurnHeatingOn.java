@@ -31,7 +31,7 @@ public class TurnHeatingOn extends Command {
         System.out.println(room);
         System.out.print("command done: ");
         room.turnCoolingOff();
-        room.turnHeatingOn();
+        // room.turnHeatingOn();
         System.out.println(room);
         System.out.println("----------------------------------------------------------------------");
         outpanel.appendText(toConsole());
@@ -49,7 +49,7 @@ public class TurnHeatingOn extends Command {
         text.add("Target: " + room.getClass().getSimpleName() + " Heating");
         text.add("Event Type: Turn On");
         text.add("Event Description: Turn Heating On");
-        text.add(room.getHvac().heatingToString());
+        // text.add(room.getHvac().heatingToString());
         return text;
     }
 }

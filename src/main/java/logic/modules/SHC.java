@@ -9,6 +9,7 @@ import main.java.logic.users.Parent;
 import main.java.logic.users.User;
 import main.java.model.rooms.*;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,9 +66,12 @@ public class SHC extends Module{
                 System.out.println("\n--------------------------------------------------------------------------");
                 System.out.println(u + " doesn't have permission to " + c);
                 System.out.println("--------------------------------------------------------------------------");
+              //  JOptionPane.showMessageDialog(null,u + " doesn't have permission to " + c);
             }
         } else {
             System.out.println(u.getName() + " is not in "+ room.getName() );
+//            JOptionPane.showMessageDialog(null,u.getName() + " is not in "+ room.getName() );
+
         }
 
         return false;

@@ -3,13 +3,29 @@ package main.java.gui.ModulePanelTabs;
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalToggleButtonUI;
 
+import main.java.logic.commands.Command;
 import main.java.logic.layout.House;
+import main.java.logic.modules.SHC;
+import main.java.logic.modules.SHH;
+import main.java.logic.modules.SHS;
+import main.java.logic.observerPattern.Observable;
+import main.java.logic.observerPattern.Observer;
+import main.java.logic.users.Parent;
+import main.java.logic.users.Permissions;
+import main.java.logic.users.Stranger;
+import main.java.logic.users.User;
+import main.java.model.rooms.Kitchen;
 import main.java.model.rooms.Room;
 
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.security.Permission;
+import java.util.ArrayList;
+import java.util.List;
 
-public class SHHPanel extends JPanel {
+import static main.java.logic.modules.SHS.shs;
+
+public class SHHPanel extends JPanel implements Observer {
     House house = House.getInstance();
     private JToggleButton zoneAButton, zoneBButton, zoneCButton, zoneDButton;
     private String selectedToggle; // This will store the command of the last toggled button
@@ -20,14 +36,26 @@ public class SHHPanel extends JPanel {
     private JCheckBox shhToggle;
     private JComboBox<String> zoneSelector;
     private JComboBox<String> roomSelector;
+    JLabel userNameLabel;
+    JLabel userLocationLabel;
+    JCheckBox windowsCheckBox, doorsCheckBox, lightsCheckBox, temperatureCheckBox;
+
+    Command aCommand;
+
+    SHC shc = SHC.getIntance();
+    private SHH shh = SHH.getInstance(shc);
 
     public SHHPanel() {
+        shs.addObserver(this);
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
+
+        //Active User Panel
+        JPanel userPanel = createUserPanel();
 
         // Zones Panel
         JPanel zonesPanel = createZonesPanel();
@@ -36,9 +64,57 @@ public class SHHPanel extends JPanel {
         JPanel roomsPanel = createRoomsPanel();
  
         // Add the items and open/close panels to the SHC panel
+        add(userPanel, gbc);
         add(zonesPanel, gbc);
         add(roomsPanel, gbc);
 
+    }
+
+    private JPanel createUserPanel() {
+
+        //User activeUser = new Parent("John Doe", new Kitchen("kitchen Room"));
+
+     //   activeUser.setPermissions(List.of(Permissions.LIGHT, Permissions.WINDOW, Permissions.TEMP));
+
+        JPanel userPanel = new JPanel();
+        userPanel.setLayout(new BoxLayout(userPanel, BoxLayout.Y_AXIS));
+        userPanel.setBorder(BorderFactory.createTitledBorder("Profile Permissions"));
+
+        //TODO:Update this to automatically display new shs.activeUser (I have to reactive user in simulation panel to see changes from Edit User)
+
+         userNameLabel = new JLabel("Active User:   " + shs.activeUser.toString());
+
+        // Create userLocationLabel with bold font
+         userLocationLabel = new JLabel("\nLocation:       " + shs.activeUser.getRoom().getName());
+
+        JLabel permissionsLabel = new JLabel("\nPermissions (Read-Only):\n");
+
+        //Permission checkboxes
+        windowsCheckBox = new JCheckBox("Open/Close Windows");
+            windowsCheckBox.setSelected(shs.activeUser.getPermissions().contains(Permissions.WINDOW));
+        doorsCheckBox = new JCheckBox("Open/Close Doors");
+            doorsCheckBox.setSelected(shs.activeUser.getPermissions().contains(Permissions.DOOR));
+        lightsCheckBox = new JCheckBox("Turn on/off the lights");
+            lightsCheckBox.setSelected(shs.activeUser.getPermissions().contains(Permissions.LIGHT));
+        temperatureCheckBox = new JCheckBox("Change House Temperature");
+            temperatureCheckBox.setSelected(shs.activeUser.getPermissions().contains(Permissions.TEMP));
+
+        windowsCheckBox.getModel().setEnabled(false);
+        doorsCheckBox.getModel().setEnabled(false);
+        lightsCheckBox.getModel().setEnabled(false);
+        temperatureCheckBox.getModel().setEnabled(false);
+
+        userPanel.add(userNameLabel);
+        userPanel.add(userLocationLabel);
+        userPanel.add(permissionsLabel);
+        userPanel.add(windowsCheckBox);
+        userPanel.add(doorsCheckBox);
+        userPanel.add(lightsCheckBox);
+        userPanel.add(temperatureCheckBox);
+
+
+
+        return userPanel;
     }
 
     private JPanel createZonesPanel() {
@@ -108,10 +184,18 @@ public class SHHPanel extends JPanel {
 
         // Add action listener for the submit button
         submitButton.addActionListener(e -> {
-            if (selectedToggle != null) {
+
+            if(!(shs.activeUser instanceof Parent)){
+                JOptionPane.showMessageDialog(zonesPanel, "You do not have permission to change ZONE Temperatures.");
+            }
+
+            else if (selectedToggle != null) {
                 String temperature = temperatureField.getText();
-                // Process the temperature setting for the selected zone
-                // For example:
+                Room kitchen = new Kitchen("kitchen Room");
+                //TODO:Actually change temperature for all rooms in TOGGLED ZONE (gotta figure out how to store rooms in Zones)
+//                aCommand = shs.cf.createCommand("ChangeTemperature", kitchen, 1);
+//                shc.userAction(shs.activeUser, aCommand, kitchen);
+
                 System.out.println("Setting temperature for " + selectedToggle + " to " + temperature + "°C");
             } else {
                 JOptionPane.showMessageDialog(zonesPanel, "Please select a zone first.");
@@ -154,13 +238,25 @@ public class SHHPanel extends JPanel {
         // Action listener for set temperature button
         setTempButton.addActionListener(e -> {
             // Get the temperature from the text field and set it for the room
-            int newTemperature;
+            double newTemperature;
             try {
-                newTemperature = Integer.parseInt(setTempField.getText());
+                newTemperature = Double.parseDouble(setTempField.getText());
                 // Here you would call a method on 'room' to set the new temperature:
-                // room.setDesiredTemperature(newTemperature);
-                System.out.println("Setting temperature for " + room.getName() + " to " + newTemperature + "°C (OVERRIDDEN)");
-                dialog.dispose(); // Close the dialog after setting the temperature
+
+                if (shs.activeUser.getPermissions().contains(Permissions.TEMP)) {
+                    if ((!(shs.activeUser instanceof Parent) && !(shs.activeUser.getRoom().equals(room)))
+                            || shs.activeUser instanceof Stranger) {
+                        JOptionPane.showMessageDialog(dialog, "You do not have permission to change " + room.getName() + " temperature.");
+                    } else {
+                        room.setDesiredTemperature(newTemperature);
+                        System.out.println("Setting temperature for " + room.getName() + " to " + newTemperature + "°C (OVERRIDDEN)");
+                        dialog.dispose(); // Close the dialog after setting the temperature
+                        JOptionPane.showMessageDialog(dialog, room.getName() + " is being set to " + newTemperature + "°C");
+                        System.out.println(room.getDesiredTemp());
+                    }
+                }
+                else JOptionPane.showMessageDialog(dialog, "You do not have permission to change any room temperatures.");
+
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(dialog, "Please enter a valid integer for the temperature.");
             }
@@ -185,4 +281,18 @@ public class SHHPanel extends JPanel {
         dialog.setVisible(true);
     }
 
+    @Override
+    public void update(Observable o) {
+        SwingUtilities.invokeLater(() -> {
+            User activeUser = SHS.getInstance().getActiveUser();
+            System.out.println(shs.activeUser.toString() + activeUser.getPermissions());
+            userNameLabel.setText("User:       "+activeUser.getName() + " is a " + activeUser.getClass().getSimpleName());
+            userLocationLabel.setText("Location:   "+activeUser.getRoom().getName());
+            windowsCheckBox.setSelected(activeUser.getPermissions().contains(Permissions.WINDOW));
+            doorsCheckBox.setSelected(activeUser.getPermissions().contains(Permissions.DOOR));
+            lightsCheckBox.setSelected(activeUser.getPermissions().contains(Permissions.LIGHT));
+            temperatureCheckBox.setSelected(activeUser.getPermissions().contains(Permissions.TEMP));
+
+        });
+    }
 }

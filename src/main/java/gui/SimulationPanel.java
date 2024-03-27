@@ -35,6 +35,7 @@ import main.java.logic.users.*;
 import main.java.logic.modules.SHS;
 import main.java.model.rooms.*;
 
+import static main.java.logic.dashboard.DateTime.getInstance;
 import static main.java.logic.users.UserPersistence.saveUsers;
 
 public class SimulationPanel extends JPanel {
@@ -43,7 +44,7 @@ public class SimulationPanel extends JPanel {
     private JSlider timeSpeedSlider;
     private JLabel userIcon;
     private JButton editButton;
-    DateTime currentDateTime = new DateTime();
+    DateTime currentDateTime = getInstance();
     private TimeSpeed timeSpeed;
     private House house = House.getInstance();
     private ArrayList<Room> rooms = house.getRooms();
@@ -131,7 +132,7 @@ public class SimulationPanel extends JPanel {
         timeSpeed = new TimeSpeed();
         timeSpeedSlider.addChangeListener(e -> {
             int speed = timeSpeedSlider.getValue();
-            timeSpeed.setSpeed(speed*10);
+            timeSpeed.setSpeed(speed*2);
         });
 
         // upload csv file containing weather data
@@ -309,7 +310,8 @@ public class SimulationPanel extends JPanel {
 
             // currentDateTime.incrementSecond();
             int increment = timeSpeed.calculateIncrement();
-            DateTime.incrementTime(0, 0, increment);
+            currentDateTime.incrementTime(0, 0, increment);
+
 
             // Get the current time after incrementing
             LocalTime afterTime = DateTime.getTime();
@@ -323,6 +325,7 @@ public class SimulationPanel extends JPanel {
             updateDateTimeLabels();
         }
     }
+
 
     // Method to update date and time labels
     private void updateDateTimeLabels() {
@@ -454,7 +457,7 @@ public class SimulationPanel extends JPanel {
                 for (User user : users) {
                     if (user.getName().equals(selectedUserName)) {
                         shs.setActiveUser(user);
-                        shs.notifyObserver();
+                        shs.notifyObservers();
                         userLabel.setText(selectedUserName);
                     }
                 }

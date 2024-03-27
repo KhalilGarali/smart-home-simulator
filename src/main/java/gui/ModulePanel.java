@@ -38,6 +38,7 @@ import main.java.logic.users.*;
 import main.java.model.rooms.Room;
 import main.java.logic.users.UserPersistence.*;
 
+import static main.java.logic.modules.SHS.shs;
 import static main.java.logic.users.UserPersistence.fetchUsers;
 
 public class ModulePanel extends JPanel implements Observer{
@@ -114,13 +115,13 @@ public class ModulePanel extends JPanel implements Observer{
 
         //Permission checkboxes
         windowsCheckBox = new JCheckBox("Open/Close Windows");
-            windowsCheckBox.setSelected(shs.activeUser.getPermissions().contains(Permissions.WINDOW) ? true : false);
+            windowsCheckBox.setSelected(shs.activeUser.getPermissions().contains(Permissions.WINDOW));
         doorsCheckBox = new JCheckBox("Open/Close Doors");
-            doorsCheckBox.setSelected(shs.activeUser.getPermissions().contains(Permissions.DOOR) ? true : false);
+            doorsCheckBox.setSelected(shs.activeUser.getPermissions().contains(Permissions.DOOR));
         lightsCheckBox = new JCheckBox("Turn on/off the lights");
-            lightsCheckBox.setSelected(shs.activeUser.getPermissions().contains(Permissions.LIGHT) ? true : false);
+            lightsCheckBox.setSelected(shs.activeUser.getPermissions().contains(Permissions.LIGHT));
         temperatureCheckBox = new JCheckBox("Change House Temperature");
-            temperatureCheckBox.setSelected(shs.activeUser.getPermissions().contains(Permissions.TEMP) ? true : false);
+            temperatureCheckBox.setSelected(shs.activeUser.getPermissions().contains(Permissions.TEMP));
 
         List<Permissions> tempPermissions = shs.activeUser.getPermissions();
 
@@ -637,6 +638,7 @@ public class ModulePanel extends JPanel implements Observer{
             doorsCheckBox.setSelected(activeUser.getPermissions().contains(Permissions.DOOR));
             lightsCheckBox.setSelected(activeUser.getPermissions().contains(Permissions.LIGHT));
             temperatureCheckBox.setSelected(activeUser.getPermissions().contains(Permissions.TEMP));
+
         });
     }
 //    private JPanel createPermissionsPanel() {

@@ -25,15 +25,15 @@ public class SHH extends Module {
         shc.moduleAction(command, room);
     }
 
-    public void regulateTemperature(Room room){
-        //directly change temperature
-        if(room.getCurrentTemperature() < room.getDesiredTemp()){
-            room.turnHeatingOn();
-        }
-        if(room.getCurrentTemperature() > room.getDesiredTemp()){
-            room.turnCoolingOn();
-        }
-    }
+    // public void regulateTemperature(Room room){
+    //     //directly change temperature
+    //     if(room.getCurrentTemperature() < room.getDesiredTemp()){
+    //         room.turnHeatingOn();
+    //     }
+    //     if(room.getCurrentTemperature() > room.getDesiredTemp()){
+    //         room.turnCoolingOn();
+    //     }
+    // }
 
     // temporary implementation, very minial just to show update received automatically
     // upon notification from the room

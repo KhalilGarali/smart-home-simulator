@@ -22,14 +22,8 @@ public class CommandFactory {
             case "openawindow":
                 command = new OpenAWindow(room, param);
                 break;
-            case "openallwindows":
-                command = new OpenAllWindows(room);
-                break;
             case "openadoor":
                 command = new OpenADoor(room, param);
-                break;
-            case "openalldoors":
-                command = new OpenAllDoors(room);
                 break;
             case "openallopenings":
                 command = new OpenAllOpenings(room);
@@ -37,14 +31,8 @@ public class CommandFactory {
             case "closeawindow":
                 command = new CloseAWindow(room, param);
                 break;
-            case "closeallwindows":
-                command = new CloseAllWindows(room);
-                break;
             case "closeadoor":
                 command = new CloseADoor(room, param);
-                break;
-            case "closealldoors":
-                command = new CloseAllDoors(room);
                 break;
             case "closeallopenings":
                 command = new CloseAllOpenings(room);

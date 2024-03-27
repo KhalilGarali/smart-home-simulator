@@ -3,6 +3,7 @@ package main.java.logic.modules;
 import javax.swing.*;
 import main.java.gui.HomeSimulatorFrame;
 import main.java.gui.LogInFrame;
+import main.java.model.rooms.Room;
 
 public class main {
 
@@ -14,6 +15,13 @@ public class main {
             logInF.setVisible(true);
             frame.setVisible(false);
         });
+
+        SHS shs = SHS.getInstance();
+        for (Room room: shs.getHouseLayout())
+        {
+            System.out.println(room.getName());
+        }
+        shs.getHouseLayout().get(1).getZone().setZoneTemperature(30);
     }
     
 }

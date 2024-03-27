@@ -106,6 +106,7 @@ public class SHHPanel extends JPanel implements Observer {
 
         userPanel.add(userNameLabel);
         userPanel.add(userLocationLabel);
+        userPanel.add(permissionsLabel);
         userPanel.add(windowsCheckBox);
         userPanel.add(doorsCheckBox);
         userPanel.add(lightsCheckBox);

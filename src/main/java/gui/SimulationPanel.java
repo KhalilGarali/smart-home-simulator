@@ -43,7 +43,6 @@ public class SimulationPanel extends JPanel {
     private JSlider timeSpeedSlider;
     private JLabel userIcon;
     private JButton editButton;
-    DateTime currentDateTime = new DateTime();
     private TimeSpeed timeSpeed;
     private House house = House.getInstance();
     private ArrayList<Room> rooms = house.getRooms();

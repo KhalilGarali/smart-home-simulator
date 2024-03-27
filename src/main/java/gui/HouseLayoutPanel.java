@@ -16,7 +16,7 @@ public class HouseLayoutPanel extends JPanel {
     Layout extractLayout;
     House house = House.getInstance();
 
-    public HouseLayoutPanel() {
+    public HouseLayoutPanel()  {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createTitledBorder("House Layout"));
         windowOpenIcon = new ImageIcon("src/main/resources/houseLayoutIcons/WindowOpenIcon.png");
@@ -49,7 +49,7 @@ public class HouseLayoutPanel extends JPanel {
     private void checkRoomInfo(){
         for (Room room : house.getRooms()) {
             System.out.println("INFO: " + room.getName() + " --- Light: " + room.getLight().getLight() + "  --- Temp: " 
-            + room.getCurrentTemperature() + "  --- Door: " + room.getDoor1().isOpen() + "  --- Window: " + 
+            + room.getCurrentTemperature() + "  --- Door: " + room.getDoor1().isOpen() + "  --- Window: " +
             room.getWindow(1).isOpen() + " --- Number Of Users " + room.getUserFromRoom().size());
         }
     }
@@ -154,10 +154,16 @@ public class HouseLayoutPanel extends JPanel {
 
             iconX += userIcon.getIconWidth() + 100; // Move to the right for the next icon
 
-            if(false){
-                ACIcon.paintIcon(this, g, iconX, iconY);
-            } else {
+            if(room.getDesiredTemp()!=0){
+                if(room.getDesiredTemp()<room.getCurrentTemperature()){
+                    System.out.println(room.getDesiredTemp());
+                    room.turnCoolingOn();
+                    ACIcon.paintIcon(this, g, iconX, iconY);
+
+                }
+                else {
                 HeaterIcon.paintIcon(this, g, iconX, iconY);
+                }
             }
             
             

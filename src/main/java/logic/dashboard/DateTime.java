@@ -1,19 +1,38 @@
 package main.java.logic.dashboard;
 
+import main.java.logic.observerPattern.Observable;
+import main.java.logic.observerPattern.Observer;
+import main.java.model.fixtures.HVAC;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Random;
 
-public class DateTime {
+public class DateTime implements Observable{
     private static LocalDateTime dateTime;
     private static int counter = 0;
+    private static DateTime instance;
+    private int totalSecondsElapsed = 0;
+
+    private ArrayList<Observer> observers = new ArrayList<>();
 
     static {
         generateRandomDateTime();
     }
 
+    private DateTime(){
+
+    }
+    public static DateTime getInstance(){
+        if(instance == null){
+            instance = new DateTime();
+        }
+        return instance;
+    }
     private static void generateRandomDateTime() {
         Random random = new Random();
         int year = random.nextInt(2100 - 1970) + 1970; // Random year between 1970 and 2099
@@ -25,13 +44,18 @@ public class DateTime {
         dateTime = LocalDateTime.of(year, month, day, hour, minute, second);
     }
 
-    public static void incrementTime(int hours, int minutes, int seconds) {
+    public void incrementTime(int hours, int minutes, int seconds) {
         dateTime = dateTime.plusHours(hours).plusMinutes(minutes).plusSeconds(seconds);
+        // totalHoursIncremented += dateTime.getMinute();
+        totalSecondsElapsed++;
+            this.notifyObservers();
     }
 
-    public static void incrementSecond() {
+    public int getTotalSecondsElapsed() {
+        return totalSecondsElapsed;
+    }
+    public void incrementSecond() {
         dateTime = dateTime.plusSeconds(1);
-        counter++;
     }
 
     public static void setDate(int year, int month, int day) {
@@ -64,5 +88,26 @@ public class DateTime {
 
     public static int getSeconds() {
         return counter;
+    }
+
+    public static int getCounter(){
+        return counter;
+    }
+
+    @Override
+    public void notifyObservers() {
+        for(Observer observer : observers){
+            observer.update(this);
+        }
+    }
+
+    @Override
+    public void addObserver(Observer o) {
+        observers.add(o);
+    }
+
+    @Override
+    public void removeObserver(Observer o) {
+        observers.remove(o);
     }
 }

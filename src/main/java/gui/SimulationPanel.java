@@ -35,19 +35,23 @@ import main.java.logic.users.*;
 import main.java.logic.modules.SHS;
 import main.java.model.rooms.*;
 
+import static main.java.logic.dashboard.DateTime.getInstance;
+import static main.java.logic.users.UserPersistence.saveUsers;
+
 public class SimulationPanel extends JPanel {
     private JToggleButton simulationToggle;
     private JLabel locationLabel, timeSpeedLabel, userLabel, outsideTempLabel, dateLabel, timeLabel;
     private JSlider timeSpeedSlider;
     private JLabel userIcon;
     private JButton editButton;
-    DateTime currentDateTime = new DateTime();
+    DateTime currentDateTime = getInstance();
     private TimeSpeed timeSpeed;
     private House house = House.getInstance();
     private ArrayList<Room> rooms = house.getRooms();
     private JButton editLocationButton;
     private String selection;
     private JButton uploadTempButton;
+    private JButton saveUsersButton;
 
     // used as a dummy value
     private SHS shs = SHS.getInstance();
@@ -131,7 +135,7 @@ public class SimulationPanel extends JPanel {
         timeSpeed = new TimeSpeed();
         timeSpeedSlider.addChangeListener(e -> {
             int speed = timeSpeedSlider.getValue();
-            timeSpeed.setSpeed(speed*10);
+            timeSpeed.setSpeed(speed*2);
             // This writes to file too often
             // TODO: Limit the amount of times this writes to file
             ArrayList<String> text = new ArrayList<>();
@@ -148,6 +152,13 @@ public class SimulationPanel extends JPanel {
         uploadTempButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         uploadTempButton.setMaximumSize(new Dimension(250, 40));
         uploadTempButton.addActionListener(e -> openFileChooser());
+
+        saveUsersButton = new JButton("Save Users to File");
+        saveUsersButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        saveUsersButton.setMaximumSize(new Dimension(250, 40));
+        saveUsersButton.addActionListener(e -> {
+            openDirectoryChooser();
+        });
 
 
         timeSpeedLabel = new JLabel("Time Speed");
@@ -187,6 +198,22 @@ public class SimulationPanel extends JPanel {
         }, 0, 1000); // Update every second
     }
 
+    private void openDirectoryChooser() {
+        LocalDateTime currentDateTime = LocalDateTime.now(); // Get the current local date and time
+        String message = null;
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Chose where to save Users");
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        int userSelection = fileChooser.showDialog(this, "Choose");
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File selectedFolder = fileChooser.getSelectedFile();
+            System.out.println("Save users to: " + selectedFolder.getAbsolutePath()+"/users-"+currentDateTime+".txt");
+             saveUsers(selectedFolder.getAbsolutePath()+"/users-"+currentDateTime+".txt", users, message);
+        }
+    }
+
+
     private void addComponents() {
         add(Box.createRigidArea(new Dimension(0, 10)));
         add(simulationToggle);
@@ -208,10 +235,12 @@ public class SimulationPanel extends JPanel {
         add(timeSpeedLabel);
         add(Box.createVerticalStrut(10));
         add(timeSpeedSlider);
-        add(Box.createVerticalStrut(30));
+        add(Box.createVerticalStrut(20));
         add(editLocationButton);
         add(Box.createVerticalStrut(30));
         add(uploadTempButton);
+        add(Box.createVerticalStrut(10));
+        add(saveUsersButton);
     }
 
     private void openFileChooser() {
@@ -299,7 +328,8 @@ public class SimulationPanel extends JPanel {
 
             // currentDateTime.incrementSecond();
             int increment = timeSpeed.calculateIncrement();
-            DateTime.incrementTime(0, 0, increment);
+            currentDateTime.incrementTime(0, 0, increment);
+
 
             // Get the current time after incrementing
             LocalTime afterTime = DateTime.getTime();
@@ -313,6 +343,7 @@ public class SimulationPanel extends JPanel {
             updateDateTimeLabels();
         }
     }
+
 
     // Method to update date and time labels
     private void updateDateTimeLabels() {
@@ -450,7 +481,7 @@ public class SimulationPanel extends JPanel {
                 for (User user : users) {
                     if (user.getName().equals(selectedUserName)) {
                         shs.setActiveUser(user);
-                        shs.notifyObserver();
+                        shs.notifyObservers();
                         userLabel.setText(user.getClass().getSimpleName() + " " + user.getName());
                         ArrayList<String> text = new ArrayList<>();
                         text.add("Target: Active User");

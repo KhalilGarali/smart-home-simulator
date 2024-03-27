@@ -31,7 +31,7 @@ public class ChangeTemperature extends Command {
         System.out.println("\n--------------------------------------------------------------------");
         System.out.println(room);
         System.out.print("command done: ");
-        previousTemp = room.getCurrentTemperature();
+//        previousTemp = room.getCurrentTemperature();
         room.setTemperature(temperature);
         System.out.println(room);
         System.out.println("----------------------------------------------------------------------");

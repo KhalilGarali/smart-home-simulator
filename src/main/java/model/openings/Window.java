@@ -44,4 +44,8 @@ public class Window implements Opening {
     public void unblockWindow() {
         this.isBlocked = false;
     }
+
+    public boolean getBlockedStatus(){
+        return this.isBlocked;
+    }
 }

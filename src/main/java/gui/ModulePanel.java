@@ -5,37 +5,23 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import main.java.logic.observerPattern.*;
 
 
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
+import javax.swing.*;
 // import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JToggleButton;
-import javax.swing.SwingUtilities;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.util.Iterator;
 
 import main.java.logic.dashboard.DateTime;
 import main.java.logic.modules.SHS;
 import main.java.model.fixtures.Temperature;
 
-import javax.swing.JTextField;
 import java.awt.*;
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -43,21 +29,29 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 import main.java.gui.ModulePanelTabs.SHCPanel;
+import main.java.gui.ModulePanelTabs.SHHPanel;
 import main.java.logic.layout.House;
 import main.java.logic.modules.SHS;
 import main.java.logic.users.*;
 import main.java.model.rooms.Room;
 import main.java.logic.users.*;
 import main.java.model.rooms.Room;
+import main.java.logic.users.UserPersistence.*;
+
+import static main.java.logic.modules.SHS.shs;
+import static main.java.logic.users.UserPersistence.fetchUsers;
 
 public class ModulePanel extends JPanel implements Observer{
     
     private JTabbedPane tabbedPane;
+
     House house = House.getInstance();
     private SHS shs = SHS.getInstance();
     
     List<User> listOfUsers = shs.getHouseUser();
     private JButton editButton;
+
+    private JButton fetchUsersButton;
 
     JTextField usernameField;
     JCheckBox windowsCheckBox, doorsCheckBox, lightsCheckBox, temperatureCheckBox;
@@ -73,13 +67,15 @@ public class ModulePanel extends JPanel implements Observer{
         SHCPanel SHCPanel = new SHCPanel();
         // Create SHS Panel
         JPanel shsPanel = createShsPanel(usernameDisplay, locationDisplay);
+        // Create SHH Panel
+        SHHPanel SHHPanel = new SHHPanel();
 
         // Module Tabs
         tabbedPane = new JTabbedPane();
         tabbedPane.addTab("SHS", new JScrollPane(shsPanel));
         tabbedPane.addTab("SHC", new JScrollPane(SHCPanel));
         tabbedPane.addTab("SHP", new JLabel("SHP Content"));
-        tabbedPane.addTab("SHH", new JLabel("SHH Content"));
+        tabbedPane.addTab("SHH", new JScrollPane(SHHPanel));
 
         add(tabbedPane, BorderLayout.CENTER);
     }
@@ -120,13 +116,13 @@ public class ModulePanel extends JPanel implements Observer{
 
         //Permission checkboxes
         windowsCheckBox = new JCheckBox("Open/Close Windows");
-            windowsCheckBox.setSelected(shs.activeUser.getPermissions().contains(Permissions.WINDOW) ? true : false);
+            windowsCheckBox.setSelected(shs.activeUser.getPermissions().contains(Permissions.WINDOW));
         doorsCheckBox = new JCheckBox("Open/Close Doors");
-            doorsCheckBox.setSelected(shs.activeUser.getPermissions().contains(Permissions.DOOR) ? true : false);
+            doorsCheckBox.setSelected(shs.activeUser.getPermissions().contains(Permissions.DOOR));
         lightsCheckBox = new JCheckBox("Turn on/off the lights");
-            lightsCheckBox.setSelected(shs.activeUser.getPermissions().contains(Permissions.LIGHT) ? true : false);
+            lightsCheckBox.setSelected(shs.activeUser.getPermissions().contains(Permissions.LIGHT));
         temperatureCheckBox = new JCheckBox("Change House Temperature");
-            temperatureCheckBox.setSelected(shs.activeUser.getPermissions().contains(Permissions.TEMP) ? true : false);
+            temperatureCheckBox.setSelected(shs.activeUser.getPermissions().contains(Permissions.TEMP));
 
         List<Permissions> tempPermissions = shs.activeUser.getPermissions();
 
@@ -139,6 +135,10 @@ public class ModulePanel extends JPanel implements Observer{
 
 
         JButton submitButton = new JButton("Submit");
+
+        // upload csv file containing weather data
+
+
         submitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -212,6 +212,9 @@ public class ModulePanel extends JPanel implements Observer{
             }
         });
 
+
+
+
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.WEST;
@@ -252,6 +255,7 @@ public class ModulePanel extends JPanel implements Observer{
         gbc.gridy = 6;
         gbc.anchor = GridBagConstraints.CENTER;
         editPanel.add(editButton, gbc);
+
         
         return editPanel;
     }
@@ -375,6 +379,7 @@ public class ModulePanel extends JPanel implements Observer{
         textfield.setMaximumSize(new Dimension(Integer.MAX_VALUE, textfield.getPreferredSize().height));
     }
 
+
     private JPanel createNewUserPanel()
     {
         JPanel newPanel = new JPanel(new GridBagLayout());
@@ -422,6 +427,12 @@ public class ModulePanel extends JPanel implements Observer{
         
         JButton submitButton = new JButton ("Create");
 
+        fetchUsersButton = new JButton("Fetch existing Users");
+        fetchUsersButton.addActionListener(e -> openFileChooser());
+
+
+
+
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 0.5;
@@ -450,6 +461,13 @@ public class ModulePanel extends JPanel implements Observer{
         gbc.gridy++;
         gbc.anchor = GridBagConstraints.CENTER;
         newPanel.add(submitButton, gbc);
+
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.CENTER;
+        newPanel.add(fetchUsersButton, gbc);
+
+
+
 
         submitButton.addActionListener(new ActionListener() {
             @Override
@@ -503,6 +521,22 @@ public class ModulePanel extends JPanel implements Observer{
         });
 
         return newPanel;
+    }
+    private void openFileChooser() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Select Existing Users File");
+        fileChooser.setAcceptAllFileFilterUsed(false);
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Text files", "txt");
+        fileChooser.addChoosableFileFilter(filter);
+
+        int result = fileChooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            fetchUsers(selectedFile.getPath(), (ArrayList<User>) listOfUsers);
+            for(User user : listOfUsers){
+                System.out.println(user.getName() + "HAS" + user.getPermissions());
+            }
+        }
     }
     // Method to handle editing simulation parameters
     private void editSimulationParameters() {
@@ -646,6 +680,7 @@ public class ModulePanel extends JPanel implements Observer{
             doorsCheckBox.setSelected(activeUser.getPermissions().contains(Permissions.DOOR));
             lightsCheckBox.setSelected(activeUser.getPermissions().contains(Permissions.LIGHT));
             temperatureCheckBox.setSelected(activeUser.getPermissions().contains(Permissions.TEMP));
+
         });
     }
 //    private JPanel createPermissionsPanel() {

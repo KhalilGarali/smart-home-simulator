@@ -2,18 +2,27 @@ package main.java.gui;
 
 import main.java.logic.layout.House;
 import main.java.logic.layout.Layout;
+import main.java.logic.modules.SHS;
+import main.java.logic.observerPattern.Observable;
+import main.java.logic.observerPattern.Observer;
 import main.java.model.rooms.Room;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import javax.swing.*;
 
-public class HouseLayoutPanel extends JPanel {
-    private ImageIcon windowOpenIcon, windowClosedIcon, doorOpenIcon, doorClosedIcon, lightOnIcon, lightOffIcon, userIcon;
-    private String tempInfo, userCountInfo;
+public class HouseLayoutPanel extends JPanel implements Observer {
+    private ImageIcon windowOpenIcon, windowClosedIcon, doorOpenIcon, doorClosedIcon,
+    lightOnIcon, lightOffIcon, userIcon, ACIcon, HeaterIcon;
+    private String tempInfo, userCountInfo, zoneInfo;
     private int rowHeight;
+    private Color redColor;
+    private SHS shs;
+
+    private double temperature;
     Layout extractLayout;
     House house = House.getInstance();
 
-    public HouseLayoutPanel() {
+    public HouseLayoutPanel()  {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createTitledBorder("House Layout"));
         windowOpenIcon = new ImageIcon("src/main/resources/houseLayoutIcons/WindowOpenIcon.png");
@@ -23,15 +32,35 @@ public class HouseLayoutPanel extends JPanel {
         doorClosedIcon = new ImageIcon("src/main/resources/houseLayoutIcons/DoorClosedIcon.png");
         lightOffIcon = new ImageIcon("src/main/resources/houseLayoutIcons/LightOffIcon.png");
         userIcon = new ImageIcon("src/main/resources/houseLayoutIcons/UserIcon.png");
+        ACIcon = new ImageIcon("src/main/resources/houseLayoutIcons/ACIcon.png");
+        HeaterIcon = new ImageIcon("src/main/resources/houseLayoutIcons/HeaterOnIcon.png");
+        redColor = Color.RED;
         this.rowHeight = 150 + 10; // Assuming room height of 150 and 10 units of spacing
-        checkRoomInfo();
+        // checkRoomInfo();
         updatePanelSize();
+        shs = SHS.getInstance();
+        shs.addObserver(this);
+        for(Room room: shs.getHouseLayout()){
+            room.getHvac().addObserver(this);
+        }
     }
+
+    private ImageIcon changeIconColor(ImageIcon icon, Color color) {
+        BufferedImage image = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = image.createGraphics();
+        g.drawImage(icon.getImage(), 0, 0, null);
+        g.setComposite(AlphaComposite.SrcAtop);
+        g.setColor(color);
+        g.fillRect(0, 0, icon.getIconWidth(), icon.getIconHeight());
+        g.dispose();
+        return new ImageIcon(image);
+    }
+
 
     private void checkRoomInfo(){
         for (Room room : house.getRooms()) {
             System.out.println("INFO: " + room.getName() + " --- Light: " + room.getLight().getLight() + "  --- Temp: " 
-            + room.getCurrentTemperature() + "  --- Door: " + room.getDoor1().isOpen() + "  --- Window: " + 
+            + room.getCurrentTemperature() + "  --- Door: " + room.getDoor1().isOpen() + "  --- Window: " +
             room.getWindow(1).isOpen() + " --- Number Of Users " + room.getUserFromRoom().size());
         }
     }
@@ -84,8 +113,14 @@ public class HouseLayoutPanel extends JPanel {
              // Draw the first row of icons (Window and Door)
             if (room.getWindow(1).isOpen()) {
                 windowOpenIcon.paintIcon(this, g, iconX, iconY);
+                if(room.getWindow(1).getBlockedStatus()){
+                    windowOpenIcon = changeIconColor(windowOpenIcon, redColor);
+                }
             } else {
                 windowClosedIcon.paintIcon(this, g, iconX, iconY);
+                if(room.getWindow(1).getBlockedStatus()){
+                    windowClosedIcon = changeIconColor(windowClosedIcon, redColor);
+                }
             }
             iconX += windowOpenIcon.getIconWidth() + 10; // Move to the right for the next icon
             
@@ -113,20 +148,41 @@ public class HouseLayoutPanel extends JPanel {
                 userIcon.paintIcon(this, g, iconX, iconY);
             }
 
+
             // Draw the temperature and number of users to the right of the room box
             int infoX = iconX + 120; // Set a margin of 10 pixels from the room box
             int infoY = y + 30; // Align with the top of the room box
-
-            tempInfo = "Temperature: " + room.getCurrentTemperature();
+            temperature = room.getCurrentTemperature();
+            tempInfo = "Temperature: " + String.format("%.1f",temperature);
             userCountInfo = "Nb. Of Users: " + room.getUserFromRoom().size();
+            zoneInfo = "Zone: A"; 
 
             g.drawString(tempInfo, infoX, infoY);
             infoY += 15; // Add some vertical space between lines
             g.drawString(userCountInfo, infoX, infoY);
+            infoY += 15; // Add some vertical space between lines
+            g.drawString(zoneInfo, infoX, infoY);
 
+            iconX += userIcon.getIconWidth() + 100; // Move to the right for the next icon
+
+            if(room.getHvac().getHeatingOn()){
+                HeaterIcon.paintIcon(this, g, iconX, iconY);
+            } else if(room.getHvac().getCoolingOn()){
+                ACIcon.paintIcon(this, g, iconX, iconY);
+            }
+            
+            
             x += roomWidth + 10; // Increment x position for the next room
             roomCounter++; // Increment room counter
         }
         updatePanelSize();
+    }
+
+    @Override
+    public void update(Observable o) {
+        for (Room room : shs.getHouseLayout()) {
+            temperature = room.getCurrentTemperature();
+        }
+        repaint();
     }
 }

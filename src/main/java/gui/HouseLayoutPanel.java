@@ -87,7 +87,7 @@ public class HouseLayoutPanel extends JPanel implements Observer {
     }
 
     @Override
-    protected void paintComponent(Graphics g) {
+    public void paintComponent(Graphics g) {
         super.paintComponent(g);
         int numRoomsPerRow = 2;
         int panelWidth = getWidth();

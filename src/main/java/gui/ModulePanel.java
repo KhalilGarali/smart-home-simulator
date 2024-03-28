@@ -532,7 +532,7 @@ public class ModulePanel extends JPanel implements Observer{
         int result = fileChooser.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
-            fetchUsers(selectedFile.getPath(), (ArrayList<User>) listOfUsers);
+            UserPersistence.fetchUsers(selectedFile.getPath(), (ArrayList<User>) listOfUsers);
             for(User user : listOfUsers){
                 System.out.println(user.getName() + "HAS" + user.getPermissions());
             }

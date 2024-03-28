@@ -17,7 +17,7 @@ public class UserPersistence {
 
     //Use permissions.add(Permissions.WINDOW) to add a permission to a user (for eg)
 
-    private void fetchUsers(String filePath, ArrayList<User> users) {
+    public static void fetchUsers(String filePath, ArrayList<User> users) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line, name;
             User currentUser = null;
@@ -68,7 +68,7 @@ public class UserPersistence {
         }
     }
 
-    private void saveUsers(String filePath, ArrayList<User> users) {
+    public static void saveUsers(String filePath, ArrayList<User> users) {
 
         try {
             FileWriter fw = new FileWriter(filePath);

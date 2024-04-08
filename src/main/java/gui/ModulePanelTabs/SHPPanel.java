@@ -3,17 +3,24 @@ package main.java.gui.ModulePanelTabs;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.plaf.metal.MetalToggleButtonUI;
+import javax.swing.Box;
 
 import main.java.logic.layout.House;
 import main.java.model.rooms.Room;
@@ -23,6 +30,9 @@ public class SHPPanel extends JPanel {
     private JLabel titleLabel;
     House house = House.getInstance();
     private ArrayList<JCheckBox> roomCheckBoxes;
+    private JLabel timerLabel;
+    private JTextField timerField;
+    
 
     public SHPPanel() {
         setLayout(new GridBagLayout());
@@ -80,26 +90,61 @@ public class SHPPanel extends JPanel {
 
 
     private JPanel createMotionDetectorsPlacementPanel() {
-        JPanel openClosePanel = new JPanel();
-        openClosePanel.setLayout(new BoxLayout(openClosePanel, BoxLayout.Y_AXIS));
-        openClosePanel.setBorder(BorderFactory.createTitledBorder("Motion Detectors Locations"));  
+        JPanel motionDetectorsPlacementPanel = new JPanel();
+        motionDetectorsPlacementPanel.setLayout(new BoxLayout(motionDetectorsPlacementPanel, BoxLayout.Y_AXIS));
+        motionDetectorsPlacementPanel.setBorder(BorderFactory.createTitledBorder("Motion Detectors Locations"));
+        
+        JPanel motionDetectorsPanel = new JPanel();
+        int rows = (int) Math.ceil(house.getRooms().size() / 4.0); // Calculate the number of rows needed for two columns
+        motionDetectorsPanel.setLayout(new GridLayout(rows, 4, 15, 15)); // Set the layout with px horizontal and vertical gaps
+
         for (Room room : house.getRooms()) {
             JCheckBox roomCheckBox = new JCheckBox(room.getName());
             roomCheckBox.addItemListener(e -> {
                 
             });
-            openClosePanel.add(roomCheckBox);
+            motionDetectorsPanel.add(roomCheckBox);
             roomCheckBoxes.add(roomCheckBox);
         }
 
-        return openClosePanel;
+        JPanel submitPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JButton submitButton = new JButton("Submit");
+        submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Handle submit button click
+            }
+        });
+
+        submitPanel.add(submitButton);
+        motionDetectorsPlacementPanel.add(motionDetectorsPanel);
+        motionDetectorsPlacementPanel.add(submitPanel);
+
+
+
+        return motionDetectorsPlacementPanel;
     }
 
     private JPanel createSetTimerForPolicePanel() {
         JPanel setTimerPanel = new JPanel();
         setTimerPanel.setLayout(new BoxLayout(setTimerPanel, BoxLayout.Y_AXIS));
-        setTimerPanel.setBorder(BorderFactory.createTitledBorder("Set Timer For Police"));  
+        setTimerPanel.setBorder(BorderFactory.createTitledBorder("Timer For Police"));  
         
+        // Panel for temperature setting
+        JPanel timerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        timerLabel = new JLabel("Set Timer in Minutes:");
+        timerField = new JTextField(5);
+        timerPanel.add(timerLabel);
+        timerPanel.add(timerField);
+
+
+        // Panel for the submit button
+        JPanel submitPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JButton submitButton = new JButton("Submit");
+        submitPanel.add(submitButton);
+
+        setTimerPanel.add(timerPanel);
+        setTimerPanel.add(submitPanel);
 
         return setTimerPanel;
     }

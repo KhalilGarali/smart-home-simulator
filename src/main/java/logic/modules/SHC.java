@@ -4,6 +4,7 @@ import main.java.logic.MediatorPattern.Component;
 import main.java.logic.commands.*;
 import main.java.logic.commands.close.CloseADoor;
 import main.java.logic.commands.close.CloseAWindow;
+import main.java.logic.commands.close.CloseAllOpenings;
 import main.java.logic.commands.open.OpenADoor;
 import main.java.logic.commands.open.OpenAWindow;
 import main.java.logic.observerPattern.Observable;
@@ -116,5 +117,13 @@ public class SHC extends Module implements Component {
     @Override
     public void notifying(Component c, String message) {
         mediator.notifying(this, message);
+    }
+
+    public void closeAllOpenings() {
+        //go thru every room and close all windows and doors
+    }
+
+    public void openAllOpenings() {
+        //go thru every room and open all openings
     }
 }

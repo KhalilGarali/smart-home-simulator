@@ -34,4 +34,12 @@ public class SHP extends Module implements Component{
     public void notifying(Component c , String message) {
         mediator.notifying(this, message);
     }
+
+    public void houseIsEmpty() {
+        notifying(this, "houseIsEmpty");
+    }
+
+    public void houseIsNotEmpty() {
+        notifying(this, "houseIsNotEmpty");
+    }
 }

@@ -29,21 +29,36 @@ public class Mediator implements main.java.logic.MediatorPattern.Mediator {
             }
         }
         if( c instanceof SHP){
-            if(Objects.equals(message, "")){
-
+            if(Objects.equals(message, "HouseIsEmpty")){
+                closeAllOpenings();
             }
-            if(Objects.equals(message, "")){
-
+            if(Objects.equals(message, "HouseIsNotEmpty")){
+                openAllOpenings();
             }
         }
         if( c instanceof SHS){
-            if(Objects.equals(message, "")){
-
+            if(Objects.equals(message, "Empty House")){
+                houseIsEmpty();
             }
-            if(Objects.equals(message, "")){
-
+            if(Objects.equals(message, "Not Empty House")){
+                houseIsNotEmpty();
             }
         }
+    }
+
+    private void openAllOpenings() {
+        shc.openAllOpenings();
+    }
+
+    private void closeAllOpenings() {
+        shc.closeAllOpenings();
+    }
+
+    private void houseIsEmpty() {
+        shp.houseIsEmpty();
+    }
+    private void houseIsNotEmpty() {
+        shp.houseIsNotEmpty();
     }
 
 }

@@ -1,6 +1,7 @@
 package main.java.logic.modules;
 
 //can remove alot of the commands from here
+import main.java.logic.MediatorPattern.Component;
 import main.java.logic.commands.Command;
 import main.java.logic.commands.CommandFactory;
 import main.java.logic.commands.change.ChangeTemperature;
@@ -34,10 +35,11 @@ import java.util.Objects;
 
 import java.util.concurrent.TimeUnit;
 
-public class SHS implements Observable{
+public class SHS implements Observable, Component {
     SHH shh;
     SHC shc;
     SHP shp ;
+    private Mediator mediator = new Mediator();
     private boolean isEmpty = true;
     public static SHS shs;
     public CommandFactory cf;
@@ -105,6 +107,7 @@ public class SHS implements Observable{
     public void addHouseUser(User user){
         this.houseUsers.add(user);
         this.isEmpty = false;
+        notifying(this, "Not Empty House");
     }
 
     public void setActiveUser(User user){
@@ -142,6 +145,7 @@ public class SHS implements Observable{
         houseUsers.remove(user);
         if(houseUsers.isEmpty()){
             isEmpty = true;
+            notifying(this, "Empty House");
         }
     }
 
@@ -298,5 +302,10 @@ public class SHS implements Observable{
         for (Observer observer : observers) {
             observer.update(this);
         }
+    }
+
+    @Override
+    public void notifying(Component c, String message) {
+        mediator.notifying(this, message);
     }
 }

@@ -1,4 +1,5 @@
 package main.java.logic.modules;
+
 import main.java.logic.MediatorPattern.Component;
 import main.java.logic.commands.*;
 import main.java.logic.commands.close.CloseADoor;
@@ -26,14 +27,15 @@ public class SHC extends Module implements Component {
     main.java.logic.MediatorPattern.Mediator mediator = new main.java.logic.modules.Mediator();
     private static SHC instance = null;
 
-    private SHC(){
+    private SHC() {
 
     }
+
     /**
      * Default constructor for the SHC module.
      */
-    public static SHC getIntance(){
-        if(instance ==null){
+    public static SHC getIntance() {
+        if (instance == null) {
             instance = new SHC();
         }
         return instance;
@@ -51,27 +53,26 @@ public class SHC extends Module implements Component {
 
     //SHS
     //userAction(father, OpenAWindow, kitchen) //upon an event from GUI
-    public Boolean userAction(User u, Command c, Room room){
-        if(u instanceof Parent){
-            if (u.hasPermission(c.requirePermissions())){
+    public Boolean userAction(User u, Command c, Room room) {
+        if (u instanceof Parent) {
+            if (u.hasPermission(c.requirePermissions())) {
                 addCommand(c);
                 executeCommand();
                 return true;
             }
-        }
-        else if(u.getRoom().equals(room)){
-            if (u.hasPermission(c.requirePermissions())){
+        } else if (u.getRoom().equals(room)) {
+            if (u.hasPermission(c.requirePermissions())) {
                 addCommand(c);
                 executeCommand();
                 return true;
-            }else {
+            } else {
                 System.out.println("\n--------------------------------------------------------------------------");
                 System.out.println(u + " doesn't have permission to " + c);
                 System.out.println("--------------------------------------------------------------------------");
-              //  JOptionPane.showMessageDialog(null,u + " doesn't have permission to " + c);
+                //  JOptionPane.showMessageDialog(null,u + " doesn't have permission to " + c);
             }
         } else {
-            System.out.println(u.getName() + " is not in "+ room.getName() );
+            System.out.println(u.getName() + " is not in " + room.getName());
 //            JOptionPane.showMessageDialog(null,u.getName() + " is not in "+ room.getName() );
 
         }
@@ -85,10 +86,10 @@ public class SHC extends Module implements Component {
     // shc.moduleAction
     //}
     // FIXME must be called from SHH when temp is up for example.
-    public Boolean moduleAction(Command c, Room room){
-            addCommand(c);
-            executeCommand();
-            return true;
+    public Boolean moduleAction(Command c, Room room) {
+        addCommand(c);
+        executeCommand();
+        return true;
     }
 
     /**
@@ -96,20 +97,20 @@ public class SHC extends Module implements Component {
      *
      * @param c The command to add to the module.
      */
-    public void addCommand(Command c){
+    public void addCommand(Command c) {
         aCommand = c;
     }
 
     /**
      * Executes the command stored in the module.
      */
-    public void executeCommand(){
+    public void executeCommand() {
         aCommand.execute();
     }
 
     //TODO to be implemented as needed
     @Override
-    public void update(Observable o){
+    public void update(Observable o) {
     }
 
     @Override

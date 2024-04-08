@@ -38,6 +38,7 @@ public class SHS implements Observable{
     SHH shh;
     SHC shc;
     SHP shp ;
+    private boolean isEmpty = true;
     public static SHS shs;
     public CommandFactory cf;
     private List<Room> houseLayout;
@@ -103,6 +104,7 @@ public class SHS implements Observable{
 
     public void addHouseUser(User user){
         this.houseUsers.add(user);
+        this.isEmpty = false;
     }
 
     public void setActiveUser(User user){
@@ -138,6 +140,9 @@ public class SHS implements Observable{
     }
     public void removeuser(User user){
         houseUsers.remove(user);
+        if(houseUsers.isEmpty()){
+            isEmpty = true;
+        }
     }
 
     /**

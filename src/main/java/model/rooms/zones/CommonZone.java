@@ -5,7 +5,7 @@ public class CommonZone extends Zone{
     private static CommonZone instance = null;
 
     private CommonZone(){
-        super(25);
+        super(30);
     }
 
     public static CommonZone getInstance(){

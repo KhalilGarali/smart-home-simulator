@@ -5,7 +5,7 @@ public class BathroomsZone extends Zone{
     private static BathroomsZone instance = null;
     
     private BathroomsZone(){
-        super(24);
+        super(10);
     }
 
     public static BathroomsZone getInstance(){

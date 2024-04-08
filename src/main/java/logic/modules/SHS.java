@@ -53,7 +53,7 @@ public class SHS implements Observable{
     // Singleton Constructor
     private SHS(){
         this.shc = SHC.getIntance();
-        this.shh = SHH.getInstance(shc);
+        this.shh = SHH.getInstance();
         this.shp = SHP.getInstance(shc);
         this.cf = new CommandFactory(shc);
         this.houseLayout = new ArrayList<Room>();
@@ -277,8 +277,8 @@ public class SHS implements Observable{
     //         shh.doAction(command, room);
     //     }
     // }
-    public void shpDoAction(Command command, Room room){
-        shp.doAction(command, room);
+    public void shpDoAction(Command command){
+        shp.doAction(command);
     }
     public void shcDoAction(User user, Command command, Room room){
         shc.userAction(user, command, room);

@@ -83,7 +83,7 @@ public class SHC extends Module{
     // shc.moduleAction
     //}
     // FIXME must be called from SHH when temp is up for example.
-    public Boolean moduleAction(Command c, Room room){
+    public Boolean moduleAction(Command c){
             addCommand(c);
             executeCommand();
             return true;

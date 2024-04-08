@@ -38,7 +38,6 @@ public class SHS implements Observable{
     SHH shh;
     SHC shc;
     SHP shp ;
-    public static SHS shs;
     public CommandFactory cf;
     private List<Room> houseLayout;
     private ArrayList<User> houseUsers;
@@ -48,9 +47,13 @@ public class SHS implements Observable{
     private House house;
     public List<Observer> observers = new ArrayList();
 
+    // Singleton Instance Pointer
+    public static SHS shs;
+
+    // Singleton Constructor
     private SHS(){
         this.shc = SHC.getIntance();
-        this.shh = SHH.getInstance(shc);
+        this.shh = SHH.getInstance();
         this.shp = SHP.getInstance(shc);
         this.cf = new CommandFactory(shc);
         this.houseLayout = new ArrayList<Room>();
@@ -60,6 +63,14 @@ public class SHS implements Observable{
         this.activeUser = null;
         this.house = House.getInstance();
         houseLayout = house.getRooms();
+    }
+    
+    // Singleton Instance Getter
+    public static SHS getInstance(){
+        if(shs == null){
+            shs = new SHS();
+        }
+        return shs;
     }
 
     public ArrayList<Room> getHouseLayout(){
@@ -86,12 +97,6 @@ public class SHS implements Observable{
                 return room;
         }
         return null;
-    }
-    public static SHS getInstance(){
-        if(shs == null){
-            shs = new SHS();
-        }
-        return shs;
     }
     public void init(){
         //GUI init
@@ -272,8 +277,8 @@ public class SHS implements Observable{
     //         shh.doAction(command, room);
     //     }
     // }
-    public void shpDoAction(Command command, Room room){
-        shp.doAction(command, room);
+    public void shpDoAction(Command command){
+        shp.doAction(command);
     }
     public void shcDoAction(User user, Command command, Room room){
         shc.userAction(user, command, room);

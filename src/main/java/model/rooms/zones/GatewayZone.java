@@ -4,7 +4,7 @@ public class GatewayZone extends Zone{
     private static GatewayZone instance = null;
 
     private GatewayZone(){
-        super(19);
+        super(0);
     }
 
     public static GatewayZone getInstance(){

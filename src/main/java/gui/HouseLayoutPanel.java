@@ -17,7 +17,7 @@ import javax.swing.*;
 
 public class HouseLayoutPanel extends JPanel implements Observer {
     private ImageIcon windowOpenIcon, windowClosedIcon, doorOpenIcon, doorClosedIcon,
-    lightOnIcon, lightOffIcon, userIcon, ACIcon, HeaterIcon;
+    lightOnIcon, lightOffIcon, userIcon, ACIcon, HeaterIcon, MotionDetectorIcon;
     private String tempInfo, userCountInfo, zoneInfo;
     private int rowHeight;
     private Color redColor;
@@ -39,6 +39,7 @@ public class HouseLayoutPanel extends JPanel implements Observer {
         userIcon = new ImageIcon("src/main/resources/houseLayoutIcons/UserIcon.png");
         ACIcon = new ImageIcon("src/main/resources/houseLayoutIcons/ACIcon.png");
         HeaterIcon = new ImageIcon("src/main/resources/houseLayoutIcons/HeaterOnIcon.png");
+        MotionDetectorIcon = new ImageIcon("src/main/resources/houseLayoutIcons/MotionDetectorIcon.png");
         redColor = Color.RED;
         this.rowHeight = 150 + 10; // Assuming room height of 150 and 10 units of spacing
         // checkRoomInfo();
@@ -180,12 +181,21 @@ public class HouseLayoutPanel extends JPanel implements Observer {
             infoY += 15; // Add some vertical space between lines
             g.drawString(zoneInfo, infoX, infoY);
 
-            iconX += userIcon.getIconWidth() + 100; // Move to the right for the next icon
+            iconX += userIcon.getIconWidth() + 60; // Move to the right for the next icon
 
             if(room.getHvac().getHeatingOn()){
                 HeaterIcon.paintIcon(this, g, iconX, iconY);
             } else if(room.getHvac().getCoolingOn()){
                 ACIcon.paintIcon(this, g, iconX, iconY);
+            }
+
+            iconX += userIcon.getIconWidth() + 20; // Move to the right for the next icon
+
+            // The icon displaying the motion detectors would display here
+            if(true){
+                MotionDetectorIcon.paintIcon(this, g, iconX, iconY);
+            } else if(false){
+
             }
             
             

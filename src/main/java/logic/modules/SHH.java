@@ -1,5 +1,7 @@
 package main.java.logic.modules;
 
+import main.java.logic.MediatorPattern.Component;
+import main.java.logic.MediatorPattern.Mediator;
 import main.java.logic.commands.Command;
 import main.java.logic.commands.off.TurnCoolingOff;
 import main.java.logic.commands.off.TurnHeatingOff;
@@ -9,7 +11,8 @@ import main.java.logic.observerPattern.Observable;
 import main.java.logic.users.User;
 import main.java.model.rooms.Room;
 
-public class SHH extends Module {
+public class SHH extends Module implements Component {
+    Mediator mediator = new main.java.logic.modules.Mediator();
     private SHC shc;
     private static SHH shh;
     private SHH(SHC shc){
@@ -44,5 +47,10 @@ public class SHH extends Module {
             System.out.println("updated the SHH and the window is now: " + room.getWindow(1).isOpen());
         } else {
         }    
+    }
+
+    @Override
+    public void notifying(Component c, String message) {
+        mediator.notifying(this, message);
     }
 }

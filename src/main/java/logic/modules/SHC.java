@@ -1,4 +1,5 @@
 package main.java.logic.modules;
+import main.java.logic.MediatorPattern.Component;
 import main.java.logic.commands.*;
 import main.java.logic.commands.close.CloseADoor;
 import main.java.logic.commands.close.CloseAWindow;
@@ -18,10 +19,11 @@ import java.util.List;
  * This module is responsible for handling commands related to room operations,
  * such as opening or closing doors and windows, based on user permissions.
  */
-public class SHC extends Module{
+public class SHC extends Module implements Component {
+
     //this potentially has to be a list
     private Command aCommand;
-
+    main.java.logic.MediatorPattern.Mediator mediator = new main.java.logic.modules.Mediator();
     private static SHC instance = null;
 
     private SHC(){
@@ -108,5 +110,10 @@ public class SHC extends Module{
     //TODO to be implemented as needed
     @Override
     public void update(Observable o){
+    }
+
+    @Override
+    public void notifying(Component c, String message) {
+        mediator.notifying(this, message);
     }
 }

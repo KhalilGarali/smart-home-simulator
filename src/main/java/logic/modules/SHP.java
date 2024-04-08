@@ -1,11 +1,15 @@
 package main.java.logic.modules;
 
+import main.java.logic.MediatorPattern.Component;
+import main.java.logic.MediatorPattern.Mediator;
 import main.java.logic.commands.Command;
 import main.java.logic.observerPattern.Observable;
 import main.java.logic.users.User;
 import main.java.model.rooms.Room;
 
-public class SHP extends Module{
+public class SHP extends Module implements Component{
+
+    Mediator mediator = new main.java.logic.modules.Mediator();
     private SHC shc;
     private static SHP shp;
 
@@ -25,5 +29,9 @@ public class SHP extends Module{
     @Override
     public void update(Observable o){
 
+    }
+
+    public void notifying(Component c , String message) {
+        mediator.notifying(this, message);
     }
 }

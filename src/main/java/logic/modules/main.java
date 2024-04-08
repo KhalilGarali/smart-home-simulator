@@ -1,9 +1,8 @@
 package main.java.logic.modules;
 
 import javax.swing.*;
-import main.java.gui.HomeSimulatorFrame;
 import main.java.gui.LogInFrame;
-import main.java.model.rooms.Room;
+
 
 public class main {
 

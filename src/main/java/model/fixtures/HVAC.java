@@ -76,9 +76,9 @@ public class HVAC implements Observer, Observable{
     }
 
     public void controlTemperature() {
-        if(this.currentRoomTemp < this.desiredRoomTemp && (Math.abs(this.currentRoomTemp - this.desiredRoomTemp)) > 0.00000000000009){
+        if(this.currentRoomTemp < this.desiredRoomTemp && (Math.abs(this.currentRoomTemp - this.desiredRoomTemp)) > 0.09){
             this.raiseTemp();
-        } else if(this.currentRoomTemp > this.desiredRoomTemp && (Math.abs(this.currentRoomTemp - this.desiredRoomTemp)) > 0.00000000000009){
+        } else if(this.currentRoomTemp > this.desiredRoomTemp && (Math.abs(this.currentRoomTemp - this.desiredRoomTemp)) > 0.09){
             this.lowerTemp();
         } else {
             this.heatingOn = false;

@@ -51,16 +51,15 @@ public class SHPPanel extends JPanel {
         roomCheckBoxes =  new ArrayList<>();
 
         JPanel awayMode = createAwayModePanel();
-        JPanel motionDetectorsPlacement = createMotionDetectorsPlacementPanel();
         JPanel setTimerForPolice = createSetTimerForPolicePanel();
 
         add(awayMode, gbc);
-        add(motionDetectorsPlacement, gbc);
         add(setTimerForPolice, gbc);
     }
 
     private JPanel createAwayModePanel(){
         JPanel awayMode = new JPanel();
+        JLabel pleaseMsg = new JLabel("Please set Detector Monitors in rooms BEFORE turning on the AWAY MODE");
         awayMode.setLayout(new BoxLayout(awayMode, BoxLayout.Y_AXIS));
         awayMode.setBorder(BorderFactory.createTitledBorder("Away Mode")); 
 
@@ -90,22 +89,6 @@ public class SHPPanel extends JPanel {
                 simulationToggle.setBackground(Color.RED);
             }
         });
-
-        //awayMode.add(titleLabel);
-        awayMode.add(simulationToggle);
-        return awayMode;
-    }
-
-
-    private JPanel createMotionDetectorsPlacementPanel() {
-        JPanel motionDetectorsPlacementPanel = new JPanel();
-        motionDetectorsPlacementPanel.setLayout(new BoxLayout(motionDetectorsPlacementPanel, BoxLayout.Y_AXIS));
-        motionDetectorsPlacementPanel.setBorder(BorderFactory.createTitledBorder("Motion Detectors Locations"));
-        
-        JPanel motionDetectorsPanel = new JPanel();
-        int rows = (int) Math.ceil(house.getRooms().size() / 4.0); // Calculate the number of rows needed for two columns
-        motionDetectorsPanel.setLayout(new GridLayout(rows, 4, 15, 15)); // Set the layout with px horizontal and vertical gaps
-
         for (Room room : house.getRooms()) {
             JCheckBox roomCheckBox = new JCheckBox(room.getName());
             roomCheckBox.addItemListener(e -> {
@@ -118,27 +101,36 @@ public class SHPPanel extends JPanel {
                 }
 
             });
-            motionDetectorsPanel.add(roomCheckBox);
+            awayMode.add(roomCheckBox);
             roomCheckBoxes.add(roomCheckBox);
         }
 
-        JPanel submitPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        JButton submitButton = new JButton("Submit");
-        submitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Handle submit button click
-            }
-        });
-
-        submitPanel.add(submitButton);
-        motionDetectorsPlacementPanel.add(motionDetectorsPanel);
-        motionDetectorsPlacementPanel.add(submitPanel);
-
-
-
-        return motionDetectorsPlacementPanel;
+        //awayMode.add(titleLabel);
+        awayMode.add(simulationToggle);
+        awayMode.add(pleaseMsg);
+        return awayMode;
     }
+
+
+//    private JPanel createMotionDetectorsPlacementPanel() {
+//        JPanel motionDetectorsPlacementPanel = new JPanel();
+//        motionDetectorsPlacementPanel.setLayout(new BoxLayout(motionDetectorsPlacementPanel, BoxLayout.Y_AXIS));
+//        motionDetectorsPlacementPanel.setBorder(BorderFactory.createTitledBorder("Motion Detectors Locations"));
+//
+//        JPanel motionDetectorsPanel = new JPanel();
+//        int rows = (int) Math.ceil(house.getRooms().size() / 4.0); // Calculate the number of rows needed for two columns
+//        motionDetectorsPanel.setLayout(new GridLayout(rows, 4, 15, 15)); // Set the layout with px horizontal and vertical gaps
+//
+//
+//
+//
+//
+//        motionDetectorsPlacementPanel.add(motionDetectorsPanel);
+//
+//
+//
+//        return motionDetectorsPlacementPanel;
+//    }
 
     private JPanel createSetTimerForPolicePanel() {
         JPanel setTimerPanel = new JPanel();

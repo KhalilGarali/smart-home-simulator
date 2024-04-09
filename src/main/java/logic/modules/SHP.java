@@ -19,10 +19,14 @@ public class SHP extends Module implements Component, Observable{
     private House house = House.getInstance();
     private boolean isAway = false;
 
+
     private ArrayList<Observer> observers = new ArrayList<>();
 
     private SHP(SHC ashc){
         this.shc = ashc;
+        for(Room room: house.getRooms()){
+            room.addObserver(this);
+        }
     }
 
     public static synchronized SHP getInstance(SHC ashc){
@@ -37,7 +41,11 @@ public class SHP extends Module implements Component, Observable{
 
     @Override
     public void update(Observable o){
-
+        if(o instanceof Room){
+            Room room = (Room) o;
+            //TODO: call police
+            System.out.println("POLICE CALLED");
+        }
     }
 
     public void houseIsEmpty() {
@@ -54,11 +62,22 @@ public class SHP extends Module implements Component, Observable{
 
     public void setIsAway(boolean isAway) {
         this.isAway = isAway;
+
         notifyObservers();
 
-        if (this.isAway == true) {
+        if(!this.isAway){
+            for(Room room: house.getRooms()){
+                room.setActiveMotionDetector(false);
+            }
+        }
+        if (this.isAway) {
+            for(Room room: house.getRooms()){
+                if(room.getMotionDetector())
+                    room.setActiveMotionDetector(true);
+            }
             shs.notify(this, "HouseIsEmpty");
         }
+
     }
 
     public boolean getIsAway() {

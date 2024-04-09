@@ -32,6 +32,7 @@ public abstract class Room implements Observable, Observer{
     protected String name;
     public Zone zone;
     private boolean hasMotionDetector;
+    private boolean activeMotionDetector;
 
     protected List<User> usersInThisRoomList = new ArrayList<>();
 
@@ -147,6 +148,12 @@ public abstract class Room implements Observable, Observer{
         this.hasMotionDetector = hasMotionDetector;
     }
 
+    public boolean getActiveMotionDetector(){
+        return activeMotionDetector;
+    }
+    public void setActiveMotionDetector(boolean activeMotionDetector){
+        this.activeMotionDetector = activeMotionDetector;
+    }
     // open and close for All's - will be useful with SHH and SHP
     public void openAllOpenings() {
         System.out.println("Open everything");
@@ -258,6 +265,10 @@ public abstract class Room implements Observable, Observer{
 
     public void addUserToRoom(User user){
         usersInThisRoomList.add(user);
+        if(hasMotionDetector && activeMotionDetector){
+            System.out.println("Motion detected in: " + this.getName());
+            notifyObservers();
+        }
     }
 
     public void removeUserFromRoom(User user){

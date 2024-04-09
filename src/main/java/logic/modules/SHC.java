@@ -1,7 +1,10 @@
 package main.java.logic.modules;
 
+import java.util.ArrayList;
+
 import main.java.logic.MediatorPattern.Component;
 import main.java.logic.commands.*;
+import main.java.logic.layout.House;
 import main.java.logic.observerPattern.Observable;
 import main.java.logic.users.Parent;
 import main.java.logic.users.User;
@@ -18,6 +21,8 @@ public class SHC extends Module implements Component {
     private Command aCommand;
     private static SHC instance = null;
     private SHS shs;
+    private House house = House.getInstance();
+    private ArrayList<Room> rooms = house.getRooms();
 
     private SHC() {
 
@@ -107,6 +112,9 @@ public class SHC extends Module implements Component {
 
     public void closeAllOpenings() {
         //go thru every room and close all windows and doors
+        for (Room room : this.rooms) {
+            
+        }
     }
 
     public void openAllOpenings() {

@@ -23,6 +23,9 @@ import javax.swing.plaf.metal.MetalToggleButtonUI;
 import javax.swing.Box;
 
 import main.java.logic.layout.House;
+import main.java.logic.modules.SHC;
+import main.java.logic.modules.SHP;
+import main.java.logic.modules.SHS;
 import main.java.model.rooms.Room;
 
 public class SHPPanel extends JPanel {
@@ -32,6 +35,9 @@ public class SHPPanel extends JPanel {
     private ArrayList<JCheckBox> roomCheckBoxes;
     private JLabel timerLabel;
     private JTextField timerField;
+    
+    private SHC shc = SHC.getIntance();
+    private SHP shp = SHP.getInstance(shc);
     
 
     public SHPPanel() {
@@ -76,9 +82,11 @@ public class SHPPanel extends JPanel {
         simulationToggle.addItemListener(e -> {
             if (simulationToggle.isSelected()) {
                 simulationToggle.setText("ON");
+                shp.setIsAway(true);
                 simulationToggle.setBackground(Color.GREEN);
             } else {
                 simulationToggle.setText("OFF");
+                shp.setIsAway(false);
                 simulationToggle.setBackground(Color.RED);
             }
         });

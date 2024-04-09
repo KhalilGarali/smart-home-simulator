@@ -23,12 +23,16 @@ public class SHH extends Module implements Component {
     private SHC shc;
     private SHS shs;
     private static SHH shh;
+    private SHP shp;
     private ArrayList<HVAC> hvacs = House.getInstance().getHVACs();
     private Temperature tempOutside = Temperature.getInstance();
     private CommandFactory cf;
     private Boolean isAway = false;
+
     private SHH(SHC shc){
         this.shc = shc;
+        this.shp = SHP.getInstance(shc);
+        this.shp.addObserver(this);
         cf = new CommandFactory(shc);
         for (HVAC hvac : hvacs) {
             hvac.addObserver(this);
@@ -66,6 +70,11 @@ public class SHH extends Module implements Component {
             tempOutside = temp;
             System.out.println("updated the SHH and the Temperature is now: " + tempOutside.getTemperature() + " outside");
             monitorTemp();
+        }
+
+        if (o instanceof SHP) {
+            this.isAway = ((SHP)o).getIsAway();
+            System.out.println("this.isAway in SHH: " + this.isAway);
         }
     }
 

@@ -334,7 +334,10 @@ public class SHS implements Observable, Mediator {
         }
         if( c instanceof SHP){
             if(message.equalsIgnoreCase("HouseIsEmpty")){
-                shc.closeAllOpenings();
+                for (Room room : houseLayout) {
+                    shc.moduleAction(cf.createCommand("closeawindow", room, 0));
+                    shc.moduleAction(cf.createCommand("closeadoor", room, 0));
+                }
             }
             if(message.equalsIgnoreCase("HouseIsNotEmpty")){
                 shc.openAllOpenings();

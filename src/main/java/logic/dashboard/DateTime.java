@@ -17,6 +17,7 @@ public class DateTime implements Observable{
     private static int counter = 0;
     private static DateTime instance;
     private int totalSecondsElapsed = 0;
+    private int multiplier = 1;
 
     private ArrayList<Observer> observers = new ArrayList<>();
 
@@ -55,7 +56,7 @@ public class DateTime implements Observable{
         return totalSecondsElapsed;
     }
     public void incrementSecond() {
-        dateTime = dateTime.plusSeconds(1);
+        dateTime = dateTime.plusSeconds(1*multiplier);
     }
 
     public static void setDate(int year, int month, int day) {
@@ -109,5 +110,13 @@ public class DateTime implements Observable{
     @Override
     public void removeObserver(Observer o) {
         observers.remove(o);
+    }
+
+    public void setMultiplier(int multiplier2) {
+        this.multiplier = multiplier2;
+    }
+
+    public int getMultiplier() {
+        return multiplier;
     }
 }

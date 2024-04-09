@@ -2,6 +2,9 @@ package main.java.logic.modules;
 
 import java.util.ArrayList;
 
+import java.util.ArrayList;
+import main.java.logic.MediatorPattern.Component;
+import main.java.logic.MediatorPattern.Mediator;
 import main.java.logic.commands.Command;
 import main.java.logic.commands.CommandFactory;
 import main.java.logic.commands.off.TurnCoolingOff;
@@ -16,15 +19,21 @@ import main.java.model.fixtures.HVAC;
 import main.java.model.fixtures.Temperature;
 import main.java.model.rooms.Room;
 
-public class SHH extends Module{
-    private SHC shc = SHC.getIntance();
+public class SHH extends Module implements Component {
+    private SHC shc;
+    private SHS shs;
     private static SHH shh;
+    private SHP shp;
     private ArrayList<HVAC> hvacs = House.getInstance().getHVACs();
     private Temperature tempOutside = Temperature.getInstance();
-    private CommandFactory cf = new CommandFactory(shc);
+    private CommandFactory cf;
     private Boolean isAway = false;
 
-    private SHH(){
+    private SHH(SHC shc){
+        this.shc = shc;
+        this.shp = SHP.getInstance(shc);
+        this.shp.addObserver(this);
+        cf = new CommandFactory(shc);
         for (HVAC hvac : hvacs) {
             hvac.addObserver(this);
         }
@@ -32,9 +41,10 @@ public class SHH extends Module{
             tempOutside.addObserver(this);
         }
     }
-    public static SHH getInstance(){
+
+    public static SHH getInstance(SHC shc){
         if(shh == null){
-            shh = new SHH();
+            shh = new SHH(shc);
         }
         return shh;
     }
@@ -44,6 +54,7 @@ public class SHH extends Module{
 
     @Override
     public void update(Observable o){
+        System.err.println("SHH is updated");
         if (o instanceof Room) {
             Room room = (Room) o;
         } 
@@ -60,14 +71,21 @@ public class SHH extends Module{
             System.out.println("updated the SHH and the Temperature is now: " + tempOutside.getTemperature() + " outside");
             monitorTemp();
         }
+
+        if (o instanceof SHP) {
+            this.isAway = ((SHP)o).getIsAway();
+            System.out.println("this.isAway in SHH: " + this.isAway);
+        }
     }
 
     public void monitorTemp(){
         if (!isAway) {
             for (HVAC hvac : hvacs) {
-                if (tempOutside.getTemperature() <= hvac.getCurrentRoomTemp()  && !hvac.getRoom().getWindow(1).isOpen() ) {
+                if (tempOutside.getTemperature() <= hvac.getCurrentRoomTemp()  && !hvac.getRoom().getWindow(1).isOpen()) {
+                    System.out.println("the temp check is reached");
                     shc.moduleAction(cf.createCommand("openawindow", hvac.getRoom(),0));
                 } else if (tempOutside.getTemperature() > hvac.getCurrentRoomTemp() && hvac.getRoom().getWindow(1).isOpen()) {
+                    System.out.println("the temp check is reached");
                     shc.moduleAction(cf.createCommand("closeawindow", hvac.getRoom(),0));
                 }
             }
@@ -78,5 +96,12 @@ public class SHH extends Module{
     // to be called by the mediator class
     public void updateHouseStatus(Boolean isAway){
         this.isAway = isAway;
+    }
+    public void setSHS(SHS shs){
+        this.shs = shs;
+    }
+    @Override
+    public String toString() {
+        return "SHH";
     }
 }

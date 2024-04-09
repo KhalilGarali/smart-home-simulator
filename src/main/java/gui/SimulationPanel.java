@@ -59,6 +59,7 @@ public class SimulationPanel extends JPanel {
 
     // Add link to outputPanel to print information
     private static OutputPanel outpanel = OutputPanel.getInstance();
+    private DateTime dateTime = DateTime.getInstance();
 
 
     public SimulationPanel() {
@@ -136,6 +137,7 @@ public class SimulationPanel extends JPanel {
         timeSpeedSlider.addChangeListener(e -> {
             int speed = timeSpeedSlider.getValue();
             timeSpeed.setSpeed(speed*2);
+            dateTime.setMultiplier(dateTime.getMultiplier()*10);
             // This writes to file too often
             // TODO: Limit the amount of times this writes to file
             ArrayList<String> text = new ArrayList<>();

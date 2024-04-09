@@ -1,37 +1,38 @@
 package main.java.logic.modules;
+
+import java.util.ArrayList;
+
+import main.java.logic.MediatorPattern.Component;
 import main.java.logic.commands.*;
-import main.java.logic.commands.close.CloseADoor;
-import main.java.logic.commands.close.CloseAWindow;
-import main.java.logic.commands.open.OpenADoor;
-import main.java.logic.commands.open.OpenAWindow;
+import main.java.logic.layout.House;
 import main.java.logic.observerPattern.Observable;
 import main.java.logic.users.Parent;
 import main.java.logic.users.User;
 import main.java.model.rooms.*;
-
-import javax.swing.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Represents the Smart Home Controller (SHC) module.
  * This module is responsible for handling commands related to room operations,
  * such as opening or closing doors and windows, based on user permissions.
  */
-public class SHC extends Module{
+public class SHC extends Module implements Component {
+
     //this potentially has to be a list
     private Command aCommand;
-
     private static SHC instance = null;
+    private SHS shs;
+    private House house = House.getInstance();
+    private ArrayList<Room> rooms = house.getRooms();
 
-    private SHC(){
+    private SHC() {
 
     }
+
     /**
      * Default constructor for the SHC module.
      */
-    public static SHC getIntance(){
-        if(instance ==null){
+    public static synchronized SHC getIntance() {
+        if (instance == null) {
             instance = new SHC();
         }
         return instance;
@@ -49,27 +50,26 @@ public class SHC extends Module{
 
     //SHS
     //userAction(father, OpenAWindow, kitchen) //upon an event from GUI
-    public Boolean userAction(User u, Command c, Room room){
-        if(u instanceof Parent){
-            if (u.hasPermission(c.requirePermissions())){
+    public Boolean userAction(User u, Command c, Room room) {
+        if (u instanceof Parent) {
+            if (u.hasPermission(c.requirePermissions())) {
                 addCommand(c);
                 executeCommand();
                 return true;
             }
-        }
-        else if(u.getRoom().equals(room)){
-            if (u.hasPermission(c.requirePermissions())){
+        } else if (u.getRoom().equals(room)) {
+            if (u.hasPermission(c.requirePermissions())) {
                 addCommand(c);
                 executeCommand();
                 return true;
-            }else {
+            } else {
                 System.out.println("\n--------------------------------------------------------------------------");
                 System.out.println(u + " doesn't have permission to " + c);
                 System.out.println("--------------------------------------------------------------------------");
-              //  JOptionPane.showMessageDialog(null,u + " doesn't have permission to " + c);
+                //  JOptionPane.showMessageDialog(null,u + " doesn't have permission to " + c);
             }
         } else {
-            System.out.println(u.getName() + " is not in "+ room.getName() );
+            System.out.println(u.getName() + " is not in " + room.getName());
 //            JOptionPane.showMessageDialog(null,u.getName() + " is not in "+ room.getName() );
 
         }
@@ -94,19 +94,33 @@ public class SHC extends Module{
      *
      * @param c The command to add to the module.
      */
-    public void addCommand(Command c){
+    public void addCommand(Command c) {
         aCommand = c;
     }
 
     /**
      * Executes the command stored in the module.
      */
-    public void executeCommand(){
+    public void executeCommand() {
         aCommand.execute();
     }
 
     //TODO to be implemented as needed
     @Override
-    public void update(Observable o){
+    public void update(Observable o) {
+    }
+
+    public void closeAllOpenings() {
+        //go thru every room and close all windows and doors
+        for (Room room : this.rooms) {
+            
+        }
+    }
+
+    public void openAllOpenings() {
+        //go thru every room and open all openings
+    }
+    public void setSHS(SHS shs){
+        this.shs = shs;
     }
 }

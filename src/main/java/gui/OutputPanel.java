@@ -6,6 +6,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -20,18 +24,14 @@ public class OutputPanel extends JPanel {
     private JTextArea outputConsole;
     private static OutputPanel op;
     private SHS shs = SHS.getInstance();
-    private File file;
-    private FileWriter writer;
+    private static final Logger logger = Logger.getLogger(OutputPanel.class.getName());
     public OutputPanel() {
-        file = new File("consoleLog.txt");
-        if (file.exists()) {
-            file.delete();
-        }
         try {
-            boolean isCreated = file.createNewFile();
-            writer = new FileWriter(file);
+            FileHandler fileHandler = new FileHandler("consoleLog.log");
+            fileHandler.setFormatter(new SimpleFormatter());
+            logger.addHandler(fileHandler);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Error creating log file", e);
         }
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -44,27 +44,21 @@ public class OutputPanel extends JPanel {
         add(scrollPane);
     }
 
-    // Append text to the output console and file
-    public void writeText(String text) {
-        try {
-            writer.write(text + "\n");
-            writer.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        outputConsole.append(text + "\n");
-    }
-
     public void appendText(ArrayList<String> text){
         String date = DateTime.getDate().format(DateTimeFormatter.ofPattern("E MMM dd yyyy"));
         String time = DateTime.getTime().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
-        writeText(date + " " + time);
+        StringBuilder builder = new StringBuilder();
+        builder.append(date + " " + time + "\n");
+        outputConsole.append(date + " " + time + "\n");
         for (String txt: text){
-            writeText(txt);
+            outputConsole.append(txt + "\n");
+            builder.append(txt + "\n");
         }
-        // This can be subject to change if event is triggered not through GUI
-        writeText("Event triggered by user " + shs.activeUser.getClass().getSimpleName() + " " + shs.activeUser.getName());
-        writeText("**************************************************************");
+        outputConsole.append("Event triggered by user " + shs.activeUser.getClass().getSimpleName() + " " + shs.activeUser.getName() + "\n");
+        builder.append("Event triggered by user " + shs.activeUser.getClass().getSimpleName() + " " + shs.activeUser.getName() + "\n");
+        outputConsole.append("**************************************************************\n");
+        builder.append("**************************************************************");
+        logger.log(Level.INFO, builder.toString());
     }
 
     public static OutputPanel getInstance(){

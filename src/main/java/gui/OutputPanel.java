@@ -24,8 +24,10 @@ public class OutputPanel extends JPanel {
     private JTextArea outputConsole;
     private static OutputPanel op;
     private SHS shs = SHS.getInstance();
+    // Log file to be written to
     private static final Logger logger = Logger.getLogger(OutputPanel.class.getName());
     public OutputPanel() {
+        // Adding handler to logger
         try {
             FileHandler fileHandler = new FileHandler("consoleLog.log");
             fileHandler.setFormatter(new SimpleFormatter());
@@ -34,26 +36,36 @@ public class OutputPanel extends JPanel {
             logger.log(Level.SEVERE, "Error creating log file", e);
         }
 
+        // Creating console output area with text area
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createTitledBorder("Console Output"));
         outputConsole = new JTextArea();
         outputConsole.setLineWrap(true);
         outputConsole.setWrapStyleWord(true);
         JScrollPane scrollPane = new JScrollPane(outputConsole);
-        scrollPane.setPreferredSize(new Dimension(getWidth(), 100)); // Set the preferred height to 100 pixels
+        // Set the preferred height to 100 pixels
+        scrollPane.setPreferredSize(new Dimension(getWidth(), 100));
+
         add(scrollPane);
     }
 
+    // Function to log text to file and print to console
     public void appendText(ArrayList<String> text){
+        StringBuilder builder = new StringBuilder();
         String date = DateTime.getDate().format(DateTimeFormatter.ofPattern("E MMM dd yyyy"));
         String time = DateTime.getTime().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
-        StringBuilder builder = new StringBuilder();
+
+        // Log date and time
         builder.append(date + " " + time + "\n");
         outputConsole.append(date + " " + time + "\n");
+
+        // Log text sent from commands
         for (String txt: text){
             outputConsole.append(txt + "\n");
             builder.append(txt + "\n");
         }
+
+        // Log info event is triggered by
         outputConsole.append("Event triggered by user " + shs.activeUser.getClass().getSimpleName() + " " + shs.activeUser.getName() + "\n");
         builder.append("Event triggered by user " + shs.activeUser.getClass().getSimpleName() + " " + shs.activeUser.getName() + "\n");
         outputConsole.append("**************************************************************\n");

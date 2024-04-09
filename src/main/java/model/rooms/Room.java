@@ -31,6 +31,7 @@ public abstract class Room implements Observable, Observer{
     private HVAC hvac;
     protected String name;
     public Zone zone;
+    private boolean hasMotionDetector;
 
     protected List<User> usersInThisRoomList = new ArrayList<>();
 
@@ -137,6 +138,13 @@ public abstract class Room implements Observable, Observer{
     }
     public String getName() {
         return name;
+    }
+
+    public boolean getMotionDetector(){
+        return hasMotionDetector;
+    }
+    public void setMotionDetector(boolean hasMotionDetector){
+        this.hasMotionDetector = hasMotionDetector;
     }
 
     // open and close for All's - will be useful with SHH and SHP

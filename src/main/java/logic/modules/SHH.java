@@ -54,14 +54,12 @@ public class SHH extends Module implements Component {
 
     @Override
     public void update(Observable o){
-        System.err.println("SHH is updated");
         if (o instanceof Room) {
             Room room = (Room) o;
         } 
         // monitor the temperature of the rooms
         if (o instanceof HVAC) {
             HVAC hvac = (HVAC) o;
-            System.out.println("updated the SHH and the HVAC is now: " + hvac.getHeatingOn() + " in room: " + hvac.getRoom().getName() + "from " + hvac.getCurrentRoomTemp() + " to " + hvac.getDesiredRoomTemp());
             monitorTemp();
         }  
         // monitor the temperature outside 

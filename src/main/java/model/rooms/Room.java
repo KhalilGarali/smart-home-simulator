@@ -287,7 +287,8 @@ public abstract class Room implements Observable, Observer{
     //not showing window2 and door2 for now!
     @Override
     public String toString() {
-        return " has window= " + window1 +
+        return " has motion detector= " + hasMotionDetector +
+                ", window= " + window1 +
                 ", door= " + door1 +
                 ", light= " + light.getLight() +
                 ", current temp= " + getCurrentTemperature() +

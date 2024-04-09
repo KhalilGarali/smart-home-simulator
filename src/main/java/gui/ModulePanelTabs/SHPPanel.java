@@ -109,7 +109,14 @@ public class SHPPanel extends JPanel {
         for (Room room : house.getRooms()) {
             JCheckBox roomCheckBox = new JCheckBox(room.getName());
             roomCheckBox.addItemListener(e -> {
-                
+                if (roomCheckBox.isSelected()) {
+                    shp.addMotionDetector(room);
+                    System.out.println("Room: " + room.getName() + " has motion detector: " + room.getMotionDetector());
+                } else {
+                    shp.removeMotionDetector(room);
+                    System.out.println("Room: " + room.getName() + " has motion detector: " + room.getMotionDetector());
+                }
+
             });
             motionDetectorsPanel.add(roomCheckBox);
             roomCheckBoxes.add(roomCheckBox);

@@ -81,4 +81,11 @@ public class SHP extends Module implements Component, Observable{
             o.update(this);
         }
     }
+
+    public void addMotionDetector(Room room) {
+        room.setMotionDetector(true);
+    }
+    public void removeMotionDetector(Room room) {
+        room.setMotionDetector(false);
+    }
 }

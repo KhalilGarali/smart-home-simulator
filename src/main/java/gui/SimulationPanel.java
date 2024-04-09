@@ -200,7 +200,13 @@ public class SimulationPanel extends JPanel {
 
     private void openDirectoryChooser() {
         LocalDateTime currentDateTime = LocalDateTime.now(); // Get the current local date and time
-        String message = null;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        String formattedDateTime = currentDateTime.format(formatter);
+
+        // Replace colons with dashes in the time part
+        String dateTimeWithDashes = formattedDateTime.replace(":", "-");
+
+
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Chose where to save Users");
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -208,8 +214,8 @@ public class SimulationPanel extends JPanel {
 
         if (userSelection == JFileChooser.APPROVE_OPTION) {
             File selectedFolder = fileChooser.getSelectedFile();
-            System.out.println("Save users to: " + selectedFolder.getAbsolutePath()+"/users-"+currentDateTime+".txt");
-             saveUsers(selectedFolder.getAbsolutePath()+"/users-"+currentDateTime+".txt", users, message);
+            System.out.println("Save users to: " + selectedFolder.getAbsolutePath()+"/users-"+dateTimeWithDashes+".txt");
+             UserPersistence.saveUsers(selectedFolder.getAbsolutePath()+"/users-"+dateTimeWithDashes+".txt", users);
         }
     }
 

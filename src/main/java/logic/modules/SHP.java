@@ -8,6 +8,8 @@ import main.java.logic.commands.Command;
 import main.java.logic.layout.House;
 import main.java.logic.observerPattern.Observable;
 import main.java.logic.observerPattern.Observer;
+import main.java.model.fixtures.HVAC;
+import main.java.model.fixtures.Temperature;
 import main.java.model.rooms.Room;
 
 // FIXME must also implement the observer pattern to observe the rooms
@@ -18,11 +20,14 @@ public class SHP extends Module implements Component, Observable{
     private SHS shs;
     private House house = House.getInstance();
     private boolean isAway = false;
-
+    private ArrayList<HVAC> hvacs = House.getInstance().getHVACs();
     private ArrayList<Observer> observers = new ArrayList<>();
 
     private SHP(SHC ashc){
         this.shc = ashc;
+        for (HVAC hvac : hvacs) {
+            hvac.addObserver(this);
+        }
     }
 
     public static synchronized SHP getInstance(SHC ashc){
@@ -33,11 +38,6 @@ public class SHP extends Module implements Component, Observable{
     }
     public void doAction(Command command){
         shc.moduleAction(command);
-    }
-
-    @Override
-    public void update(Observable o){
-
     }
 
     public void houseIsEmpty() {
@@ -81,4 +81,14 @@ public class SHP extends Module implements Component, Observable{
             o.update(this);
         }
     }
+    @Override
+    public void update(Observable o){
+        System.err.println("SHP is updated");
+
+        // monitor the temperature of the rooms
+        if (o instanceof HVAC) {
+            HVAC hvac = (HVAC) o;
+        }
+    }
+
 }

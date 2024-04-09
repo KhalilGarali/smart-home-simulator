@@ -70,3 +70,4 @@ nbdist/
 
 .DS_Store
 consoleLog.txt
+consoleLog.log.lck

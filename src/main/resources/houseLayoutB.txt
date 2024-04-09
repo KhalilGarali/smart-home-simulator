@@ -5,10 +5,8 @@ Door: Closed
 Light: on
 
 Room: garage
-Name: My Garage
-Window: Open
 Name: BMW Garage
-Window: Closed
+Window: Open
 Door: Closed
 Light: on
 

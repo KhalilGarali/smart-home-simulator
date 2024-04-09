@@ -30,6 +30,7 @@ import main.java.model.rooms.zones.Zone;
 public class Layout {
     private List<Room> rooms = new ArrayList<>();
     private List<Zone> zones = new ArrayList<>(); // This will be populated with the zones (0 or max of 1 per zone type). JB!
+    private List<HVAC> hvacs = new ArrayList<>();
 
     public Layout(String filePath) {
         readLayout(filePath);
@@ -121,6 +122,16 @@ public class Layout {
 
     public List<Zone> getZones() {
         return zones;
+    }
+
+    public List<HVAC> getHVACs() {
+        for (Room room : rooms) {
+            HVAC hvac = room.getHvac();
+            if (hvac != null && hvacs.contains(hvac) == false) {
+                hvacs.add(hvac);
+            }
+        }
+        return hvacs;
     }
 }
 

@@ -42,7 +42,6 @@ public class SHS implements Observable, Mediator {
     SHP shp;
 
     private boolean isEmpty = true;
-    public static SHS shs;
     public CommandFactory cf;
     private List<Room> houseLayout;
     private ArrayList<User> houseUsers;
@@ -52,9 +51,13 @@ public class SHS implements Observable, Mediator {
     private House house;
     public List<Observer> observers = new ArrayList();
 
+    // Singleton Instance Pointer
+    public static SHS shs;
+
+    // Singleton Constructor
     private SHS(){
         this.shc = SHC.getIntance();
-        this.shh = SHH.getInstance(shc);
+        this.shh = SHH.getInstance();
         this.shp = SHP.getInstance(shc);
         this.shc.setSHS(this);
         this.shh.setSHS(this);
@@ -67,6 +70,14 @@ public class SHS implements Observable, Mediator {
         this.activeUser = null;
         this.house = House.getInstance();
         houseLayout = house.getRooms();
+    }
+    
+    // Singleton Instance Getter
+    public static SHS getInstance(){
+        if(shs == null){
+            shs = new SHS();
+        }
+        return shs;
     }
 
     public ArrayList<Room> getHouseLayout(){

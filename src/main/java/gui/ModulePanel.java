@@ -30,6 +30,7 @@ import java.awt.event.ActionEvent;
 
 import main.java.gui.ModulePanelTabs.SHCPanel;
 import main.java.gui.ModulePanelTabs.SHHPanel;
+import main.java.gui.ModulePanelTabs.SHPPanel;
 import main.java.logic.layout.House;
 import main.java.logic.modules.SHS;
 import main.java.logic.users.*;
@@ -69,12 +70,14 @@ public class ModulePanel extends JPanel implements Observer{
         JPanel shsPanel = createShsPanel(usernameDisplay, locationDisplay);
         // Create SHH Panel
         SHHPanel SHHPanel = new SHHPanel();
+        // Create SHP Panel
+        SHPPanel SHPPanel = new SHPPanel();
 
         // Module Tabs
         tabbedPane = new JTabbedPane();
         tabbedPane.addTab("SHS", new JScrollPane(shsPanel));
         tabbedPane.addTab("SHC", new JScrollPane(SHCPanel));
-        tabbedPane.addTab("SHP", new JLabel("SHP Content"));
+        tabbedPane.addTab("SHP", new JScrollPane(SHPPanel));
         tabbedPane.addTab("SHH", new JScrollPane(SHHPanel));
 
         add(tabbedPane, BorderLayout.CENTER);

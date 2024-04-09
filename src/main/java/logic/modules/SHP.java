@@ -22,9 +22,8 @@ public class SHP extends Module implements Component{
         }
         return shp;
     }
-
-    public void doAction(Command command, Room room){
-        shc.moduleAction(command, room);
+    public void doAction(Command command){
+        shc.moduleAction(command);
     }
 
     @Override

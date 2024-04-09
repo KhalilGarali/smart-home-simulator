@@ -6,6 +6,8 @@ import main.java.logic.observerPattern.Observer;
 import main.java.model.rooms.Room;
 import main.java.model.rooms.zones.Zone;
 
+import java.lang.Math;
+
 import java.util.ArrayList;
 
 public class HVAC implements Observer, Observable{
@@ -19,6 +21,7 @@ public class HVAC implements Observer, Observable{
     private double seconds = 0;
     private ArrayList<Observer> observers= new ArrayList<>();
     private DateTime dateTime = DateTime.getInstance();
+    private int tempOutside = Temperature.getTemperature();
 
     public HVAC(Room room) {
         this.room = room;
@@ -73,10 +76,9 @@ public class HVAC implements Observer, Observable{
     }
 
     public void controlTemperature() {
-        //TODO check the 0.25 for maintaining the temperature
-        if(this.currentRoomTemp < this.desiredRoomTemp){
+        if(this.currentRoomTemp < this.desiredRoomTemp && (Math.abs(this.currentRoomTemp - this.desiredRoomTemp)) > 0.00000000000009){
             this.raiseTemp();
-        } else if(this.currentRoomTemp > this.desiredRoomTemp){
+        } else if(this.currentRoomTemp > this.desiredRoomTemp && (Math.abs(this.currentRoomTemp - this.desiredRoomTemp)) > 0.00000000000009){
             this.lowerTemp();
         } else {
             this.heatingOn = false;

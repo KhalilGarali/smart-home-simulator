@@ -2,19 +2,10 @@ package main.java.logic.modules;
 
 import main.java.logic.MediatorPattern.Component;
 import main.java.logic.commands.*;
-import main.java.logic.commands.close.CloseADoor;
-import main.java.logic.commands.close.CloseAWindow;
-import main.java.logic.commands.close.CloseAllOpenings;
-import main.java.logic.commands.open.OpenADoor;
-import main.java.logic.commands.open.OpenAWindow;
 import main.java.logic.observerPattern.Observable;
 import main.java.logic.users.Parent;
 import main.java.logic.users.User;
 import main.java.model.rooms.*;
-
-import javax.swing.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Represents the Smart Home Controller (SHC) module.
@@ -25,8 +16,8 @@ public class SHC extends Module implements Component {
 
     //this potentially has to be a list
     private Command aCommand;
-    main.java.logic.MediatorPattern.Mediator mediator = new main.java.logic.modules.Mediator();
     private static SHC instance = null;
+    private SHS shs;
 
     private SHC() {
 
@@ -35,7 +26,7 @@ public class SHC extends Module implements Component {
     /**
      * Default constructor for the SHC module.
      */
-    public static SHC getIntance() {
+    public static synchronized SHC getIntance() {
         if (instance == null) {
             instance = new SHC();
         }
@@ -114,16 +105,14 @@ public class SHC extends Module implements Component {
     public void update(Observable o) {
     }
 
-    @Override
-    public void notifying(Component c, String message) {
-        mediator.notifying(this, message);
-    }
-
     public void closeAllOpenings() {
         //go thru every room and close all windows and doors
     }
 
     public void openAllOpenings() {
         //go thru every room and open all openings
+    }
+    public void setSHS(SHS shs){
+        this.shs = shs;
     }
 }

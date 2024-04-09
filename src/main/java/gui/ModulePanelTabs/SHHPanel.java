@@ -48,7 +48,7 @@ public class SHHPanel extends JPanel implements Observer {
     Command aCommand;
 
     SHC shc = SHC.getIntance();
-    private SHH shh = SHH.getInstance(shc);
+    // private SHH shh = SHH.getInstance(shc);
 
     private static OutputPanel outpanel = OutputPanel.getInstance();
 

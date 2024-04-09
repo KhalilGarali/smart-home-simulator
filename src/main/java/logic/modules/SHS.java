@@ -2,6 +2,7 @@ package main.java.logic.modules;
 
 //can remove alot of the commands from here
 import main.java.logic.MediatorPattern.Component;
+import main.java.logic.MediatorPattern.Mediator;
 import main.java.logic.commands.Command;
 import main.java.logic.commands.CommandFactory;
 import main.java.logic.commands.change.ChangeTemperature;
@@ -35,11 +36,11 @@ import java.util.Objects;
 
 import java.util.concurrent.TimeUnit;
 
-public class SHS implements Observable, Component {
-    SHH shh;
+public class SHS implements Observable, Mediator {
     SHC shc;
-    SHP shp ;
-    private Mediator mediator = new Mediator();
+    SHH shh;
+    SHP shp;
+
     private boolean isEmpty = true;
     public static SHS shs;
     public CommandFactory cf;
@@ -55,6 +56,9 @@ public class SHS implements Observable, Component {
         this.shc = SHC.getIntance();
         this.shh = SHH.getInstance(shc);
         this.shp = SHP.getInstance(shc);
+        this.shc.setSHS(this);
+        this.shh.setSHS(this);
+        this.shp.setSHS(this);
         this.cf = new CommandFactory(shc);
         this.houseLayout = new ArrayList<Room>();
         this.houseUsers = new ArrayList<User>();
@@ -90,7 +94,7 @@ public class SHS implements Observable, Component {
         }
         return null;
     }
-    public static SHS getInstance(){
+    public static synchronized SHS getInstance(){
         if(shs == null){
             shs = new SHS();
         }
@@ -107,7 +111,7 @@ public class SHS implements Observable, Component {
     public void addHouseUser(User user){
         this.houseUsers.add(user);
         this.isEmpty = false;
-        notifying(this, "Not Empty House");
+        // notifying(this, "Not Empty House");
     }
 
     public void setActiveUser(User user){
@@ -145,7 +149,7 @@ public class SHS implements Observable, Component {
         houseUsers.remove(user);
         if(houseUsers.isEmpty()){
             isEmpty = true;
-            notifying(this, "Empty House");
+            // notifying(this, "Empty House");
         }
     }
 
@@ -281,9 +285,12 @@ public class SHS implements Observable, Component {
     //         shh.doAction(command, room);
     //     }
     // }
-    public void shpDoAction(Command command, Room room){
-        shp.doAction(command, room);
-    }
+
+    //TODO to be corrected
+    // public void shpDoAction(Command command, Room room){
+    //     shp.doAction(command, room);
+    // }
+
     public void shcDoAction(User user, Command command, Room room){
         shc.userAction(user, command, room);
     }
@@ -305,7 +312,37 @@ public class SHS implements Observable, Component {
     }
 
     @Override
-    public void notifying(Component c, String message) {
-        mediator.notifying(this, message);
+    public void notify(Component c, String message) {
+        if( c instanceof SHH){
+            if(message.equalsIgnoreCase("")){
+
+            }
+            if(message.equalsIgnoreCase("")){
+
+            }
+        }
+        if( c instanceof SHC){
+            if(message.equalsIgnoreCase("")){
+
+            }
+            if(message.equalsIgnoreCase("")){
+
+            }
+        }
+        if( c instanceof SHP){
+            if(message.equalsIgnoreCase("HouseIsEmpty")){
+                shc.closeAllOpenings();
+            }
+            if(message.equalsIgnoreCase("HouseIsNotEmpty")){
+                shc.openAllOpenings();
+            }
+        }
+    }
+    // FIXME can only be used when the observer is implemented
+    private void houseIsEmpty() {
+        shp.houseIsEmpty();
+    }
+    private void houseIsNotEmpty() {
+        shp.houseIsNotEmpty();
     }
 }

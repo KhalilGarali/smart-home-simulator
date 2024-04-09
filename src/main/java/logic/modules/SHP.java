@@ -1,27 +1,28 @@
 package main.java.logic.modules;
 
 import main.java.logic.MediatorPattern.Component;
-import main.java.logic.MediatorPattern.Mediator;
 import main.java.logic.commands.Command;
 import main.java.logic.observerPattern.Observable;
-import main.java.logic.users.User;
 import main.java.model.rooms.Room;
 
+// FIXME must also implement the observer pattern to observe the rooms
 public class SHP extends Module implements Component{
 
-    Mediator mediator = new main.java.logic.modules.Mediator();
     private SHC shc;
     private static SHP shp;
+    private SHS shs;
 
-    private SHP(SHC shc){
-        this.shc = shc;
+    private SHP(SHC ashc){
+        this.shc = ashc;
     }
-    public static SHP getInstance(SHC shc){
+
+    public static synchronized SHP getInstance(SHC ashc){
         if(shp == null){
-            shp = new SHP(shc);
+            shp = new SHP(ashc);
         }
         return shp;
     }
+
     public void doAction(Command command, Room room){
         shc.moduleAction(command, room);
     }
@@ -31,15 +32,15 @@ public class SHP extends Module implements Component{
 
     }
 
-    public void notifying(Component c , String message) {
-        mediator.notifying(this, message);
-    }
-
     public void houseIsEmpty() {
-        notifying(this, "houseIsEmpty");
+        shs.notify(this, "houseIsEmpty");
     }
 
     public void houseIsNotEmpty() {
-        notifying(this, "houseIsNotEmpty");
+        shs.notify(this, "houseIsNotEmpty");
+    }
+
+    public void setSHS(SHS shs){
+        this.shs = shs;
     }
 }

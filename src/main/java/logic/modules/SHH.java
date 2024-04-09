@@ -12,13 +12,15 @@ import main.java.logic.users.User;
 import main.java.model.rooms.Room;
 
 public class SHH extends Module implements Component {
-    Mediator mediator = new main.java.logic.modules.Mediator();
     private SHC shc;
     private static SHH shh;
-    private SHH(SHC shc){
+    public SHS shs; 
+
+    public SHH(SHC shc){
         this.shc = shc;
     }
-    public static SHH getInstance(SHC shc){
+
+    public static synchronized SHH getInstance(SHC shc){
         if(shh == null){
             shh = new SHH(shc);
         }
@@ -48,9 +50,7 @@ public class SHH extends Module implements Component {
         } else {
         }    
     }
-
-    @Override
-    public void notifying(Component c, String message) {
-        mediator.notifying(this, message);
+    public void setSHS(SHS shs){
+        this.shs = shs;
     }
 }

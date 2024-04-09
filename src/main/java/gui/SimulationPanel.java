@@ -133,7 +133,7 @@ public class SimulationPanel extends JPanel {
 
         // Time Speed Slider
         timeSpeedSlider = new JSlider();
-        timeSpeed = new TimeSpeed();
+        timeSpeed = TimeSpeed.getInstance();
         timeSpeedSlider.addChangeListener(e -> {
             int speed = timeSpeedSlider.getValue();
             timeSpeed.setSpeed(speed*2);

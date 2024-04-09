@@ -2,9 +2,15 @@ package main.java.logic.dashboard;
 
 public class TimeSpeed {
     private int speed; // Speed of time increment in seconds
-
-    public TimeSpeed() {
+    private static TimeSpeed instance;
+    private TimeSpeed() {
         this.speed = 1; // Default speed
+    }
+
+    public static TimeSpeed getInstance() {
+        if(instance == null)
+            new TimeSpeed();
+        return instance;
     }
 
     public void setSpeed(int speed) {

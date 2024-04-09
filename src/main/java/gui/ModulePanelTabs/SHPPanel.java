@@ -153,6 +153,7 @@ public class SHPPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 //int time = Integer.parseInt(timerField.getText());
                 //shp.setTimerForPolice(time);
+                shp.setPoliceTimer(Integer.parseInt(timerField.getText()));
             }
         });
         submitPanel.add(submitButton);

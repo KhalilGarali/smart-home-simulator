@@ -18,6 +18,7 @@ public class SHP extends Module implements Component, Observable{
     private SHS shs;
     private House house = House.getInstance();
     private boolean isAway = false;
+    private int policeTimer = 0;
 
 
     private ArrayList<Observer> observers = new ArrayList<>();
@@ -45,6 +46,10 @@ public class SHP extends Module implements Component, Observable{
             Room room = (Room) o;
             System.out.println("POLICE CALLED");
         }
+    }
+
+    public void setPoliceTimer(int time){
+        this.policeTimer = time;
     }
 
     public void houseIsEmpty() {

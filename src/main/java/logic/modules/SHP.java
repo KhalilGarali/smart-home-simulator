@@ -84,7 +84,9 @@ public class SHP extends Module implements Component, Observable{
     @Override
     public void update(Observable o){
         System.err.println("SHP is updated");
-
+        if (o instanceof Room) {
+            Room room = (Room) o;
+        }
         // monitor the temperature of the rooms
         if (o instanceof HVAC) {
             HVAC hvac = (HVAC) o;

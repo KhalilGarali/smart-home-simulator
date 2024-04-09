@@ -43,7 +43,6 @@ public class SHP extends Module implements Component, Observable{
     public void update(Observable o){
         if(o instanceof Room){
             Room room = (Room) o;
-            //TODO: call police
             System.out.println("POLICE CALLED");
         }
     }

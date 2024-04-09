@@ -148,6 +148,13 @@ public class SHPPanel extends JPanel {
         // Panel for the submit button
         JPanel submitPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JButton submitButton = new JButton("Submit");
+        submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //int time = Integer.parseInt(timerField.getText());
+                //shp.setTimerForPolice(time);
+            }
+        });
         submitPanel.add(submitButton);
 
         setTimerPanel.add(timerPanel);

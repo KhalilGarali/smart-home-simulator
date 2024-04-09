@@ -7,6 +7,7 @@ import java.util.List;
 import main.java.logic.observerPattern.Observable;
 import main.java.logic.observerPattern.Observer;
 // import main.java.model.lighting.Light;
+import main.java.logic.users.Stranger;
 import main.java.logic.users.User;
 import main.java.model.fixtures.HVAC;
 import main.java.model.fixtures.Light;
@@ -265,7 +266,7 @@ public abstract class Room implements Observable, Observer{
 
     public void addUserToRoom(User user){
         usersInThisRoomList.add(user);
-        if(hasMotionDetector && activeMotionDetector){
+        if(hasMotionDetector && activeMotionDetector && user instanceof Stranger){
             System.out.println("Motion detected in: " + this.getName());
             notifyObservers();
         }

@@ -21,13 +21,26 @@ import main.java.model.rooms.Room;
 
 public class SHH extends Module implements Component {
     private SHC shc;
+    private SHS shs;
     private static SHH shh;
+    private ArrayList<HVAC> hvacs = House.getInstance().getHVACs();
+    private Temperature tempOutside = Temperature.getInstance();
+    private CommandFactory cf;
+    private Boolean isAway = false;
     private SHH(SHC shc){
         this.shc = shc;
+        cf = new CommandFactory(shc);
+        for (HVAC hvac : hvacs) {
+            hvac.addObserver(this);
+        }
+        if (tempOutside != null) {
+            tempOutside.addObserver(this);
+        }
     }
+
     public static SHH getInstance(SHC shc){
         if(shh == null){
-            shh = new SHH();
+            shh = new SHH(shc);
         }
         return shh;
     }
@@ -37,6 +50,7 @@ public class SHH extends Module implements Component {
 
     @Override
     public void update(Observable o){
+        System.err.println("SHH is updated");
         if (o instanceof Room) {
             Room room = (Room) o;
         } 
@@ -58,9 +72,11 @@ public class SHH extends Module implements Component {
     public void monitorTemp(){
         if (!isAway) {
             for (HVAC hvac : hvacs) {
-                if (tempOutside.getTemperature() <= hvac.getCurrentRoomTemp()  && !hvac.getRoom().getWindow(1).isOpen() ) {
+                if (tempOutside.getTemperature() <= hvac.getCurrentRoomTemp()  && !hvac.getRoom().getWindow(1).isOpen()) {
+                    System.out.println("the temp check is reached");
                     shc.moduleAction(cf.createCommand("openawindow", hvac.getRoom(),0));
                 } else if (tempOutside.getTemperature() > hvac.getCurrentRoomTemp() && hvac.getRoom().getWindow(1).isOpen()) {
+                    System.out.println("the temp check is reached");
                     shc.moduleAction(cf.createCommand("closeawindow", hvac.getRoom(),0));
                 }
             }
@@ -75,7 +91,8 @@ public class SHH extends Module implements Component {
     public void setSHS(SHS shs){
         this.shs = shs;
     }
-    public void setSHS(SHS shs){
-        this.shs = shs;
+    @Override
+    public String toString() {
+        return "SHH";
     }
 }

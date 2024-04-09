@@ -57,7 +57,7 @@ public class SHS implements Observable, Mediator {
     // Singleton Constructor
     private SHS(){
         this.shc = SHC.getIntance();
-        this.shh = SHH.getInstance();
+        this.shh = SHH.getInstance(shc);
         this.shp = SHP.getInstance(shc);
         this.shc.setSHS(this);
         this.shh.setSHS(this);
@@ -70,14 +70,6 @@ public class SHS implements Observable, Mediator {
         this.activeUser = null;
         this.house = House.getInstance();
         houseLayout = house.getRooms();
-    }
-    
-    // Singleton Instance Getter
-    public static SHS getInstance(){
-        if(shs == null){
-            shs = new SHS();
-        }
-        return shs;
     }
 
     public ArrayList<Room> getHouseLayout(){

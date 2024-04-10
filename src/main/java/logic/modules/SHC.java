@@ -117,9 +117,6 @@ public class SHC extends Module implements Component {
         }
     }
 
-    public void openAllOpenings() {
-        //go thru every room and open all openings
-    }
     public void setSHS(SHS shs){
         this.shs = shs;
     }

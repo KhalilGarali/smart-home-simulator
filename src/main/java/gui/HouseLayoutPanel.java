@@ -2,9 +2,12 @@ package main.java.gui;
 
 import main.java.logic.layout.House;
 import main.java.logic.layout.Layout;
+import main.java.logic.modules.SHC;
+import main.java.logic.modules.SHP;
 import main.java.logic.modules.SHS;
 import main.java.logic.observerPattern.Observable;
 import main.java.logic.observerPattern.Observer;
+import main.java.model.rooms.Outside;
 import main.java.model.rooms.Room;
 import main.java.model.rooms.zones.BathroomsZone;
 import main.java.model.rooms.zones.BedroomsZone;
@@ -22,6 +25,11 @@ public class HouseLayoutPanel extends JPanel implements Observer {
     private int rowHeight;
     private Color redColor;
     private SHS shs;
+    private SHP shp;
+    private SHC shc;
+
+
+    private Boolean isAway = false;
 
     private double temperature;
     Layout extractLayout;
@@ -51,6 +59,7 @@ public class HouseLayoutPanel extends JPanel implements Observer {
         }
     }
 
+    // Changing icon color
     private ImageIcon changeIconColor(ImageIcon icon, Color color) {
         BufferedImage image = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = image.createGraphics();
@@ -67,7 +76,8 @@ public class HouseLayoutPanel extends JPanel implements Observer {
         for (Room room : house.getRooms()) {
             System.out.println("INFO: " + room.getName() + " --- Light: " + room.getLight().getLight() + "  --- Temp: " 
             + room.getCurrentTemperature() + "  --- Door: " + room.getDoor1().isOpen() + "  --- Window: " +
-            room.getWindow(1).isOpen() + " --- Number Of Users " + room.getUserFromRoom().size());
+            room.getWindow(1).isOpen() + " --- Number Of Users " + room.getUserFromRoom().size()
+            + " --- Motion Detector " + room.getMotionDetector());
         }
     }
 
@@ -116,7 +126,7 @@ public class HouseLayoutPanel extends JPanel implements Observer {
             int iconX = x + 15; // Position the icon inside the room
             int iconY = y + 15;
 
-             // Draw the first row of icons (Window and Door)
+            if (!(room instanceof Outside)){ // Draw the first row of icons (Window and Door)
             if (room.getWindow(1).isOpen()) {
                 windowOpenIcon.paintIcon(this, g, iconX, iconY);
                 if(room.getWindow(1).getBlockedStatus()){
@@ -145,7 +155,7 @@ public class HouseLayoutPanel extends JPanel implements Observer {
                 lightOnIcon.paintIcon(this, g, iconX, iconY);
             } else {
                 lightOffIcon.paintIcon(this, g, iconX, iconY);
-            }
+            }}
 
             iconX += userIcon.getIconWidth() + 10; // Move to the right for the next icon
 
@@ -159,8 +169,11 @@ public class HouseLayoutPanel extends JPanel implements Observer {
             int infoX = iconX + 120; // Set a margin of 10 pixels from the room box
             int infoY = y + 30; // Align with the top of the room box
             temperature = room.getCurrentTemperature();
-            tempInfo = "Temperature: " + String.format("%.1f",temperature);
+            if (!(room instanceof Outside)){
+                tempInfo = "Temperature: " + String.format("%.1f",temperature);
+            }
             userCountInfo = "Nb. Of Users: " + room.getUserFromRoom().size();
+            if (!(room instanceof Outside)){
             if(room.getZone() instanceof CommonZone){
                 zoneInfo = "Common Zone"; 
             }
@@ -173,6 +186,7 @@ public class HouseLayoutPanel extends JPanel implements Observer {
             else if(room.getZone() instanceof GatewayZone){
                 zoneInfo = "Gateway Zone"; 
             }
+        }
             
 
             g.drawString(tempInfo, infoX, infoY);
@@ -189,15 +203,15 @@ public class HouseLayoutPanel extends JPanel implements Observer {
                 ACIcon.paintIcon(this, g, iconX, iconY);
             }
 
+            if (!(room instanceof Outside)){
             iconX += userIcon.getIconWidth() + 20; // Move to the right for the next icon
 
-            // The icon displaying the motion detectors would display here
-            if(true){
-                MotionDetectorIcon.paintIcon(this, g, iconX, iconY);
-            } else if(false){
 
+            // The icon displaying the motion detectors would display here
+            if(room.getActiveMotionDetector())
+                MotionDetectorIcon.paintIcon(this, g, iconX, iconY);
             }
-            
+
             
             x += roomWidth + 10; // Increment x position for the next room
             roomCounter++; // Increment room counter

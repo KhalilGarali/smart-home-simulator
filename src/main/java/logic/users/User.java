@@ -108,6 +108,6 @@ public abstract class User {
         return room;
     }
     public String toString(){
-        return this.getClass().getSimpleName() + this.getName();
+        return this.getClass().getSimpleName() + this.getName() + this.getRoom();
     }
 }

@@ -15,6 +15,7 @@ import main.java.model.rooms.BedRoom;
 import main.java.model.rooms.Garage;
 import main.java.model.rooms.Kitchen;
 import main.java.model.rooms.LivingRoom;
+import main.java.model.rooms.Outside;
 import main.java.model.rooms.Porch;
 import main.java.model.rooms.Room;
 import main.java.model.rooms.zones.BathroomsZone;
@@ -114,6 +115,11 @@ public class Layout {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        Outside outside = new Outside("Outside");
+        outside.setWindow(new Window("Window"));
+        outside.setDoor(new Door("Door"));
+        outside.setLight(new Light());
+        rooms.add(outside);
     }
 
     public List<Room> getRooms() {

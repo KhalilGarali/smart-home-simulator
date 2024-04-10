@@ -134,11 +134,7 @@ public class SHS implements Observable, Mediator {
     }
 
 
-    public Room makeBedRoom(String roomName){
-        Room room = new BedRoom(roomName);
-        houseLayout.add(room);
-        return room;
-    }
+
     public Room makeBasement(String roomName){
         Room room = new Basement(roomName);
         houseLayout.add(room);

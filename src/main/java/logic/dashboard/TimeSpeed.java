@@ -7,10 +7,12 @@ public class TimeSpeed {
         this.speed = 1; // Default speed
     }
 
+    // method to set speed
     public void setSpeed(int speed) {
         this.speed = speed;
     }
 
+    // return speed
     public int getSpeed() {
         return speed;
     }

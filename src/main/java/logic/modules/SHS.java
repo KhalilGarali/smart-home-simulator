@@ -37,10 +37,13 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class SHS implements Observable, Mediator {
+
+    // modules
     SHC shc;
     SHH shh;
     SHP shp;
 
+    // attributes
     private boolean isEmpty = true;
     public CommandFactory cf;
     private List<Room> houseLayout;
@@ -72,22 +75,28 @@ public class SHS implements Observable, Mediator {
         houseLayout = house.getRooms();
     }
 
+    // return all rooms in the house
     public ArrayList<Room> getHouseLayout(){
         return (ArrayList<Room>) this.houseLayout;
     }
     
+    // return all users in the house
     public ArrayList<User> getHouseUsers(){
         return this.houseUsers;
     }
+
+    // return active user
     public User getActiveUser()
     {
         return this.activeUser;
     }
 
+    // return house user
     public List<User> getHouseUser(){
         return this.houseUsers;
     }
     
+    // method to get room by name
     public Room getRoomByName(String name)
     {
         for (Room room: houseLayout)
@@ -97,12 +106,15 @@ public class SHS implements Observable, Mediator {
         }
         return null;
     }
+
+    // getIntance method for the Singleton pattern
     public static synchronized SHS getInstance(){
         if(shs == null){
             shs = new SHS();
         }
         return shs;
     }
+    
     public void init(){
         //GUI init
         while(true){

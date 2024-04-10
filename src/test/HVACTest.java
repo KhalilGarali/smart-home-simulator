@@ -29,8 +29,8 @@ public class HVACTest {
 
     @Test
     public void testInitialTemperature() {
-        assertEquals(24, hvac.getCurrentRoomTemp());
-        assertEquals(24, hvac.getDesiredRoomTemp());
+        assertEquals(10, hvac.getCurrentRoomTemp());
+        assertEquals(10, hvac.getDesiredRoomTemp());
     }
 
     @Test

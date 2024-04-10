@@ -109,18 +109,22 @@ public class DateTime implements Observable{
         return dateTime.getSecond();
     }
 
+    // method to set date and time
     public static void setDateTime(LocalDateTime newDateTime) {
         dateTime = newDateTime;
     }
 
+    // method to get seconds
     public static int getSeconds() {
         return counter;
     }
 
+    // return counter
     public static int getCounter(){
         return counter;
     }
 
+    // implementing notifyObservers method 
     @Override
     public void notifyObservers() {
         for(Observer observer : observers){
@@ -128,20 +132,24 @@ public class DateTime implements Observable{
         }
     }
 
+    // implementing addObserver method
     @Override
     public void addObserver(Observer o) {
         observers.add(o);
     }
 
+    // implementing removeObserver method
     @Override
     public void removeObserver(Observer o) {
         observers.remove(o);
     }
 
+    // method to set time multiplier
     public void setMultiplier(int multiplier2) {
         this.multiplier = multiplier2;
     }
 
+    // method to get multiplier
     public int getMultiplier() {
         return multiplier;
     }

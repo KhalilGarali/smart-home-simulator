@@ -184,8 +184,9 @@ public class HouseLayoutPanel extends JPanel implements Observer {
             infoY += 15; // Add some vertical space between lines
             g.drawString(userCountInfo, infoX, infoY);
             infoY += 15; // Add some vertical space between lines
+            if(!(room instanceof Outside)){
             g.drawString(zoneInfo, infoX, infoY);
-
+            }
             iconX += userIcon.getIconWidth() + 60; // Move to the right for the next icon
 
             if(room.getHvac().getHeatingOn()){

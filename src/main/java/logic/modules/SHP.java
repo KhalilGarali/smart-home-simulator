@@ -85,6 +85,8 @@ public class SHP extends Module implements Component, Observable{
             if(hvac.onFire || hvac.tooHot){
                 this.isAway = false;
                 System.out.println("HVAC is on fire or too hot");
+                notifyObservers();
+                shs.notify(this, "HouseIsNotEmpty");
             }
         }
 

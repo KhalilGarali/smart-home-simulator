@@ -33,10 +33,12 @@ public class SHPPanel extends JPanel implements Observer {
     private SHP shp = SHP.getInstance(shc);
     private SHS shs = SHS.getInstance();   
     private static OutputPanel outpanel = OutputPanel.getInstance();
+    private boolean isAway = false;
 
 
     public SHPPanel() {
         shs.addObserver(this);
+        shp.addObserver(this);
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridwidth = GridBagConstraints.REMAINDER;
@@ -177,9 +179,21 @@ public class SHPPanel extends JPanel implements Observer {
         SwingUtilities.invokeLater(() -> {
             User activeUser = SHS.getInstance().getActiveUser();
         });
-        if (o instanceof SHP){
+        if (o instanceof SHP) {
             SHP shp = (SHP) o;
-            // create logic to change buttons based on shp.getIsAway() variable as well after line 117
+            SwingUtilities.invokeLater(() -> {
+                this.isAway = shp.getIsAway();
+                simulationToggle.setSelected(isAway);
+                if (isAway) {
+                    simulationToggle.setText("ON");
+                    simulationToggle.setBackground(Color.GREEN);
+                } else {
+                    simulationToggle.setText("OFF");
+                    simulationToggle.setBackground(Color.RED);
+                }
+                simulationToggle.revalidate();
+                simulationToggle.repaint();
+            });
         }
     }
 }

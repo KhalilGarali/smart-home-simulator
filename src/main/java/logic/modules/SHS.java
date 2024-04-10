@@ -132,11 +132,7 @@ public class SHS implements Observable, Mediator {
     public void removeRoom(Room room){
         houseLayout.remove(room);
     }
-    public Room makeKitchen(String roomName){
-        Room room = new Kitchen(roomName);
-        houseLayout.add(room);
-        return room;
-    }
+
     public Room makeLivingRoom(String roomName){
         Room room = new LivingRoom(roomName);
         houseLayout.add(room);

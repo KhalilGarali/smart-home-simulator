@@ -1,19 +1,15 @@
 package main.java.gui.ModulePanelTabs;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalToggleButtonUI;
-
 import main.java.logic.layout.House;
 import main.java.logic.modules.SHC;
 import main.java.logic.modules.SHP;
@@ -27,7 +23,6 @@ import main.java.logic.users.Parent;
 
 public class SHPPanel extends JPanel implements Observer {
     private JToggleButton simulationToggle;
-    private JLabel titleLabel;
     House house = House.getInstance();
     private ArrayList<JCheckBox> roomCheckBoxes;
     private JLabel timerLabel;
@@ -35,10 +30,7 @@ public class SHPPanel extends JPanel implements Observer {
     
     private SHC shc = SHC.getIntance();
     private SHP shp = SHP.getInstance(shc);
-    private SHS shs = SHS.getInstance();
-
-    private User activeUser;
-    
+    private SHS shs = SHS.getInstance();   
 
     public SHPPanel() {
         shs.addObserver(this);

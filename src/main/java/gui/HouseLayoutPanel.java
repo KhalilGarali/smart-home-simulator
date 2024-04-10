@@ -179,8 +179,9 @@ public class HouseLayoutPanel extends JPanel implements Observer {
             }
         }
             
-
+            if(!(room instanceof Outside)){
             g.drawString(tempInfo, infoX, infoY);
+            }
             infoY += 15; // Add some vertical space between lines
             g.drawString(userCountInfo, infoX, infoY);
             infoY += 15; // Add some vertical space between lines

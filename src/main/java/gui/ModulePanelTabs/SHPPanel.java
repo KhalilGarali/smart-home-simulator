@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalToggleButtonUI;
 
+import main.java.gui.OutputPanel;
 import main.java.logic.layout.House;
 import main.java.logic.modules.SHC;
 import main.java.logic.modules.SHP;
@@ -38,6 +39,7 @@ public class SHPPanel extends JPanel implements Observer {
     private SHS shs = SHS.getInstance();
 
     private User activeUser;
+    private static OutputPanel outpanel = OutputPanel.getInstance();
     
 
     public SHPPanel() {
@@ -82,15 +84,22 @@ public class SHPPanel extends JPanel implements Observer {
         simulationToggle.setBackground(Color.RED);
         simulationToggle.addItemListener(e -> {
          if(shs.activeUser instanceof Parent) {
-             if (simulationToggle.isSelected()) {
-                 simulationToggle.setText("ON");
-                 shp.setIsAway(true);
-                 simulationToggle.setBackground(Color.GREEN);
-             } else {
-                 simulationToggle.setText("OFF");
-                 shp.setIsAway(false);
-                 simulationToggle.setBackground(Color.RED);
-             }
+            ArrayList<String> text = new ArrayList<>();
+            text.add("Target: Away From Home Status");
+            text.add("Event type: Change");
+            text.add("Event Description: Change away from home status");
+            if (simulationToggle.isSelected()) {
+                simulationToggle.setText("ON");
+                shp.setIsAway(true);
+                text.add("Change away from home status to: ON");
+                simulationToggle.setBackground(Color.GREEN);
+            } else {
+                simulationToggle.setText("OFF");
+                shp.setIsAway(false);
+                text.add("Change away from home status to: OFF");
+                simulationToggle.setBackground(Color.RED);
+            }
+            outpanel.appendText(text);
          } else {
              JOptionPane.showMessageDialog(null, "Only parents can turn on the AWAY MODE");
              simulationToggle.setSelected(false);
@@ -99,18 +108,25 @@ public class SHPPanel extends JPanel implements Observer {
         for (Room room : house.getRooms()) {
             JCheckBox roomCheckBox = new JCheckBox(room.getName());
             roomCheckBox.addItemListener(e -> {
-             if(shs.activeUser instanceof Parent) {
-                 if (roomCheckBox.isSelected()) {
-                     shp.addMotionDetector(room);
-                     System.out.println("Room: " + room.getName() + " has motion detector: " + room.getMotionDetector());
-                 } else {
-                     shp.removeMotionDetector(room);
-                     System.out.println("Room: " + room.getName() + " has motion detector: " + room.getMotionDetector());
-                 }
-             } else {
-                 JOptionPane.showMessageDialog(null, "Only parents can set the motion detectors");
-                 roomCheckBox.setSelected(false);
-             }
+            if(shs.activeUser instanceof Parent) {
+                ArrayList<String> text = new ArrayList<>();
+                text.add("Target: Motion Detector");
+                text.add("Event type: Change");
+                text.add("Event Description: Change away from home status");
+                if (roomCheckBox.isSelected()) {
+                    shp.addMotionDetector(room);
+                    text.add("Motion detector in room " + room.getName() + " set to ON");
+                    System.out.println("Room: " + room.getName() + " has motion detector: " + room.getMotionDetector());
+                } else {
+                    shp.removeMotionDetector(room);
+                    text.add("Motion detector in room " + room.getName() + " set to OFF");
+                    System.out.println("Room: " + room.getName() + " has motion detector: " + room.getMotionDetector());
+                }
+                outpanel.appendText(text);
+            } else {
+                JOptionPane.showMessageDialog(null, "Only parents can set the motion detectors");
+                roomCheckBox.setSelected(false);
+            }
 
             });
             awayMode.add(roomCheckBox);
@@ -165,8 +181,15 @@ public class SHPPanel extends JPanel implements Observer {
             public void actionPerformed(ActionEvent e) {
                 //int time = Integer.parseInt(timerField.getText());
                 //shp.setTimerForPolice(time);
-                if(shs.activeUser instanceof Parent)
+                if(shs.activeUser instanceof Parent){
                     shp.setPoliceTimer(Integer.parseInt(timerField.getText()));
+                    ArrayList<String> text = new ArrayList<>();
+                    text.add("Target: Police Timer");
+                    text.add("Event type: Set");
+                    text.add("Event Description: Set Police Timer");
+                    text.add("Set current Police Timer field to " + timerField.getText());
+                    outpanel.appendText(text);
+                }
                 else
                     JOptionPane.showMessageDialog(null, "Only parents can set this TIMER");
 

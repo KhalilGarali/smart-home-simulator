@@ -2,6 +2,8 @@ package main.java.gui;
 
 import main.java.logic.layout.House;
 import main.java.logic.layout.Layout;
+import main.java.logic.modules.SHC;
+import main.java.logic.modules.SHP;
 import main.java.logic.modules.SHS;
 import main.java.logic.observerPattern.Observable;
 import main.java.logic.observerPattern.Observer;
@@ -22,6 +24,11 @@ public class HouseLayoutPanel extends JPanel implements Observer {
     private int rowHeight;
     private Color redColor;
     private SHS shs;
+    private SHP shp;
+    private SHC shc;
+
+
+    private Boolean isAway = false;
 
     private double temperature;
     Layout extractLayout;
@@ -67,7 +74,8 @@ public class HouseLayoutPanel extends JPanel implements Observer {
         for (Room room : house.getRooms()) {
             System.out.println("INFO: " + room.getName() + " --- Light: " + room.getLight().getLight() + "  --- Temp: " 
             + room.getCurrentTemperature() + "  --- Door: " + room.getDoor1().isOpen() + "  --- Window: " +
-            room.getWindow(1).isOpen() + " --- Number Of Users " + room.getUserFromRoom().size());
+            room.getWindow(1).isOpen() + " --- Number Of Users " + room.getUserFromRoom().size()
+            + " ---- Motion Detector " + room.getMotionDetector());
         }
     }
 
@@ -191,13 +199,12 @@ public class HouseLayoutPanel extends JPanel implements Observer {
 
             iconX += userIcon.getIconWidth() + 20; // Move to the right for the next icon
 
-            // The icon displaying the motion detectors would display here
-            if(true){
-                MotionDetectorIcon.paintIcon(this, g, iconX, iconY);
-            } else if(false){
 
-            }
-            
+            // The icon displaying the motion detectors would display here
+            if(room.getActiveMotionDetector())
+                MotionDetectorIcon.paintIcon(this, g, iconX, iconY);
+
+
             
             x += roomWidth + 10; // Increment x position for the next room
             roomCounter++; // Increment room counter

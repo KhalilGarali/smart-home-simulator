@@ -7,6 +7,7 @@ import java.util.List;
 import main.java.logic.observerPattern.Observable;
 import main.java.logic.observerPattern.Observer;
 // import main.java.model.lighting.Light;
+import main.java.logic.users.Stranger;
 import main.java.logic.users.User;
 import main.java.model.fixtures.HVAC;
 import main.java.model.fixtures.Light;
@@ -31,6 +32,8 @@ public abstract class Room implements Observable, Observer{
     private HVAC hvac;
     protected String name;
     public Zone zone;
+    private boolean hasMotionDetector;
+    private boolean activeMotionDetector;
 
     protected List<User> usersInThisRoomList = new ArrayList<>();
 
@@ -139,6 +142,19 @@ public abstract class Room implements Observable, Observer{
         return name;
     }
 
+    public boolean getMotionDetector(){
+        return hasMotionDetector;
+    }
+    public void setMotionDetector(boolean hasMotionDetector){
+        this.hasMotionDetector = hasMotionDetector;
+    }
+
+    public boolean getActiveMotionDetector(){
+        return activeMotionDetector;
+    }
+    public void setActiveMotionDetector(boolean activeMotionDetector){
+        this.activeMotionDetector = activeMotionDetector;
+    }
     // open and close for All's - will be useful with SHH and SHP
     public void openAllOpenings() {
         System.out.println("Open everything");
@@ -156,30 +172,30 @@ public abstract class Room implements Observable, Observer{
     public void openWindow(int num){
             System.out.println("Open window1");
             window1.open();
-            notifyObservers();
+            //notifyObservers();
     }
     public void openDoor(int num){
             System.out.println("Open door1");
             door1.open();
-            notifyObservers();
+           // notifyObservers();
     }
     public void closeWindow(int num){
             System.out.println("Close window1");
             window1.close();
-            notifyObservers();
+           // notifyObservers();
         
     }
     public void closeDoor(int num){
             System.out.println("Close door1");
             door1.close();
-            notifyObservers();
+            //notifyObservers();
         
     }
     public void turnLightOn(){
         if(!light.getLight() && light.getAutolight()){
             System.out.println("turning light on in : " + this.getName());
             light.setLightOn();
-            notifyObservers();
+           // notifyObservers();
         }
     }
     public void turnLightOff(){
@@ -189,23 +205,23 @@ public abstract class Room implements Observable, Observer{
         else{
             System.out.println("turning light off");
             light.setLightOff();
-            notifyObservers();
+            //notifyObservers();
         }
     }
     public void turnAutoLightOn(){
         System.out.println("turning auto light on");
         light.setAutolightOn();
-        notifyObservers();
+      //  notifyObservers();
     }
     public void turnAutoLightOff(){
         System.out.println("turning light on");
         light.setAutolightOff();
-        notifyObservers();
+       // notifyObservers();
     }
     public void setTemperature(int temperature){
         System.out.println("setting temperature to: "+temperature);
         setCurrentTemperature(temperature);
-        notifyObservers();
+        //notifyObservers();
     }
     //TODO worry about this when the user set the temperature
     // public void setDesiredTemperature(int temperature){
@@ -245,11 +261,15 @@ public abstract class Room implements Observable, Observer{
     public void turnCoolingOff(){
         System.out.println("Turning Off Cooling : ");
         // hvac.setCooling(false);
-        notifyObservers();
+      //  notifyObservers();
     }
 
     public void addUserToRoom(User user){
         usersInThisRoomList.add(user);
+        if(hasMotionDetector && activeMotionDetector && user instanceof Stranger){
+            System.out.println("Motion detected in: " + this.getName());
+            notifyObservers();
+        }
     }
 
     public void removeUserFromRoom(User user){
@@ -279,7 +299,8 @@ public abstract class Room implements Observable, Observer{
     //not showing window2 and door2 for now!
     @Override
     public String toString() {
-        return " has window= " + window1 +
+        return " has motion detector= " + hasMotionDetector +
+                ", window= " + window1 +
                 ", door= " + door1 +
                 ", light= " + light.getLight() +
                 ", current temp= " + getCurrentTemperature() +

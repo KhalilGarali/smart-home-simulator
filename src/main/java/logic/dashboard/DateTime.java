@@ -83,6 +83,19 @@ public class DateTime implements Observable{
         return dateTime.getMonthValue();
     }
 
+    public static int getHour() {
+        return dateTime.getHour();
+    }
+
+    public static int getMinute() {
+        return dateTime.getMinute();
+    }
+
+    public static int getSecond() {
+        return dateTime.getSecond();
+    }
+
+
     public static void setDateTime(LocalDateTime newDateTime) {
         dateTime = newDateTime;
     }

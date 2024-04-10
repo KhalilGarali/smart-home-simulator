@@ -9,6 +9,7 @@ import main.java.model.rooms.zones.Zone;
 import java.lang.Math;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class HVAC implements Observer, Observable{
 
@@ -90,7 +91,15 @@ public class HVAC implements Observer, Observable{
         this.coolingOn = false;
         this.heatingOn = true;
         // arithmetically increase the temperature
-        this.currentRoomTemp += 0.1;
+        Random random = new Random();
+        int randomNumber = random.nextInt(100);
+
+        if (randomNumber < 10) {
+            this.currentRoomTemp += 15;
+        } else {
+            this.currentRoomTemp += 0.1;
+        }
+
         System.out.println("Current in "+this.room.getName() + " is "+this.currentRoomTemp);
         System.err.println("Desired in "+this.room.getName() + " is "+this.desiredRoomTemp);
     }

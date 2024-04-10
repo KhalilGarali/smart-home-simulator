@@ -123,26 +123,6 @@ public class SHPPanel extends JPanel implements Observer {
     }
 
 
-//    private JPanel createMotionDetectorsPlacementPanel() {
-//        JPanel motionDetectorsPlacementPanel = new JPanel();
-//        motionDetectorsPlacementPanel.setLayout(new BoxLayout(motionDetectorsPlacementPanel, BoxLayout.Y_AXIS));
-//        motionDetectorsPlacementPanel.setBorder(BorderFactory.createTitledBorder("Motion Detectors Locations"));
-//
-//        JPanel motionDetectorsPanel = new JPanel();
-//        int rows = (int) Math.ceil(house.getRooms().size() / 4.0); // Calculate the number of rows needed for two columns
-//        motionDetectorsPanel.setLayout(new GridLayout(rows, 4, 15, 15)); // Set the layout with px horizontal and vertical gaps
-//
-//
-//
-//
-//
-//        motionDetectorsPlacementPanel.add(motionDetectorsPanel);
-//
-//
-//
-//        return motionDetectorsPlacementPanel;
-//    }
-
     private JPanel createSetTimerForPolicePanel() {
         JPanel setTimerPanel = new JPanel();
         setTimerPanel.setLayout(new BoxLayout(setTimerPanel, BoxLayout.Y_AXIS));

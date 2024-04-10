@@ -19,37 +19,49 @@ import javax.swing.*;
 // FIXME must also implement the observer pattern to observe the rooms
 public class SHP extends Module implements Component, Observable{
 
+    // System's date and time handler
     private DateTime dateTime = DateTime.getInstance();
 
+    // References to other modules
     private SHC shc;
     private static SHP shp;
     private SHS shs;
+
+    // Home layout and status
     private House house = House.getInstance();
     private boolean isAway = false;
+
+    // Timers for security automation
     private int policeTimer = 0;
     private int startTime = 0;
 
-
+    // List of observers for the observer pattern
     private ArrayList<Observer> observers = new ArrayList<>();
 
+    // Private constructor for singleton pattern
     private SHP(SHC ashc){
         this.shc = ashc;
+        // Register as an observer for each room and dateTime changes
         for(Room room: house.getRooms()){
             room.addObserver(this);
         }
         dateTime.addObserver(this);
     }
 
+    // Singleton method to get instance of SHP
     public static synchronized SHP getInstance(SHC ashc){
         if(shp == null){
             shp = new SHP(ashc);
         }
         return shp;
     }
+
+    // Perform actions via the SHC module
     public void doAction(Command command){
         shc.moduleAction(command);
     }
 
+    // Update method from the Observer interface, called when observed objects change
     @Override
     public void update(Observable o){
         if(o instanceof Room) {
@@ -70,23 +82,28 @@ public class SHP extends Module implements Component, Observable{
 
     }
 
+    // Set the timer after which police notification is sent
     public void setPoliceTimer(int time){
         this.policeTimer = time;
         System.out.println("Police Timer: " + policeTimer);
     }
 
+    // Notify that house is empty
     public void houseIsEmpty() {
         shs.notify(this, "houseIsEmpty");
     }
 
+    // Notify that house is not empty
     public void houseIsNotEmpty() {
         shs.notify(this, "houseIsNotEmpty");
     }
 
+    // Set reference to Smart Home Simulation module
     public void setSHS(SHS shs){
         this.shs = shs;
     }
 
+    // Set away status and trigger notifications and motion detectors accordingly
     public void setIsAway(boolean isAway) {
         this.isAway = isAway;
 
@@ -109,20 +126,24 @@ public class SHP extends Module implements Component, Observable{
 
     }
 
+    // Return away status
     public boolean getIsAway() {
         return this.isAway;
     }
 
+    // Add an observer to the list
     @Override
     public void addObserver(Observer o) {
         observers.add(o);
     }
 
+    // Remove an observer from the list
     @Override
     public void removeObserver(Observer o) {
         observers.remove(o);
     }
 
+    // Notify all observers about a change
     @Override
     public void notifyObservers() {
         for (Observer o : observers) {

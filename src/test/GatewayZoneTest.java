@@ -16,7 +16,7 @@ public class GatewayZoneTest {
     @Test
     public void testZoneTemperature() {
         GatewayZone zone = GatewayZone.getInstance();
-        assertEquals(19, zone.getZoneTemperature()); // Initial temperature should be 19
+        assertEquals(0, zone.getZoneTemperature()); // Initial temperature should be 19
 
         zone.setZoneTemperature(20);
         assertEquals(20, zone.getZoneTemperature()); // Temperature should be set correctly

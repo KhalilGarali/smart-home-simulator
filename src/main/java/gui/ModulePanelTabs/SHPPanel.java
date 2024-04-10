@@ -61,7 +61,7 @@ public class SHPPanel extends JPanel implements Observer {
 
     private JPanel createAwayModePanel(){
         JPanel awayMode = new JPanel();
-        JLabel pleaseMsg = new JLabel("Please set Detector Monitors in rooms BEFORE turning on the AWAY MODE");
+        JLabel warningMessage = new JLabel("Please set Detector Monitors in rooms BEFORE turning on the AWAY MODE");
         awayMode.setLayout(new BoxLayout(awayMode, BoxLayout.Y_AXIS));
         awayMode.setBorder(BorderFactory.createTitledBorder("Away Mode")); 
 
@@ -117,7 +117,7 @@ public class SHPPanel extends JPanel implements Observer {
         awayMode.add(Box.createVerticalStrut(20)); // Add 10 pixels of vertical spacing
         awayMode.add(simulationToggle);
         awayMode.add(Box.createVerticalStrut(10)); // Add 10 pixels of vertical spacing
-        awayMode.add(pleaseMsg);
+        awayMode.add(warningMessage);
         
         return awayMode;
     }

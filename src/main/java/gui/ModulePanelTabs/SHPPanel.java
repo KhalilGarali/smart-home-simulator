@@ -84,6 +84,7 @@ public class SHPPanel extends JPanel implements Observer {
         simulationToggle.setBackground(Color.RED);
         simulationToggle.addItemListener(e -> {
          if(shs.activeUser instanceof Parent) {
+            // Code to add changes to log
             ArrayList<String> text = new ArrayList<>();
             text.add("Target: Away From Home Status");
             text.add("Event type: Change");
@@ -109,6 +110,7 @@ public class SHPPanel extends JPanel implements Observer {
             JCheckBox roomCheckBox = new JCheckBox(room.getName());
             roomCheckBox.addItemListener(e -> {
             if(shs.activeUser instanceof Parent) {
+                // Code to write changes to log
                 ArrayList<String> text = new ArrayList<>();
                 text.add("Target: Motion Detector");
                 text.add("Event type: Change");
@@ -183,6 +185,7 @@ public class SHPPanel extends JPanel implements Observer {
                 //shp.setTimerForPolice(time);
                 if(shs.activeUser instanceof Parent){
                     shp.setPoliceTimer(Integer.parseInt(timerField.getText()));
+                    // Adding to code to write changes to log
                     ArrayList<String> text = new ArrayList<>();
                     text.add("Target: Police Timer");
                     text.add("Event type: Set");

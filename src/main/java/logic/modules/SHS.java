@@ -136,38 +136,7 @@ public class SHS implements Observable, Mediator {
     /**
      *  Make/Delete users: ////////////////////////////////////
      */
-    public User makeParent(String name){
-        User parent = new Parent(name);
-        houseUsers.add(parent);
-        return parent;
-    }
-    public User makeFamilyMember(String name){
-        User member = new FamilyMember(name);
-        houseUsers.add(member);
-        return member;
-    }
-    public User makeChild(String name){
-        User child = new Child(name);
-        houseUsers.add(child);
-        return child;
-    }
-    public User makeStranger(String name){
-        User stranger = new Stranger(name);
-        houseUsers.add(stranger);
-        return stranger;
-    }
-    public User makeGuest(String name){
-        User guest = new Guest(name);
-        houseUsers.add(guest);
-        return guest;
-    }
-    public void removeuser(User user){
-        houseUsers.remove(user);
-        if(houseUsers.isEmpty()){
-            isEmpty = true;
-            // notifying(this, "Empty House");
-        }
-    }
+
 
     /**
      *  Make/Delete rooms: ////////////////////////////////////
@@ -176,41 +145,7 @@ public class SHS implements Observable, Mediator {
     public void removeRoom(Room room){
         houseLayout.remove(room);
     }
-    public Room makeKitchen(String roomName){
-        Room room = new Kitchen(roomName);
-        houseLayout.add(room);
-        return room;
-    }
-    public Room makeLivingRoom(String roomName){
-        Room room = new LivingRoom(roomName);
-        houseLayout.add(room);
-        return room;
-    }
-    public Room makeBedRoom(String roomName){
-        Room room = new BedRoom(roomName);
-        houseLayout.add(room);
-        return room;
-    }
-    public Room makeBasement(String roomName){
-        Room room = new Basement(roomName);
-        houseLayout.add(room);
-        return room;
-    }
-    public Room makeGarage(String roomName){
-        Room room = new Garage(roomName);
-        houseLayout.add(room);
-        return room;
-    }
-    public Room makePorch(String roomName){
-        Room room = new Porch(roomName);
-        houseLayout.add(room);
-        return room;
-    }
-    public Room makeBathroom(String roomName){
-        Room room = new Bathroom(roomName);
-        houseLayout.add(room);
-        return room;
-    }
+
 
     /**
      *  Make/Delete commands: ////////////////////////////////////
@@ -270,26 +205,10 @@ public class SHS implements Observable, Mediator {
         shc.addCommand(command);
         return command;
     }
-    public TurnCoolingOn makeTurnCoolingOn(Room room){
-        TurnCoolingOn command = new TurnCoolingOn(room);
-        shc.addCommand(command);
-        return command;
-    }
-    public TurnCoolingOff makeTurnCoolingOff(Room room){
-        TurnCoolingOff command = new TurnCoolingOff(room);
-        shc.addCommand(command);
-        return command;
-    }
-    public TurnHeatingOn makeTurnHeatingOn(Room room){
-        TurnHeatingOn command = new TurnHeatingOn(room);
-        shc.addCommand(command);
-        return command;
-    }
-    public TurnHeatingOff makeTurnHeatingOff(Room room){
-        TurnHeatingOff command = new TurnHeatingOff(room);
-        shc.addCommand(command);
-        return command;
-    }
+
+
+
+
     // public void shhDoAction(Command command, Room room){
     //     if(command instanceof TurnHeatingOff||
     //             command instanceof TurnHeatingOn ||
@@ -302,14 +221,6 @@ public class SHS implements Observable, Mediator {
     //     }
     // }
 
-    //TODO to be corrected
-    // public void shpDoAction(Command command, Room room){
-    //     shp.doAction(command, room);
-    // }
-
-    public void shcDoAction(User user, Command command, Room room){
-        shc.userAction(user, command, room);
-    }
 
     @Override
     public void addObserver(Observer observer) {

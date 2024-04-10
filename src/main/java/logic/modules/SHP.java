@@ -10,6 +10,8 @@ import main.java.logic.dashboard.DateTime;
 import main.java.logic.layout.House;
 import main.java.logic.observerPattern.Observable;
 import main.java.logic.observerPattern.Observer;
+import main.java.model.fixtures.HVAC;
+import main.java.model.fixtures.Temperature;
 import main.java.model.rooms.Room;
 
 import javax.swing.*;
@@ -30,18 +32,18 @@ public class SHP extends Module implements Component, Observable{
     // Home layout and status
     private House house = House.getInstance();
     private boolean isAway = false;
-
-    // Timers for security automation
+    private ArrayList<HVAC> hvacs = House.getInstance().getHVACs();
     private int policeTimer = 0;
     private int startTime = 0;
 
-    // List of observers for the observer pattern
     private ArrayList<Observer> observers = new ArrayList<>();
 
     // Private constructor for singleton pattern
     private SHP(SHC ashc){
         this.shc = ashc;
-        // Register as an observer for each room and dateTime changes
+        for (HVAC hvac : hvacs) {
+            hvac.addObserver(this);
+        }
         for(Room room: house.getRooms()){
             room.addObserver(this);
         }
@@ -61,7 +63,7 @@ public class SHP extends Module implements Component, Observable{
         shc.moduleAction(command);
     }
 
-    // Update method from the Observer interface, called when observed objects change
+
     @Override
     public void update(Observable o){
         if(o instanceof Room) {

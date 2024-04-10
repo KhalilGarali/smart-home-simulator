@@ -7,11 +7,12 @@ public class LogInFrame extends JFrame{
     public LogInPanel loginPanel;
     public LogInFrame()
     {
-        setTitle("Smart Home Simulator");
+        setTitle("Smart Home Simulator.");
         setSize(1400, 800);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
+        // Get Login panel
         loginPanel = new LogInPanel(this);
         add(loginPanel, BorderLayout.CENTER);
     }

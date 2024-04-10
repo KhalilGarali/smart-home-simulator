@@ -383,6 +383,7 @@ public class ModulePanel extends JPanel implements Observer{
     }
 
 
+    // Creating the panel for creating a new user
     private JPanel createNewUserPanel()
     {
         JPanel newPanel = new JPanel(new GridBagLayout());
@@ -400,6 +401,7 @@ public class ModulePanel extends JPanel implements Observer{
         JMenuBar locationBar = new JMenuBar();
         JMenu locationMenu = new JMenu("Location");
         locationMenu.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+        // Get list of rooms to set new user
         for (Room room: house.getRooms())
         {
             JMenuItem locationItem = new JMenuItem(room.getName());
@@ -415,6 +417,7 @@ public class ModulePanel extends JPanel implements Observer{
         JMenuBar usertypeBar = new JMenuBar();
         JMenu usertypeMenu = new JMenu("Usertype");
         usertypeMenu.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+        // List of user types to create
         List<String> usertypes = Arrays.asList("Admin", "Child", "FamilyMember", "Guest", "Parent", "Stranger");
         for (String types: usertypes)
         {
@@ -430,7 +433,7 @@ public class ModulePanel extends JPanel implements Observer{
         
         JButton submitButton = new JButton ("Create");
 
-        fetchUsersButton = new JButton("Fetch existing Users");
+        fetchUsersButton = new JButton("Fetch existing users");
         fetchUsersButton.addActionListener(e -> openFileChooser());
 
 
@@ -469,9 +472,6 @@ public class ModulePanel extends JPanel implements Observer{
         gbc.anchor = GridBagConstraints.CENTER;
         newPanel.add(fetchUsersButton, gbc);
 
-
-
-
         submitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -480,6 +480,7 @@ public class ModulePanel extends JPanel implements Observer{
                 String newUserType = usertypeMenu.getText().trim();
                 Room newRoom = shs.getRoomByName(locationMenu.getText());
                 User newUser;
+                // Handling switching based on new user type
                 switch (newUserType){
                     case "Admin":
                         newUser = new Admin(newUsername, newRoom);
@@ -525,6 +526,8 @@ public class ModulePanel extends JPanel implements Observer{
 
         return newPanel;
     }
+
+    // Function to create a file chooser
     private void openFileChooser() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Select Existing Users File");
@@ -590,6 +593,7 @@ public class ModulePanel extends JPanel implements Observer{
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // Writing changes to log file
                 ArrayList<String> text = new ArrayList<>();
                 text.add("Target: Date and Time");
                 text.add("Event type: Change");

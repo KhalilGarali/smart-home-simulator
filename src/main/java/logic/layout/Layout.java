@@ -29,6 +29,8 @@ import main.java.model.rooms.zones.Zone;
 // *******************
 
 public class Layout {
+
+    // attributes
     private List<Room> rooms = new ArrayList<>();
     private List<Zone> zones = new ArrayList<>(); // This will be populated with the zones (0 or max of 1 per zone type). JB!
     private List<HVAC> hvacs = new ArrayList<>();
@@ -37,6 +39,7 @@ public class Layout {
         readLayout(filePath);
     }
 
+    // method to read layout
     private void readLayout(String filePath) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line, roomName;
@@ -122,14 +125,17 @@ public class Layout {
         rooms.add(outside);
     }
 
+    // return rooms
     public List<Room> getRooms() {
         return rooms;
     }
 
+    // return zones
     public List<Zone> getZones() {
         return zones;
     }
 
+    // return HVACs
     public List<HVAC> getHVACs() {
         for (Room room : rooms) {
             HVAC hvac = room.getHvac();

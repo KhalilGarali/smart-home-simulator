@@ -72,7 +72,7 @@ public class SHH extends Module implements Component {
 
         if (o instanceof SHP) {
             this.isAway = ((SHP)o).getIsAway();
-            System.out.println("this.isAway in SHH: " + this.isAway);
+            // System.out.println("this.isAway in SHH: " + this.isAway);
         }
     }
 

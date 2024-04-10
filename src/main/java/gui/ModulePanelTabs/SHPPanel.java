@@ -65,57 +65,8 @@ public class SHPPanel extends JPanel implements Observer {
         awayMode.setLayout(new BoxLayout(awayMode, BoxLayout.Y_AXIS));
         awayMode.setBorder(BorderFactory.createTitledBorder("Away Mode")); 
 
-        // Simulation Toggle
-        simulationToggle = new JToggleButton("OFF");
-        simulationToggle.setPreferredSize(new Dimension(100, 40));
-        simulationToggle.setAlignmentX(Component.CENTER_ALIGNMENT);
-        simulationToggle.setUI(new MetalToggleButtonUI() {
-            @Override
-            protected Color getSelectColor() {
-                return Color.GREEN;
-            }
-        });
-        simulationToggle.setBackground(Color.RED);
-        simulationToggle.addItemListener(e -> {
-         if(shs.activeUser instanceof Parent) {
-             if (simulationToggle.isSelected()) {
-                 simulationToggle.setText("ON");
-                 shp.setIsAway(true);
-                 simulationToggle.setBackground(Color.GREEN);
-             } else {
-                 simulationToggle.setText("OFF");
-                 shp.setIsAway(false);
-                 simulationToggle.setBackground(Color.RED);
-             }
-         } else {
-             JOptionPane.showMessageDialog(null, "Only parents can turn on the AWAY MODE");
-             simulationToggle.setSelected(false);
-         }
-        });
-        for (Room room : house.getRooms()) {
-            JCheckBox roomCheckBox = new JCheckBox(room.getName());
-            roomCheckBox.addItemListener(e -> {
-             if(shs.activeUser instanceof Parent) {
-                 if (roomCheckBox.isSelected()) {
-                     shp.addMotionDetector(room);
-                     System.out.println("Room: " + room.getName() + " has motion detector: " + room.getMotionDetector());
-                 } else {
-                     shp.removeMotionDetector(room);
-                     System.out.println("Room: " + room.getName() + " has motion detector: " + room.getMotionDetector());
-                 }
-             } else {
-                 JOptionPane.showMessageDialog(null, "Only parents can set the motion detectors");
-                 roomCheckBox.setSelected(false);
-             }
-
-            });
-            awayMode.add(roomCheckBox);
-            roomCheckBoxes.add(roomCheckBox);
-        }
-
-
-        awayMode.add(simulationToggle);
-        awayMode.add(pleaseMsg);
+        
+        
         return awayMode;
     }
 

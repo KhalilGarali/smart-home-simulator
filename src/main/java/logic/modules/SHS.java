@@ -135,11 +135,7 @@ public class SHS implements Observable, Mediator {
 
 
 
-    public Room makePorch(String roomName){
-        Room room = new Porch(roomName);
-        houseLayout.add(room);
-        return room;
-    }
+\
     public Room makeBathroom(String roomName){
         Room room = new Bathroom(roomName);
         houseLayout.add(room);

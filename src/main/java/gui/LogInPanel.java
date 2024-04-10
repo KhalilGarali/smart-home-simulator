@@ -46,6 +46,7 @@ public class LogInPanel extends JPanel {
         add(loginButton, gbc);
 
         uploadButton.addActionListener(e -> {
+            // Selecting the house layout file
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setDialogTitle("Select House Layout File");
             fileChooser.setAcceptAllFileFilterUsed(false);
@@ -64,6 +65,7 @@ public class LogInPanel extends JPanel {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // Allow login if password and username matches
                 String usernameField = username.getText();
                 String passwordField = new String(password.getPassword());
 
@@ -71,7 +73,7 @@ public class LogInPanel extends JPanel {
                     JOptionPane.showMessageDialog(null, "Login successful!");
                     LogInPanel.goToHome(frame);
                 } else {
-                    JOptionPane.showMessageDialog(null, "Login failed. Please try again.");
+                    JOptionPane.showMessageDialog(null, "Login failed. Please try again");
                 }
             }
         });

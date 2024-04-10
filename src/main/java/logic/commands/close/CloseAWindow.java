@@ -23,12 +23,12 @@ public class CloseAWindow extends Command{
 
     @Override
     public Boolean execute(){
-        System.out.println("\n--------------------------------------------------------------------");
-        System.out.println(room);
-        System.out.print("command done: ");
+        // System.out.println("\n--------------------------------------------------------------------");
+        // System.out.println(room);
+        // System.out.print("command done: ");
         room.closeWindow(1);
-        System.out.println(room);
-        System.out.println("----------------------------------------------------------------------");
+        // System.out.println(room);
+        // System.out.println("----------------------------------------------------------------------");
         outpanel.appendText(toConsole());
         return true;
     }

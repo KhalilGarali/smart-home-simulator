@@ -5,6 +5,7 @@ import main.java.logic.layout.Layout;
 import main.java.logic.modules.SHS;
 import main.java.logic.observerPattern.Observable;
 import main.java.logic.observerPattern.Observer;
+import main.java.model.rooms.Outside;
 import main.java.model.rooms.Room;
 import main.java.model.rooms.zones.BathroomsZone;
 import main.java.model.rooms.zones.BedroomsZone;
@@ -116,7 +117,7 @@ public class HouseLayoutPanel extends JPanel implements Observer {
             int iconX = x + 15; // Position the icon inside the room
             int iconY = y + 15;
 
-             // Draw the first row of icons (Window and Door)
+            if (!(room instanceof Outside)){ // Draw the first row of icons (Window and Door)
             if (room.getWindow(1).isOpen()) {
                 windowOpenIcon.paintIcon(this, g, iconX, iconY);
                 if(room.getWindow(1).getBlockedStatus()){
@@ -145,7 +146,7 @@ public class HouseLayoutPanel extends JPanel implements Observer {
                 lightOnIcon.paintIcon(this, g, iconX, iconY);
             } else {
                 lightOffIcon.paintIcon(this, g, iconX, iconY);
-            }
+            }}
 
             iconX += userIcon.getIconWidth() + 10; // Move to the right for the next icon
 
@@ -159,8 +160,11 @@ public class HouseLayoutPanel extends JPanel implements Observer {
             int infoX = iconX + 120; // Set a margin of 10 pixels from the room box
             int infoY = y + 30; // Align with the top of the room box
             temperature = room.getCurrentTemperature();
-            tempInfo = "Temperature: " + String.format("%.1f",temperature);
+            if (!(room instanceof Outside)){
+                tempInfo = "Temperature: " + String.format("%.1f",temperature);
+            }
             userCountInfo = "Nb. Of Users: " + room.getUserFromRoom().size();
+            if (!(room instanceof Outside)){
             if(room.getZone() instanceof CommonZone){
                 zoneInfo = "Common Zone"; 
             }
@@ -173,6 +177,7 @@ public class HouseLayoutPanel extends JPanel implements Observer {
             else if(room.getZone() instanceof GatewayZone){
                 zoneInfo = "Gateway Zone"; 
             }
+        }
             
 
             g.drawString(tempInfo, infoX, infoY);
@@ -189,6 +194,7 @@ public class HouseLayoutPanel extends JPanel implements Observer {
                 ACIcon.paintIcon(this, g, iconX, iconY);
             }
 
+            if (!(room instanceof Outside)){
             iconX += userIcon.getIconWidth() + 20; // Move to the right for the next icon
 
             // The icon displaying the motion detectors would display here
@@ -196,7 +202,7 @@ public class HouseLayoutPanel extends JPanel implements Observer {
                 MotionDetectorIcon.paintIcon(this, g, iconX, iconY);
             } else if(false){
 
-            }
+            }}
             
             
             x += roomWidth + 10; // Increment x position for the next room

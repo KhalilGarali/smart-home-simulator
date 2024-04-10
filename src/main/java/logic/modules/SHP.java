@@ -58,6 +58,8 @@ public class SHP extends Module implements Component, Observable{
 
         if (this.isAway == true) {
             shs.notify(this, "HouseIsEmpty");
+        } else {
+            shs.notify(this, "HouseIsNotEmpty");
         }
     }
 

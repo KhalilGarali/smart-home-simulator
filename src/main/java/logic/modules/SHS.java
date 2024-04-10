@@ -334,21 +334,45 @@ public class SHS implements Observable, Mediator {
         }
         if( c instanceof SHP){
             if(message.equalsIgnoreCase("HouseIsEmpty")){
-                for (Room room : houseLayout) {
-                    shc.moduleAction(cf.createCommand("closeawindow", room, 0));
-                    shc.moduleAction(cf.createCommand("closeadoor", room, 0));
-                }
+                handleHouseIsEmptyFromSHP();
             }
             if(message.equalsIgnoreCase("HouseIsNotEmpty")){
-                shc.openAllOpenings();
+                handleHouseIsNotEmptyFromSHP();
             }
         }
     }
-    // FIXME can only be used when the observer is implemented
-    private void houseIsEmpty() {
-        shp.houseIsEmpty();
+    public void handleHouseIsEmptyFromSHP(){
+        for (Room room : houseLayout) {
+            shc.moduleAction(cf.createCommand("closeawindow", room, 0));
+            shc.moduleAction(cf.createCommand("closeadoor", room, 0));
+            //if room has a user, move the user to the Outside room
+            if (room.getUserFromRoom().size() > 0) {
+                for (User user : room.getUserFromRoom()) {
+                    if (room instanceof Outside) {
+                        continue;
+                    }
+                    house.getOutside().addUserToRoom(user);
+                }
+                
+            }
+            if(!(room instanceof Outside)){
+                room.clearRoom();
+            }
+        }
     }
-    private void houseIsNotEmpty() {
-        shp.houseIsNotEmpty();
+    public void handleHouseIsNotEmptyFromSHP(){
+        // add the users back to their own room based on the room name in the user object, and add them to the room that has the same name in the houselayout
+        for (User user : house.getOutside().getUserFromRoom()) {
+            for (Room r : houseLayout) {
+                if (r.getName().equalsIgnoreCase(user.getRoom().getName())) {
+                    r.addUserToRoom(user);
+                }
+            }
+        }
+        for (Room room : houseLayout) {
+            if (room instanceof Outside && room.getUserFromRoom().size() > 0 ) {
+                    room.clearRoom();
+            }
+        }
     }
 }

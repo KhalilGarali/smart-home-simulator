@@ -13,6 +13,8 @@ import java.util.Date;
 import java.util.Random;
 
 public class DateTime implements Observable{
+
+    // attributes
     private static LocalDateTime dateTime;
     private static int counter = 0;
     private static DateTime instance;
@@ -25,9 +27,9 @@ public class DateTime implements Observable{
         generateRandomDateTime();
     }
 
-    private DateTime(){
+    // private constructor for the Singleton pattern
+    private DateTime(){}
 
-    }
     public static DateTime getInstance(){
         if(instance == null){
             instance = new DateTime();
@@ -45,6 +47,7 @@ public class DateTime implements Observable{
         dateTime = LocalDateTime.of(year, month, day, hour, minute, second);
     }
 
+    // method to  increment time
     public void incrementTime(int hours, int minutes, int seconds) {
         dateTime = dateTime.plusHours(hours).plusMinutes(minutes).plusSeconds(seconds);
         // totalHoursIncremented += dateTime.getMinute();
@@ -52,25 +55,32 @@ public class DateTime implements Observable{
             this.notifyObservers();
     }
 
+    // method to get total time elapsed
     public int getTotalSecondsElapsed() {
         return totalSecondsElapsed;
     }
+
+    // method to increment time by seconds
     public void incrementSecond() {
         dateTime = dateTime.plusSeconds(1*multiplier);
     }
 
+    // method to set date
     public static void setDate(int year, int month, int day) {
         dateTime = dateTime.withYear(year).withMonth(month).withDayOfMonth(day);
     }
 
+    // method to set time
     public static void setTime(int hour, int minute, int second) {
         dateTime = dateTime.withHour(hour).withMinute(minute).withSecond(second);
     }
 
+    // method to get date
     public static LocalDate getDate() {
         return dateTime.toLocalDate();
     }
 
+    // method to get time
     public static LocalTime getTime() {
         return dateTime.toLocalTime();
     }

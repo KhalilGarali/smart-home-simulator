@@ -20,6 +20,8 @@ import main.java.model.fixtures.Temperature;
 import main.java.model.rooms.Room;
 
 public class SHH extends Module implements Component {
+
+    // attributes
     private SHC shc;
     private SHS shs;
     private static SHH shh;
@@ -29,6 +31,7 @@ public class SHH extends Module implements Component {
     private CommandFactory cf;
     private Boolean isAway = false;
 
+    // private constructor for the Singleton pattern
     private SHH(SHC shc){
         this.shc = shc;
         this.shp = SHP.getInstance(shc);
@@ -48,6 +51,7 @@ public class SHH extends Module implements Component {
         }
         return shh;
     }
+    
     public void doAction(Command command, Room room){
         shc.moduleAction(command);
     }

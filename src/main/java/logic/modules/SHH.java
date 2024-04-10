@@ -45,6 +45,7 @@ public class SHH extends Module implements Component {
         }
     }
 
+    // getInstance method return SHH instance
     public static SHH getInstance(SHC shc){
         if(shh == null){
             shh = new SHH(shc);
@@ -80,6 +81,7 @@ public class SHH extends Module implements Component {
         }
     }
 
+    // method to monitor temperature
     public void monitorTemp(){
         if (!isAway) {
             for (HVAC hvac : hvacs) {
@@ -99,9 +101,13 @@ public class SHH extends Module implements Component {
     public void updateHouseStatus(Boolean isAway){
         this.isAway = isAway;
     }
+
+    // method to set SHS
     public void setSHS(SHS shs){
         this.shs = shs;
     }
+
+    // overriding the toString method
     @Override
     public String toString() {
         return "SHH";

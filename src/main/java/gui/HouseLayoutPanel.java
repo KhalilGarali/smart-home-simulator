@@ -59,6 +59,7 @@ public class HouseLayoutPanel extends JPanel implements Observer {
         }
     }
 
+    // Changing icon color
     private ImageIcon changeIconColor(ImageIcon icon, Color color) {
         BufferedImage image = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = image.createGraphics();
@@ -76,7 +77,7 @@ public class HouseLayoutPanel extends JPanel implements Observer {
             System.out.println("INFO: " + room.getName() + " --- Light: " + room.getLight().getLight() + "  --- Temp: " 
             + room.getCurrentTemperature() + "  --- Door: " + room.getDoor1().isOpen() + "  --- Window: " +
             room.getWindow(1).isOpen() + " --- Number Of Users " + room.getUserFromRoom().size()
-            + " ---- Motion Detector " + room.getMotionDetector());
+            + " --- Motion Detector " + room.getMotionDetector());
         }
     }
 

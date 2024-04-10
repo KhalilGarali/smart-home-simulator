@@ -251,6 +251,7 @@ public class SimulationPanel extends JPanel {
         add(saveUsersButton);
     }
 
+    // Create UI function to choose a file
     private void openFileChooser() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Select Temperature CSV File");
@@ -262,6 +263,7 @@ public class SimulationPanel extends JPanel {
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
             readTemperatureFile(selectedFile);
+            // Writing changes to log
             ArrayList<String> text = new ArrayList<>();
             text.add("Target: Temperature");
             text.add("Event type: Upload");
@@ -271,6 +273,7 @@ public class SimulationPanel extends JPanel {
         }
     }
 
+    // Get a temperature reading from a file
     private void readTemperatureFile(File file) {
         try {
             List<String> lines = Files.readAllLines(file.toPath(), StandardCharsets.UTF_8);
@@ -454,6 +457,7 @@ public class SimulationPanel extends JPanel {
         moveDialog.setVisible(true);
     }
 
+    // Function to handle change of active user
     private void handleProfileChange(){
         JDialog changeUserDialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), "Change Active User", true);
         changeUserDialog.setLayout(new BorderLayout());
@@ -492,6 +496,7 @@ public class SimulationPanel extends JPanel {
                         shs.notifyObservers();
                         userLabel.setText(user.getClass().getSimpleName() + " " + user.getName());
                         locationLabel.setText("Location: " + user.getRoom().getClass().getSimpleName());
+                        // Writing changes to log
                         ArrayList<String> text = new ArrayList<>();
                         text.add("Target: Active User");
                         text.add("Event type: Change");

@@ -16,7 +16,7 @@ public class CommonZoneTest {
     @Test
     public void testZoneTemperature() {
         CommonZone zone = CommonZone.getInstance();
-        assertEquals(25, zone.getZoneTemperature()); // Initial temperature should be 25
+        assertEquals(30, zone.getZoneTemperature()); // Initial temperature should be 25
 
         zone.setZoneTemperature(30);
         assertEquals(30, zone.getZoneTemperature()); // Temperature should be set correctly

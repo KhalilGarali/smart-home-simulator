@@ -59,6 +59,7 @@ public class HouseLayoutPanel extends JPanel implements Observer {
         }
     }
 
+    // Changing icon color
     private ImageIcon changeIconColor(ImageIcon icon, Color color) {
         BufferedImage image = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = image.createGraphics();
@@ -69,7 +70,6 @@ public class HouseLayoutPanel extends JPanel implements Observer {
         g.dispose();
         return new ImageIcon(image);
     }
-
 
 
     private void updatePanelSize() {

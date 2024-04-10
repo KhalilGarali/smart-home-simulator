@@ -32,6 +32,7 @@ public class SHPPanel extends JPanel implements Observer {
     private SHP shp = SHP.getInstance(shc);
     private SHS shs = SHS.getInstance();   
 
+
     public SHPPanel() {
         shs.addObserver(this);
         setLayout(new GridBagLayout());
@@ -90,20 +91,29 @@ public class SHPPanel extends JPanel implements Observer {
         simulationToggle.setBackground(Color.RED);
         simulationToggle.addItemListener(e -> {
          if(shs.activeUser instanceof Parent) {
-             if (simulationToggle.isSelected()) {
-                 simulationToggle.setText("ON");
-                 shp.setIsAway(true);
-                 simulationToggle.setBackground(Color.GREEN);
-             } else {
-                 simulationToggle.setText("OFF");
-                 shp.setIsAway(false);
-                 simulationToggle.setBackground(Color.RED);
-             }
+            // Code to add changes to log
+            ArrayList<String> text = new ArrayList<>();
+            text.add("Target: Away From Home Status");
+            text.add("Event type: Change");
+            text.add("Event Description: Change away from home status");
+            if (simulationToggle.isSelected()) {
+                simulationToggle.setText("ON");
+                shp.setIsAway(true);
+                text.add("Change away from home status to: ON");
+                simulationToggle.setBackground(Color.GREEN);
+            } else {
+                simulationToggle.setText("OFF");
+                shp.setIsAway(false);
+                text.add("Change away from home status to: OFF");
+                simulationToggle.setBackground(Color.RED);
+            }
+            outpanel.appendText(text);
          } else {
              JOptionPane.showMessageDialog(null, "Only parents can turn on the AWAY MODE");
              simulationToggle.setSelected(false);
          }
         });
+
         
       
         awayMode.add(Box.createVerticalStrut(20)); // Add 10 pixels of vertical spacing
@@ -136,8 +146,16 @@ public class SHPPanel extends JPanel implements Observer {
             public void actionPerformed(ActionEvent e) {
                 //int time = Integer.parseInt(timerField.getText());
                 //shp.setTimerForPolice(time);
-                if(shs.activeUser instanceof Parent)
+                if(shs.activeUser instanceof Parent){
                     shp.setPoliceTimer(Integer.parseInt(timerField.getText()));
+                    // Adding to code to write changes to log
+                    ArrayList<String> text = new ArrayList<>();
+                    text.add("Target: Police Timer");
+                    text.add("Event type: Set");
+                    text.add("Event Description: Set Police Timer");
+                    text.add("Set current Police Timer field to " + timerField.getText());
+                    outpanel.appendText(text);
+                }
                 else
                     JOptionPane.showMessageDialog(null, "Only parents can set this TIMER");
 

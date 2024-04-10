@@ -7,8 +7,9 @@ import java.awt.*;
 
 public class HomeSimulatorFrame extends JFrame {
 
+    // Main UI frame of simulator
     public HomeSimulatorFrame() {
-        setTitle("Smart Home Simulator");
+        setTitle("Smart Home Simulator.");
         setSize(1500, 800);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout());

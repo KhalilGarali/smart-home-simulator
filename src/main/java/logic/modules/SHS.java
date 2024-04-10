@@ -124,11 +124,6 @@ public class SHS implements Observable, Mediator {
      *  Make/Delete users: ////////////////////////////////////
      */
 
-    public User makeStranger(String name){
-        User stranger = new Stranger(name);
-        houseUsers.add(stranger);
-        return stranger;
-    }
     public User makeGuest(String name){
         User guest = new Guest(name);
         houseUsers.add(guest);

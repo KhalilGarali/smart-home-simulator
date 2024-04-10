@@ -1,20 +1,15 @@
 package main.java.gui.ModulePanelTabs;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalToggleButtonUI;
-
-import main.java.gui.OutputPanel;
 import main.java.logic.layout.House;
 import main.java.logic.modules.SHC;
 import main.java.logic.modules.SHP;
@@ -28,7 +23,6 @@ import main.java.logic.users.Parent;
 
 public class SHPPanel extends JPanel implements Observer {
     private JToggleButton simulationToggle;
-    private JLabel titleLabel;
     House house = House.getInstance();
     private ArrayList<JCheckBox> roomCheckBoxes;
     private JLabel timerLabel;
@@ -36,11 +30,8 @@ public class SHPPanel extends JPanel implements Observer {
     
     private SHC shc = SHC.getIntance();
     private SHP shp = SHP.getInstance(shc);
-    private SHS shs = SHS.getInstance();
+    private SHS shs = SHS.getInstance();   
 
-    private User activeUser;
-    private static OutputPanel outpanel = OutputPanel.getInstance();
-    
 
     public SHPPanel() {
         shs.addObserver(this);
@@ -63,18 +54,34 @@ public class SHPPanel extends JPanel implements Observer {
 
     private JPanel createAwayModePanel(){
         JPanel awayMode = new JPanel();
-        JLabel pleaseMsg = new JLabel("Please set Detector Monitors in rooms BEFORE turning on the AWAY MODE");
+        JLabel warningMessage = new JLabel("Please set Detector Monitors in rooms BEFORE turning on the AWAY MODE");
         awayMode.setLayout(new BoxLayout(awayMode, BoxLayout.Y_AXIS));
         awayMode.setBorder(BorderFactory.createTitledBorder("Away Mode")); 
 
-        // Title Label
-        titleLabel = new JLabel("Away mode");
-        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        for (Room room : house.getRooms()) {
+            JCheckBox roomCheckBox = new JCheckBox(room.getName());
+            roomCheckBox.addItemListener(e -> {
+             if(shs.activeUser instanceof Parent) {
+                 if (roomCheckBox.isSelected()) {
+                     shp.addMotionDetector(room);
+                     System.out.println("Room: " + room.getName() + " has motion detector: " + room.getMotionDetector());
+                 } else {
+                     shp.removeMotionDetector(room);
+                     System.out.println("Room: " + room.getName() + " has motion detector: " + room.getMotionDetector());
+                 }
+             } else {
+                 JOptionPane.showMessageDialog(null, "Only parents can set the motion detectors");
+                 roomCheckBox.setSelected(false);
+             }
+
+            });
+            awayMode.add(roomCheckBox);
+            roomCheckBoxes.add(roomCheckBox);
+        }
 
         // Simulation Toggle
         simulationToggle = new JToggleButton("OFF");
         simulationToggle.setPreferredSize(new Dimension(100, 40));
-        simulationToggle.setAlignmentX(Component.CENTER_ALIGNMENT);
         simulationToggle.setUI(new MetalToggleButtonUI() {
             @Override
             protected Color getSelectColor() {
@@ -106,61 +113,17 @@ public class SHPPanel extends JPanel implements Observer {
              simulationToggle.setSelected(false);
          }
         });
-        for (Room room : house.getRooms()) {
-            JCheckBox roomCheckBox = new JCheckBox(room.getName());
-            roomCheckBox.addItemListener(e -> {
-            if(shs.activeUser instanceof Parent) {
-                // Code to write changes to log
-                ArrayList<String> text = new ArrayList<>();
-                text.add("Target: Motion Detector");
-                text.add("Event type: Change");
-                text.add("Event Description: Change away from home status");
-                if (roomCheckBox.isSelected()) {
-                    shp.addMotionDetector(room);
-                    text.add("Motion detector in room " + room.getName() + " set to ON");
-                    System.out.println("Room: " + room.getName() + " has motion detector: " + room.getMotionDetector());
-                } else {
-                    shp.removeMotionDetector(room);
-                    text.add("Motion detector in room " + room.getName() + " set to OFF");
-                    System.out.println("Room: " + room.getName() + " has motion detector: " + room.getMotionDetector());
-                }
-                outpanel.appendText(text);
-            } else {
-                JOptionPane.showMessageDialog(null, "Only parents can set the motion detectors");
-                roomCheckBox.setSelected(false);
-            }
 
-            });
-            awayMode.add(roomCheckBox);
-            roomCheckBoxes.add(roomCheckBox);
-        }
-
-        //awayMode.add(titleLabel);
+        
+      
+        awayMode.add(Box.createVerticalStrut(20)); // Add 10 pixels of vertical spacing
         awayMode.add(simulationToggle);
-        awayMode.add(pleaseMsg);
+        awayMode.add(Box.createVerticalStrut(10)); // Add 10 pixels of vertical spacing
+        awayMode.add(warningMessage);
+        
         return awayMode;
     }
 
-
-//    private JPanel createMotionDetectorsPlacementPanel() {
-//        JPanel motionDetectorsPlacementPanel = new JPanel();
-//        motionDetectorsPlacementPanel.setLayout(new BoxLayout(motionDetectorsPlacementPanel, BoxLayout.Y_AXIS));
-//        motionDetectorsPlacementPanel.setBorder(BorderFactory.createTitledBorder("Motion Detectors Locations"));
-//
-//        JPanel motionDetectorsPanel = new JPanel();
-//        int rows = (int) Math.ceil(house.getRooms().size() / 4.0); // Calculate the number of rows needed for two columns
-//        motionDetectorsPanel.setLayout(new GridLayout(rows, 4, 15, 15)); // Set the layout with px horizontal and vertical gaps
-//
-//
-//
-//
-//
-//        motionDetectorsPlacementPanel.add(motionDetectorsPanel);
-//
-//
-//
-//        return motionDetectorsPlacementPanel;
-//    }
 
     private JPanel createSetTimerForPolicePanel() {
         JPanel setTimerPanel = new JPanel();

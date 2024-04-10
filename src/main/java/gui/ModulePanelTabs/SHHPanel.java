@@ -1,13 +1,10 @@
 package main.java.gui.ModulePanelTabs;
 
 import javax.swing.*;
-import javax.swing.plaf.metal.MetalToggleButtonUI;
-
 import main.java.gui.OutputPanel;
 import main.java.logic.commands.Command;
 import main.java.logic.layout.House;
 import main.java.logic.modules.SHC;
-import main.java.logic.modules.SHH;
 import main.java.logic.modules.SHS;
 import main.java.logic.observerPattern.Observable;
 import main.java.logic.observerPattern.Observer;
@@ -15,18 +12,16 @@ import main.java.logic.users.Parent;
 import main.java.logic.users.Permissions;
 import main.java.logic.users.Stranger;
 import main.java.logic.users.User;
-import main.java.model.rooms.Kitchen;
+import main.java.model.rooms.Outside;
 import main.java.model.rooms.Room;
 import main.java.model.rooms.zones.BathroomsZone;
 import main.java.model.rooms.zones.BedroomsZone;
 import main.java.model.rooms.zones.CommonZone;
 import main.java.model.rooms.zones.GatewayZone;
-
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.security.Permission;
 import java.util.ArrayList;
-import java.util.List;
+
 
 import static main.java.logic.modules.SHS.shs;
 
@@ -38,9 +33,6 @@ public class SHHPanel extends JPanel implements Observer {
     private JTextField temperatureField;
     private JButton submitButton;
     JPanel buttonPanel;
-    private JCheckBox shhToggle;
-    private JComboBox<String> zoneSelector;
-    private JComboBox<String> roomSelector;
     JLabel userNameLabel;
     JLabel userLocationLabel;
     JCheckBox windowsCheckBox, doorsCheckBox, lightsCheckBox, temperatureCheckBox;
@@ -243,7 +235,10 @@ public class SHHPanel extends JPanel implements Observer {
         for (Room room : house.getRooms()) {
             JToggleButton roomButton = new JToggleButton(room.getName());
             roomButton.addActionListener(e -> showRoomDialog(room));
-            roomsPanel.add(roomButton);
+            if(!(room instanceof Outside)){
+                roomsPanel.add(roomButton);
+            }
+           
         }
         return roomsPanel;
     }

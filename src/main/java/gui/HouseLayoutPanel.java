@@ -72,15 +72,6 @@ public class HouseLayoutPanel extends JPanel implements Observer {
     }
 
 
-    private void checkRoomInfo(){
-        for (Room room : house.getRooms()) {
-            System.out.println("INFO: " + room.getName() + " --- Light: " + room.getLight().getLight() + "  --- Temp: " 
-            + room.getCurrentTemperature() + "  --- Door: " + room.getDoor1().isOpen() + "  --- Window: " +
-            room.getWindow(1).isOpen() + " --- Number Of Users " + room.getUserFromRoom().size()
-            + " --- Motion Detector " + room.getMotionDetector());
-        }
-    }
-
     private void updatePanelSize() {
         int totalRows = (int) Math.ceil((double) house.getRooms().size() / 2); // 2 rooms per row
         // Calculate total height needed based on the number of rooms
@@ -188,13 +179,15 @@ public class HouseLayoutPanel extends JPanel implements Observer {
             }
         }
             
-
+            if(!(room instanceof Outside)){
             g.drawString(tempInfo, infoX, infoY);
+            }
             infoY += 15; // Add some vertical space between lines
             g.drawString(userCountInfo, infoX, infoY);
             infoY += 15; // Add some vertical space between lines
+            if(!(room instanceof Outside)){
             g.drawString(zoneInfo, infoX, infoY);
-
+            }
             iconX += userIcon.getIconWidth() + 60; // Move to the right for the next icon
 
             if(room.getHvac().getHeatingOn()){

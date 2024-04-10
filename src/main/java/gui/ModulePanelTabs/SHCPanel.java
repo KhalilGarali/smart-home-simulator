@@ -13,20 +13,10 @@ import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import main.java.gui.HouseLayoutPanel;
-import main.java.gui.SimulationPanel;
 import main.java.logic.commands.Command;
-import main.java.logic.commands.CommandFactory;
-import main.java.logic.commands.close.CloseADoor;
-import main.java.logic.commands.close.CloseAWindow;
-import main.java.logic.commands.off.TurnLightOff;
-import main.java.logic.commands.on.TurnLightOn;
-import main.java.logic.commands.open.OpenADoor;
-import main.java.logic.commands.open.OpenAWindow;
 import main.java.logic.layout.House;
 import main.java.logic.modules.SHC;
 import main.java.logic.modules.SHS;
-import main.java.logic.users.Parent;
-import main.java.logic.users.User;
 import main.java.model.rooms.Room;
 
 public class SHCPanel extends JPanel {

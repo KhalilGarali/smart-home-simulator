@@ -2,9 +2,11 @@ package main.java.logic.modules;
 
 import java.awt.List;
 import java.util.ArrayList;
+import java.util.Date;
 
 import main.java.logic.MediatorPattern.Component;
 import main.java.logic.commands.Command;
+import main.java.logic.dashboard.DateTime;
 import main.java.logic.layout.House;
 import main.java.logic.observerPattern.Observable;
 import main.java.logic.observerPattern.Observer;
@@ -12,6 +14,8 @@ import main.java.model.rooms.Room;
 
 // FIXME must also implement the observer pattern to observe the rooms
 public class SHP extends Module implements Component, Observable{
+
+    private DateTime dateTime = DateTime.getInstance();
 
     private SHC shc;
     private static SHP shp;
@@ -28,6 +32,7 @@ public class SHP extends Module implements Component, Observable{
         for(Room room: house.getRooms()){
             room.addObserver(this);
         }
+        dateTime.addObserver(this);
     }
 
     public static synchronized SHP getInstance(SHC ashc){
@@ -43,8 +48,13 @@ public class SHP extends Module implements Component, Observable{
     @Override
     public void update(Observable o){
         if(o instanceof Room){
+            int startTime = dateTime.getHour() * 3600 + dateTime.getMinute() * 60 + dateTime.getSeconds();
             Room room = (Room) o;
+
             System.out.println("POLICE CALLED");
+        }
+        if(o instanceof DateTime){
+            dateTime = (DateTime) o;
         }
     }
 

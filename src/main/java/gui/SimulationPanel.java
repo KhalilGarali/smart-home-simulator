@@ -336,8 +336,8 @@ public class SimulationPanel extends JPanel {
 
             // currentDateTime.incrementSecond();
             int increment = timeSpeed.calculateIncrement();
-            currentDateTime.incrementTime(0, 0, increment);
 
+            currentDateTime.incrementTime(0, 0, increment);
 
             // Get the current time after incrementing
             LocalTime afterTime = DateTime.getTime();

@@ -202,11 +202,7 @@ public class SHS implements Observable, Mediator {
         shc.addCommand(command);
         return command;
     }
-    public TurnHeatingOn makeTurnHeatingOn(Room room){
-        TurnHeatingOn command = new TurnHeatingOn(room);
-        shc.addCommand(command);
-        return command;
-    }
+
 
     // public void shhDoAction(Command command, Room room){
     //     if(command instanceof TurnHeatingOff||

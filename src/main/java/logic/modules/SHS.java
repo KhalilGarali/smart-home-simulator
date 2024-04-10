@@ -119,6 +119,7 @@ public class SHS implements Observable, Mediator {
 
     public void setActiveUser(User user){
         this.activeUser = user;
+        notifyObservers();
     }
     /**
      *  Make/Delete users: ////////////////////////////////////

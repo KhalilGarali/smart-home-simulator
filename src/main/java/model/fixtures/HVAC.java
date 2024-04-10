@@ -95,7 +95,7 @@ public class HVAC implements Observer, Observable{
         int randomNumber = random.nextInt(100);
 
         if (randomNumber < 10) {
-            this.currentRoomTemp += 15;
+            this.currentRoomTemp += 0.25;
         } else {
             this.currentRoomTemp += 0.1;
         }

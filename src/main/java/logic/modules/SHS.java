@@ -125,14 +125,6 @@ public class SHS implements Observable, Mediator {
      */
 
 
-    public void removeuser(User user){
-        houseUsers.remove(user);
-        if(houseUsers.isEmpty()){
-            isEmpty = true;
-            // notifying(this, "Empty House");
-        }
-    }
-
     /**
      *  Make/Delete rooms: ////////////////////////////////////
      */

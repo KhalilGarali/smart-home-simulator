@@ -177,5 +177,9 @@ public class SHPPanel extends JPanel implements Observer {
         SwingUtilities.invokeLater(() -> {
             User activeUser = SHS.getInstance().getActiveUser();
         });
+        if (o instanceof SHP){
+            SHP shp = (SHP) o;
+            // create logic to change buttons based on shp.getIsAway() variable as well after line 117
+        }
     }
 }

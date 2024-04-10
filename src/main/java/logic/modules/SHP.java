@@ -79,7 +79,13 @@ public class SHP extends Module implements Component, Observable{
                 JOptionPane.showMessageDialog(null, "*Police is on their way*");
                 startTime = 0;
             }
-
+        }
+        if(o instanceof HVAC){
+            HVAC hvac = (HVAC) o;
+            if(hvac.onFire || hvac.tooHot){
+                this.isAway = false;
+                System.out.println("HVAC is on fire or too hot");
+            }
         }
 
     }

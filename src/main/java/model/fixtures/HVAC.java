@@ -23,6 +23,9 @@ public class HVAC implements Observer, Observable{
     private ArrayList<Observer> observers= new ArrayList<>();
     private DateTime dateTime = DateTime.getInstance();
     private int tempOutside = Temperature.getTemperature();
+    public boolean onFire = false;
+    public boolean tooHot = false;
+    public double increasedTemp = 0;
 
     public HVAC(Room room) {
         this.room = room;
@@ -94,10 +97,24 @@ public class HVAC implements Observer, Observable{
         Random random = new Random();
         int randomNumber = random.nextInt(100);
 
-        if (randomNumber < 10) {
+        if (true) {
+            this.increasedTemp += 0.25;
             this.currentRoomTemp += 0.25;
+
+            if (increasedTemp >= 15){
+                this.onFire = true;
+                notifyObservers();
+                this.onFire = false;
+                increasedTemp = 0;  
+            }
+            
         } else {
             this.currentRoomTemp += 0.1;
+        }
+        if (currentRoomTemp >= 135){
+            this.tooHot = true;
+            notifyObservers();
+            this.tooHot = false;
         }
 
         System.out.println("Current in "+this.room.getName() + " is "+this.currentRoomTemp);

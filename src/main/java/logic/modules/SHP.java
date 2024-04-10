@@ -10,6 +10,8 @@ import main.java.logic.dashboard.DateTime;
 import main.java.logic.layout.House;
 import main.java.logic.observerPattern.Observable;
 import main.java.logic.observerPattern.Observer;
+import main.java.model.fixtures.HVAC;
+import main.java.model.fixtures.Temperature;
 import main.java.model.rooms.Room;
 
 import javax.swing.*;
@@ -24,14 +26,17 @@ public class SHP extends Module implements Component, Observable{
     private SHS shs;
     private House house = House.getInstance();
     private boolean isAway = false;
+    private ArrayList<HVAC> hvacs = House.getInstance().getHVACs();
     private int policeTimer = 0;
     private int startTime = 0;
-
 
     private ArrayList<Observer> observers = new ArrayList<>();
 
     private SHP(SHC ashc){
         this.shc = ashc;
+        for (HVAC hvac : hvacs) {
+            hvac.addObserver(this);
+        }
         for(Room room: house.getRooms()){
             room.addObserver(this);
         }
@@ -47,6 +52,7 @@ public class SHP extends Module implements Component, Observable{
     public void doAction(Command command){
         shc.moduleAction(command);
     }
+
 
     @Override
     public void update(Observable o){
@@ -125,6 +131,17 @@ public class SHP extends Module implements Component, Observable{
     public void notifyObservers() {
         for (Observer o : observers) {
             o.update(this);
+        }
+    }
+    @Override
+    public void update(Observable o){
+        System.err.println("SHP is updated");
+        if (o instanceof Room) {
+            Room room = (Room) o;
+        }
+        // monitor the temperature of the rooms
+        if (o instanceof HVAC) {
+            HVAC hvac = (HVAC) o;
         }
     }
 

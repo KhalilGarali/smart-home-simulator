@@ -89,7 +89,6 @@ public class SHPPanel extends JPanel implements Observer {
         // Simulation Toggle
         simulationToggle = new JToggleButton("OFF");
         simulationToggle.setPreferredSize(new Dimension(100, 40));
-        simulationToggle.setAlignmentX(Component.CENTER_ALIGNMENT);
         simulationToggle.setUI(new MetalToggleButtonUI() {
             @Override
             protected Color getSelectColor() {

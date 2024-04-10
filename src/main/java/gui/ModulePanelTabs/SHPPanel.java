@@ -65,10 +65,6 @@ public class SHPPanel extends JPanel implements Observer {
         awayMode.setLayout(new BoxLayout(awayMode, BoxLayout.Y_AXIS));
         awayMode.setBorder(BorderFactory.createTitledBorder("Away Mode")); 
 
-        // Title Label
-        titleLabel = new JLabel("Away mode");
-        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
         // Simulation Toggle
         simulationToggle = new JToggleButton("OFF");
         simulationToggle.setPreferredSize(new Dimension(100, 40));
@@ -117,7 +113,7 @@ public class SHPPanel extends JPanel implements Observer {
             roomCheckBoxes.add(roomCheckBox);
         }
 
-        //awayMode.add(titleLabel);
+
         awayMode.add(simulationToggle);
         awayMode.add(pleaseMsg);
         return awayMode;

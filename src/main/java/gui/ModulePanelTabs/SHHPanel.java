@@ -12,6 +12,7 @@ import main.java.logic.users.Parent;
 import main.java.logic.users.Permissions;
 import main.java.logic.users.Stranger;
 import main.java.logic.users.User;
+import main.java.model.rooms.Outside;
 import main.java.model.rooms.Room;
 import main.java.model.rooms.zones.BathroomsZone;
 import main.java.model.rooms.zones.BedroomsZone;
@@ -234,7 +235,10 @@ public class SHHPanel extends JPanel implements Observer {
         for (Room room : house.getRooms()) {
             JToggleButton roomButton = new JToggleButton(room.getName());
             roomButton.addActionListener(e -> showRoomDialog(room));
-            roomsPanel.add(roomButton);
+            if(!(room instanceof Outside)){
+                roomsPanel.add(roomButton);
+            }
+           
         }
         return roomsPanel;
     }

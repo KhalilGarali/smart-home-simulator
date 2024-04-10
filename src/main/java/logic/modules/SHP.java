@@ -12,6 +12,8 @@ import main.java.logic.observerPattern.Observable;
 import main.java.logic.observerPattern.Observer;
 import main.java.model.rooms.Room;
 
+import javax.swing.*;
+
 // FIXME must also implement the observer pattern to observe the rooms
 public class SHP extends Module implements Component, Observable{
 
@@ -23,6 +25,7 @@ public class SHP extends Module implements Component, Observable{
     private House house = House.getInstance();
     private boolean isAway = false;
     private int policeTimer = 0;
+    private int startTime = 0;
 
 
     private ArrayList<Observer> observers = new ArrayList<>();
@@ -47,19 +50,27 @@ public class SHP extends Module implements Component, Observable{
 
     @Override
     public void update(Observable o){
-        if(o instanceof Room){
-            int startTime = dateTime.getHour() * 3600 + dateTime.getMinute() * 60 + dateTime.getSeconds();
-            Room room = (Room) o;
+        if(o instanceof Room) {
+             startTime = dateTime.getHour() * 3600 + dateTime.getMinute() * 60 + dateTime.getSecond();
+            System.out.println("str " + startTime + " : "+ ((Room) o).getName());
+        }
 
-            System.out.println("POLICE CALLED");
-        }
         if(o instanceof DateTime){
+            System.out.println("DateTime" + dateTime.getHour() + " " + dateTime.getMinute() + " " + dateTime.getSecond());
             dateTime = (DateTime) o;
+
+            if(startTime != 0 && ((dateTime.getHour() * 3600 + dateTime.getMinute() * 60 + dateTime.getSecond()) - startTime >= policeTimer) && policeTimer != 0) {
+                JOptionPane.showMessageDialog(null, "*Police is on their way*");
+                startTime = 0;
+            }
+
         }
+
     }
 
     public void setPoliceTimer(int time){
         this.policeTimer = time;
+        System.out.println("Police Timer: " + policeTimer);
     }
 
     public void houseIsEmpty() {

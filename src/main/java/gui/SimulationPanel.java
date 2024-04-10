@@ -133,7 +133,7 @@ public class SimulationPanel extends JPanel {
 
         // Time Speed Slider
         timeSpeedSlider = new JSlider();
-        timeSpeed = TimeSpeed.getInstance();
+        timeSpeed = new TimeSpeed();
         timeSpeedSlider.addChangeListener(e -> {
             int speed = timeSpeedSlider.getValue();
             timeSpeed.setSpeed(speed*2);
@@ -336,8 +336,8 @@ public class SimulationPanel extends JPanel {
 
             // currentDateTime.incrementSecond();
             int increment = timeSpeed.calculateIncrement();
-
             currentDateTime.incrementTime(0, 0, increment);
+
 
             // Get the current time after incrementing
             LocalTime afterTime = DateTime.getTime();

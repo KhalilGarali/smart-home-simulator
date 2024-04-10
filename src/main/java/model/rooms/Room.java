@@ -172,30 +172,30 @@ public abstract class Room implements Observable, Observer{
     public void openWindow(int num){
             System.out.println("Open window1");
             window1.open();
-            notifyObservers();
+            //notifyObservers();
     }
     public void openDoor(int num){
             System.out.println("Open door1");
             door1.open();
-            notifyObservers();
+           // notifyObservers();
     }
     public void closeWindow(int num){
             System.out.println("Close window1");
             window1.close();
-            notifyObservers();
+           // notifyObservers();
         
     }
     public void closeDoor(int num){
             System.out.println("Close door1");
             door1.close();
-            notifyObservers();
+            //notifyObservers();
         
     }
     public void turnLightOn(){
         if(!light.getLight() && light.getAutolight()){
             System.out.println("turning light on in : " + this.getName());
             light.setLightOn();
-            notifyObservers();
+           // notifyObservers();
         }
     }
     public void turnLightOff(){
@@ -205,23 +205,23 @@ public abstract class Room implements Observable, Observer{
         else{
             System.out.println("turning light off");
             light.setLightOff();
-            notifyObservers();
+            //notifyObservers();
         }
     }
     public void turnAutoLightOn(){
         System.out.println("turning auto light on");
         light.setAutolightOn();
-        notifyObservers();
+      //  notifyObservers();
     }
     public void turnAutoLightOff(){
         System.out.println("turning light on");
         light.setAutolightOff();
-        notifyObservers();
+       // notifyObservers();
     }
     public void setTemperature(int temperature){
         System.out.println("setting temperature to: "+temperature);
         setCurrentTemperature(temperature);
-        notifyObservers();
+        //notifyObservers();
     }
     //TODO worry about this when the user set the temperature
     // public void setDesiredTemperature(int temperature){
@@ -261,7 +261,7 @@ public abstract class Room implements Observable, Observer{
     public void turnCoolingOff(){
         System.out.println("Turning Off Cooling : ");
         // hvac.setCooling(false);
-        notifyObservers();
+      //  notifyObservers();
     }
 
     public void addUserToRoom(User user){

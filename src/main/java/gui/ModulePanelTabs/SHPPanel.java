@@ -38,6 +38,7 @@ public class SHPPanel extends JPanel {
     
     private SHC shc = SHC.getIntance();
     private SHP shp = SHP.getInstance(shc);
+    private SHS shs = SHS.getInstance();
     
 
     public SHPPanel() {
@@ -47,6 +48,8 @@ public class SHPPanel extends JPanel {
         gbc.fill = GridBagConstraints.BOTH;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
+
+        shs.addObserver(shp);
 
         roomCheckBoxes =  new ArrayList<>();
 
@@ -139,7 +142,7 @@ public class SHPPanel extends JPanel {
         
         // Panel for temperature setting
         JPanel timerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        timerLabel = new JLabel("Set Timer in Minutes:");
+        timerLabel = new JLabel("Set Timer in SECONDS:");
         timerField = new JTextField(5);
         timerPanel.add(timerLabel);
         timerPanel.add(timerField);

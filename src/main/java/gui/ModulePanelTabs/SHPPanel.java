@@ -11,24 +11,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.JToggleButton;
+import javax.swing.*;
 import javax.swing.plaf.metal.MetalToggleButtonUI;
-import javax.swing.Box;
 
 import main.java.logic.layout.House;
 import main.java.logic.modules.SHC;
 import main.java.logic.modules.SHP;
 import main.java.logic.modules.SHS;
+import main.java.logic.observerPattern.Observable;
+import main.java.logic.observerPattern.Observer;
 import main.java.model.rooms.Room;
 
-public class SHPPanel extends JPanel {
+import main.java.logic.users.User;
+import main.java.logic.users.Parent;
+
+public class SHPPanel extends JPanel implements Observer {
     private JToggleButton simulationToggle;
     private JLabel titleLabel;
     House house = House.getInstance();
@@ -39,9 +36,12 @@ public class SHPPanel extends JPanel {
     private SHC shc = SHC.getIntance();
     private SHP shp = SHP.getInstance(shc);
     private SHS shs = SHS.getInstance();
+
+    private User activeUser;
     
 
     public SHPPanel() {
+        shs.addObserver(this);
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridwidth = GridBagConstraints.REMAINDER;
@@ -49,7 +49,6 @@ public class SHPPanel extends JPanel {
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
 
-        shs.addObserver(shp);
 
         roomCheckBoxes =  new ArrayList<>();
 
@@ -82,26 +81,36 @@ public class SHPPanel extends JPanel {
         });
         simulationToggle.setBackground(Color.RED);
         simulationToggle.addItemListener(e -> {
-            if (simulationToggle.isSelected()) {
-                simulationToggle.setText("ON");
-                shp.setIsAway(true);
-                simulationToggle.setBackground(Color.GREEN);
-            } else {
-                simulationToggle.setText("OFF");
-                shp.setIsAway(false);
-                simulationToggle.setBackground(Color.RED);
-            }
+         if(shs.activeUser instanceof Parent) {
+             if (simulationToggle.isSelected()) {
+                 simulationToggle.setText("ON");
+                 shp.setIsAway(true);
+                 simulationToggle.setBackground(Color.GREEN);
+             } else {
+                 simulationToggle.setText("OFF");
+                 shp.setIsAway(false);
+                 simulationToggle.setBackground(Color.RED);
+             }
+         } else {
+             JOptionPane.showMessageDialog(null, "Only parents can turn on the AWAY MODE");
+             simulationToggle.setSelected(false);
+         }
         });
         for (Room room : house.getRooms()) {
             JCheckBox roomCheckBox = new JCheckBox(room.getName());
             roomCheckBox.addItemListener(e -> {
-                if (roomCheckBox.isSelected()) {
-                    shp.addMotionDetector(room);
-                    System.out.println("Room: " + room.getName() + " has motion detector: " + room.getMotionDetector());
-                } else {
-                    shp.removeMotionDetector(room);
-                    System.out.println("Room: " + room.getName() + " has motion detector: " + room.getMotionDetector());
-                }
+             if(shs.activeUser instanceof Parent) {
+                 if (roomCheckBox.isSelected()) {
+                     shp.addMotionDetector(room);
+                     System.out.println("Room: " + room.getName() + " has motion detector: " + room.getMotionDetector());
+                 } else {
+                     shp.removeMotionDetector(room);
+                     System.out.println("Room: " + room.getName() + " has motion detector: " + room.getMotionDetector());
+                 }
+             } else {
+                 JOptionPane.showMessageDialog(null, "Only parents can set the motion detectors");
+                 roomCheckBox.setSelected(false);
+             }
 
             });
             awayMode.add(roomCheckBox);
@@ -156,7 +165,11 @@ public class SHPPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 //int time = Integer.parseInt(timerField.getText());
                 //shp.setTimerForPolice(time);
-                shp.setPoliceTimer(Integer.parseInt(timerField.getText()));
+                if(shs.activeUser instanceof Parent)
+                    shp.setPoliceTimer(Integer.parseInt(timerField.getText()));
+                else
+                    JOptionPane.showMessageDialog(null, "Only parents can set this TIMER");
+
             }
         });
         submitPanel.add(submitButton);
@@ -165,5 +178,13 @@ public class SHPPanel extends JPanel {
         setTimerPanel.add(submitPanel);
 
         return setTimerPanel;
+    }
+
+    @Override
+    public void update(Observable o) {
+
+        SwingUtilities.invokeLater(() -> {
+            User activeUser = SHS.getInstance().getActiveUser();
+        });
     }
 }

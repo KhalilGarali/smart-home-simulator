@@ -9,15 +9,18 @@ import main.java.model.rooms.Room;
 import main.java.model.rooms.zones.Zone;
 
 public class House {
+
+    // attributes
     private static House house;
     private Layout houseLayout;
     ArrayList<Room> rooms = new ArrayList<>();
     ArrayList<Zone> zones = new ArrayList<>();
     ArrayList<HVAC> hvacs = new ArrayList<>();
 
-    private House(){   
-    }
+    // private constructor for the Singleton pattern
+    private House(){}
 
+    // method to load house layout from a file
     public void loadLayoutFromFile(String filePath) {
         rooms.clear(); // Clear the current rooms list
         houseLayout = new Layout(filePath);
@@ -34,10 +37,12 @@ public class House {
         }
     }
 
+    // method to add room
     private void addRoom(Room room){
         rooms.add(room);
     }
 
+    // method to add zone
     private void addZone(Zone zone){
         zones.add(zone);
     }
@@ -46,6 +51,7 @@ public class House {
         hvacs.add(hvac);
     }
 
+    // getInstance method to return the House instance
     public static synchronized House getInstance(){
         if(house == null){
             house = new House();
@@ -53,14 +59,17 @@ public class House {
         return house;
     }
 
+    // return rooms
     public ArrayList<Room> getRooms(){
         return this.rooms;
     }
 
+    // return HVACs
     public ArrayList<HVAC> getHVACs(){
         return this.hvacs;
     }
 
+    // return outside
     public Room getOutside() {
         for (Room room : rooms) {
             if (room instanceof Outside) {

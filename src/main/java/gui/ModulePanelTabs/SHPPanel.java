@@ -65,7 +65,34 @@ public class SHPPanel extends JPanel implements Observer {
         awayMode.setLayout(new BoxLayout(awayMode, BoxLayout.Y_AXIS));
         awayMode.setBorder(BorderFactory.createTitledBorder("Away Mode")); 
 
+        for (Room room : house.getRooms()) {
+            JCheckBox roomCheckBox = new JCheckBox(room.getName());
+            roomCheckBox.addItemListener(e -> {
+             if(shs.activeUser instanceof Parent) {
+                 if (roomCheckBox.isSelected()) {
+                     shp.addMotionDetector(room);
+                     System.out.println("Room: " + room.getName() + " has motion detector: " + room.getMotionDetector());
+                 } else {
+                     shp.removeMotionDetector(room);
+                     System.out.println("Room: " + room.getName() + " has motion detector: " + room.getMotionDetector());
+                 }
+             } else {
+                 JOptionPane.showMessageDialog(null, "Only parents can set the motion detectors");
+                 roomCheckBox.setSelected(false);
+             }
+
+            });
+            awayMode.add(roomCheckBox);
+            roomCheckBoxes.add(roomCheckBox);
+        }
+
         
+        
+      
+        awayMode.add(Box.createVerticalStrut(20)); // Add 10 pixels of vertical spacing
+        awayMode.add(simulationToggle);
+        awayMode.add(Box.createVerticalStrut(10)); // Add 10 pixels of vertical spacing
+        awayMode.add(pleaseMsg);
         
         return awayMode;
     }

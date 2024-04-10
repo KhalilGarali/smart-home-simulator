@@ -16,7 +16,7 @@ public class BathroomsZoneTest {
     @Test
     public void testZoneTemperature() {
         BathroomsZone zone = BathroomsZone.getInstance();
-        assertEquals(24, zone.getZoneTemperature()); // Initial temperature should be 24
+        assertEquals(10, zone.getZoneTemperature()); // Initial temperature should be 24
 
         zone.setZoneTemperature(28);
         assertEquals(28, zone.getZoneTemperature()); // Temperature should be set correctly

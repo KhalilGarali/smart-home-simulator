@@ -115,7 +115,6 @@ public class HVAC implements Observer, Observable{
         if(o instanceof DateTime){
             DateTime dateTime = (DateTime) o;
             this.seconds = dateTime.getTotalSecondsElapsed();
-            System.out.println("seconds elapsed: " + this.seconds);
             reachDesiredTemp();
         }
     }

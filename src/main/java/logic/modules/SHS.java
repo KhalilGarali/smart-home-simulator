@@ -123,11 +123,7 @@ public class SHS implements Observable, Mediator {
     /**
      *  Make/Delete users: ////////////////////////////////////
      */
-    public User makeParent(String name){
-        User parent = new Parent(name);
-        houseUsers.add(parent);
-        return parent;
-    }
+
     public User makeFamilyMember(String name){
         User member = new FamilyMember(name);
         houseUsers.add(member);

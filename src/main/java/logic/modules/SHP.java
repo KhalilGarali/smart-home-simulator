@@ -14,6 +14,8 @@ import main.java.model.rooms.Room;
 
 import javax.swing.*;
 
+// Main class for the Smart Home Security module (SHP), 
+// implements Component and Observable for the observer pattern.
 // FIXME must also implement the observer pattern to observe the rooms
 public class SHP extends Module implements Component, Observable{
 

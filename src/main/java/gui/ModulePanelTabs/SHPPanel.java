@@ -17,6 +17,7 @@ import main.java.logic.modules.SHS;
 import main.java.logic.observerPattern.Observable;
 import main.java.logic.observerPattern.Observer;
 import main.java.model.rooms.Room;
+import main.java.gui.OutputPanel;
 
 import main.java.logic.users.User;
 import main.java.logic.users.Parent;
@@ -31,6 +32,7 @@ public class SHPPanel extends JPanel implements Observer {
     private SHC shc = SHC.getIntance();
     private SHP shp = SHP.getInstance(shc);
     private SHS shs = SHS.getInstance();   
+    private static OutputPanel outpanel = OutputPanel.getInstance();
 
 
     public SHPPanel() {

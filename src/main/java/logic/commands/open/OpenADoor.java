@@ -29,12 +29,12 @@ public class OpenADoor extends Command{
             // potentially send a GUI error
             // System.out.println("No doors to open in " + room);
         // }
-        System.out.println("\n--------------------------------------------------------------------");
-        System.out.println(room);
-        System.out.print("command done: ");
+        // System.out.println("\n--------------------------------------------------------------------");
+        // System.out.println(room);
+        // System.out.print("command done: ");
         room.openDoor(doorNumber);
-        System.out.println(room);
-        System.out.println("----------------------------------------------------------------------");
+        // System.out.println(room);
+        // System.out.println("----------------------------------------------------------------------");
         outpanel.appendText(toConsole());
         return true;
     }

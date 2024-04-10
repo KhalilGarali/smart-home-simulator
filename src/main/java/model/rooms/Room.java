@@ -35,7 +35,7 @@ public abstract class Room implements Observable, Observer{
     private boolean hasMotionDetector;
     private boolean activeMotionDetector;
 
-    protected List<User> usersInThisRoomList = new ArrayList<>();
+    protected ArrayList<User> usersInThisRoomList = new ArrayList<>();
 
     //default constructor
     public Room(String name){
@@ -280,7 +280,11 @@ public abstract class Room implements Observable, Observer{
         }
     }
 
-    public List<User> getUserFromRoom(){
+    public void clearRoom(){
+        usersInThisRoomList.clear();
+    }
+
+    public ArrayList<User> getUserFromRoom(){
         return usersInThisRoomList;
     }
 

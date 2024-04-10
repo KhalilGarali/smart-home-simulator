@@ -101,6 +101,8 @@ public class SHP extends Module implements Component, Observable{
                     room.setActiveMotionDetector(true);
             }
             shs.notify(this, "HouseIsEmpty");
+        } else {
+            shs.notify(this, "HouseIsNotEmpty");
         }
 
     }

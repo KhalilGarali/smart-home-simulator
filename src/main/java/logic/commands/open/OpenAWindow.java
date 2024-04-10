@@ -45,12 +45,12 @@ public class OpenAWindow extends Command{
     @Override
     public Boolean execute(){
         // FIXME should remove those ssops after UI
-        System.out.println("\n--------------------------------------------------------------------");
-        System.out.println(room);
-        System.out.print("command done: ");
+        // System.out.println("\n--------------------------------------------------------------------");
+        // System.out.println(room);
+        // System.out.print("command done: ");
         room.openWindow(windowNumber);
-        System.out.println(room);
-        System.out.println("----------------------------------------------------------------------");
+        // System.out.println(room);
+        // System.out.println("----------------------------------------------------------------------");
         outpanel.appendText(toConsole());
         return true;
     }

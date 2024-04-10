@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import main.java.logic.modules.SHS;
 import main.java.model.fixtures.HVAC;
+import main.java.model.rooms.Outside;
 import main.java.model.rooms.Room;
 import main.java.model.rooms.zones.Zone;
 
@@ -58,5 +59,14 @@ public class House {
 
     public ArrayList<HVAC> getHVACs(){
         return this.hvacs;
+    }
+
+    public Room getOutside() {
+        for (Room room : rooms) {
+            if (room instanceof Outside) {
+                return room;
+            }
+        }
+        return null;
     }
 }

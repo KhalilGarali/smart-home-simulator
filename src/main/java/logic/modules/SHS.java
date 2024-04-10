@@ -224,14 +224,6 @@ public class SHS implements Observable, Mediator {
     //     }
     // }
 
-    //TODO to be corrected
-    // public void shpDoAction(Command command, Room room){
-    //     shp.doAction(command, room);
-    // }
-
-    public void shcDoAction(User user, Command command, Room room){
-        shc.userAction(user, command, room);
-    }
 
     @Override
     public void addObserver(Observer observer) {
